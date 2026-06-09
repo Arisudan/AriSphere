@@ -18,13 +18,15 @@
   filter: brightness(0.9);
 }
 
-.badge.tech { background-color: rgba(59, 130, 246, 0.1); color: #3b82f6; }
-.badge.ai { background-color: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
-.badge.world { background-color: rgba(16, 185, 129, 0.1); color: #10b981; }
-.badge.business { background-color: rgba(245, 158, 11, 0.1); color: #f59e0b; }
-.badge.social { background-color: rgba(236, 72, 153, 0.1); color: #ec4899; }
-.badge.insights { background-color: rgba(20, 184, 166, 0.1); color: #14b8a6; }
-.badge.trending { background-color: rgba(239, 68, 68, 0.1); color: #ef4444; }
+.badge.tech { background-color: rgba(30, 41, 59, 0.05); color: var(--cat-technology); border-left: 2px solid var(--cat-technology); }
+.badge.technology { background-color: rgba(30, 41, 59, 0.05); color: var(--cat-technology); border-left: 2px solid var(--cat-technology); }
+.badge.ai { background-color: rgba(109, 40, 217, 0.05); color: var(--cat-ai); border-left: 2px solid var(--cat-ai); }
+.badge.world { background-color: rgba(20, 83, 45, 0.05); color: var(--cat-world); border-left: 2px solid var(--cat-world); }
+.badge.business { background-color: rgba(124, 45, 18, 0.05); color: var(--cat-business); border-left: 2px solid var(--cat-business); }
+.badge.social { background-color: rgba(157, 23, 77, 0.05); color: var(--cat-social-media); border-left: 2px solid var(--cat-social-media); }
+.badge.social-media { background-color: rgba(157, 23, 77, 0.05); color: var(--cat-social-media); border-left: 2px solid var(--cat-social-media); }
+.badge.insights { background-color: rgba(17, 94, 89, 0.05); color: var(--cat-insights); border-left: 2px solid var(--cat-insights); }
+.badge.trending { background-color: rgba(185, 28, 28, 0.05); color: var(--cat-trending); border-left: 2px solid var(--cat-trending); }
 
 /* Buttons & Controls */
 .btn {
@@ -130,14 +132,35 @@ textarea.form-control {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: all var(--transition-normal);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
   position: relative;
 }
 
+/* Slide-in accent line on card hover for dynamic, print-editorial visual identity */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background-color: var(--color-primary);
+  z-index: 5;
+  transition: width var(--transition-normal);
+}
+.card:has(.badge.trending):hover::before { background-color: var(--cat-trending); width: 100%; }
+.card:has(.badge.tech):hover::before { background-color: var(--cat-technology); width: 100%; }
+.card:has(.badge.technology):hover::before { background-color: var(--cat-technology); width: 100%; }
+.card:has(.badge.ai):hover::before { background-color: var(--cat-ai); width: 100%; }
+.card:has(.badge.world):hover::before { background-color: var(--cat-world); width: 100%; }
+.card:has(.badge.business):hover::before { background-color: var(--cat-business); width: 100%; }
+.card:has(.badge.social):hover::before { background-color: var(--cat-social-media); width: 100%; }
+.card:has(.badge.social-media):hover::before { background-color: var(--cat-social-media); width: 100%; }
+.card:has(.badge.insights):hover::before { background-color: var(--cat-insights); width: 100%; }
+
 .card:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-lg);
   border-color: var(--color-border-hover);
+  box-shadow: var(--shadow-md); /* Clean, subtle ink shadows */
 }
 
 .card-img-wrapper {
@@ -145,17 +168,20 @@ textarea.form-control {
   overflow: hidden;
   aspect-ratio: 16 / 10;
   background-color: var(--color-bg-offset);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .card-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform var(--transition-slow);
+  filter: grayscale(10%) contrast(102%); /* Subtle print editorial filter */
+  transition: transform var(--transition-slow), filter var(--transition-normal);
 }
 
 .card:hover .card-img {
-  transform: scale(1.05);
+  transform: scale(1.03);
+  filter: grayscale(0%) contrast(100%);
 }
 
 .card-body {
@@ -237,7 +263,7 @@ textarea.form-control {
   align-items: center;
   justify-content: center;
   background-color: var(--color-ad-bg);
-  border: 1px dashed var(--color-ad-border);
+  border: 1px solid var(--color-border); /* Solid thin borders for print feel */
   border-radius: var(--radius-md);
   margin: var(--space-xl) 0;
   padding: var(--space-md);
@@ -247,12 +273,12 @@ textarea.form-control {
 }
 
 .adsense-placement::before {
-  content: 'ADVERTISEMENT';
+  content: 'SPONSOR PLACEMENT';
   position: absolute;
-  top: 4px;
-  left: 6px;
-  font-size: 0.6rem;
-  letter-spacing: 0.1em;
+  top: 6px;
+  left: 8px;
+  font-size: 0.55rem;
+  letter-spacing: 0.15em;
   font-weight: 700;
   color: var(--color-ad-text);
   font-family: var(--font-sans);
@@ -292,9 +318,9 @@ textarea.form-control {
 
 /* Newsletter Signup Container */
 .newsletter-box {
-  background: linear-gradient(135deg, var(--color-bg-offset) 0%, var(--color-ad-bg) 100%);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  background-color: var(--color-bg-offset);
+  border: 2px solid var(--color-primary); /* Classic double/solid border frame */
+  border-radius: var(--radius-md);
   padding: var(--space-xl);
   text-align: center;
   margin: var(--space-xl) 0;
@@ -302,23 +328,15 @@ textarea.form-control {
   overflow: hidden;
 }
 
+/* Removed generic gradient circle for cleaner print aesthetic */
 .newsletter-box::after {
-  content: '';
-  position: absolute;
-  top: -50px;
-  right: -50px;
-  width: 150px;
-  height: 150px;
-  background-color: var(--color-accent-soft);
-  border-radius: var(--radius-full);
-  z-index: 1;
-  pointer-events: none;
+  display: none;
 }
 
 .newsletter-inner {
   position: relative;
   z-index: 2;
-  max-width: 540px;
+  max-width: 500px;
   margin: 0 auto;
 }
 
@@ -428,11 +446,9 @@ textarea.form-control {
   width: 100%;
   z-index: 1050;
   padding: var(--space-md) 0;
-  background-color: var(--color-glass-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid var(--color-glass-border);
-  box-shadow: var(--shadow-xl);
+  background-color: var(--color-bg-offset);
+  border-top: 2px solid var(--color-primary); /* Strong editorial divider */
+  box-shadow: var(--shadow-lg);
   transform: translateY(100%);
   transition: transform var(--transition-slow);
 }

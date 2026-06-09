@@ -162,22 +162,38 @@
 .category-header-banner {
   background-color: var(--color-bg-offset);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-top: 4px solid var(--color-primary); /* Bold top bar for print-editorial grid */
+  border-radius: var(--radius-md);
   padding: var(--space-xl);
   margin-bottom: var(--space-xl);
   text-align: center;
 }
 
+/* Category specific header bar accent support */
+.category-header-banner:has(.trending) { border-top-color: var(--cat-trending); }
+.category-header-banner:has(.technology) { border-top-color: var(--cat-technology); }
+.category-header-banner:has(.tech) { border-top-color: var(--cat-technology); }
+.category-header-banner:has(.ai) { border-top-color: var(--cat-ai); }
+.category-header-banner:has(.world) { border-top-color: var(--cat-world); }
+.category-header-banner:has(.business) { border-top-color: var(--cat-business); }
+.category-header-banner:has(.social) { border-top-color: var(--cat-social-media); }
+.category-header-banner:has(.insights) { border-top-color: var(--cat-insights); }
+
 .category-header-title {
   font-family: var(--font-serif);
-  font-size: 2.25rem;
-  font-weight: 700;
-  margin-bottom: var(--space-xs);
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin: var(--space-sm) 0 var(--space-xs);
+  letter-spacing: -0.02em;
 }
 
 .category-header-desc {
-  color: var(--color-text-light);
-  font-size: 1rem;
+  color: var(--color-text-muted);
+  font-size: 1.05rem;
+  max-width: 600px;
+  margin: 0 auto;
+  font-family: var(--font-sans);
+  line-height: 1.5;
 }
 
 /* 3. Article View Layout */
@@ -190,28 +206,34 @@
   align-items: center;
   gap: var(--space-md);
   margin-bottom: var(--space-md);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--color-text-light);
 }
 
 .article-title {
   font-family: var(--font-serif);
-  font-size: 2.75rem;
-  line-height: 1.2;
-  font-weight: 700;
+  font-size: 3rem; /* Dynamic print headline size */
+  line-height: 1.15;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   margin-bottom: var(--space-md);
+  color: var(--color-text);
 }
 
 .article-subtitle {
-  font-size: 1.2rem;
+  font-family: var(--font-sans);
+  font-size: 1.25rem;
   color: var(--color-text-muted);
   margin-bottom: var(--space-lg);
-  line-height: 1.45;
+  line-height: 1.5;
+  font-weight: 400;
 }
 
 .article-author-meta {
   display: flex;
   align-items: center;
   gap: var(--space-md);
-  border-y: 1px solid var(--color-border);
   padding: var(--space-md) 0;
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
@@ -219,53 +241,72 @@
 
 .article-featured-img {
   width: 100%;
-  max-height: 500px;
+  max-height: 520px;
   object-fit: cover;
-  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   margin-bottom: var(--space-xl);
 }
 
-/* Article Editorial Typography */
+/* Article Editorial Typography - Engineered for extreme reading comfort */
 .article-body-content {
   font-family: var(--font-sans);
-  font-size: 1.05rem;
-  line-height: 1.8;
-  color: var(--color-text);
+  font-size: 1.125rem; /* Larger font size for better reading rhythm */
+  line-height: 1.85; /* Purposeful vertical whitespace */
+  color: var(--color-text-muted);
 }
 
 .article-body-content p {
   margin-bottom: var(--space-lg);
 }
 
-/* Dropcap */
+/* Dropcap - Sophisticated signature brand crimson letter */
 .article-body-content p:first-of-type::first-letter {
   font-family: var(--font-serif);
-  font-size: 3.5rem;
+  font-size: 4rem;
   float: left;
-  line-height: 1;
+  line-height: 0.85;
   margin-right: var(--space-sm);
-  margin-top: 4px;
-  font-weight: 700;
-  color: var(--color-accent);
+  margin-top: 6px;
+  font-weight: 800;
+  color: var(--color-trending);
 }
 
 .article-body-content h2, .article-body-content h3 {
   font-family: var(--font-serif);
+  font-weight: 800;
   margin: var(--space-xl) 0 var(--space-md);
-  line-height: 1.3;
+  line-height: 1.25;
+  color: var(--color-text);
+  letter-spacing: -0.01em;
 }
 
-.article-body-content h2 { font-size: 1.75rem; }
-.article-body-content h3 { font-size: 1.4rem; }
+.article-body-content h2 { font-size: 1.85rem; }
+.article-body-content h3 { font-size: 1.45rem; }
 
 .article-body-content blockquote {
   font-family: var(--font-serif);
-  font-size: 1.35rem;
+  font-size: 1.45rem;
   font-style: italic;
-  border-left: 4px solid var(--color-accent);
+  border-left: 3px solid var(--color-trending); /* Left border highlights pull-quote */
   padding-left: var(--space-lg);
   margin: var(--space-xl) var(--space-md);
-  color: var(--color-text-muted);
+  color: var(--color-text);
+  position: relative;
+}
+
+/* Background quote callout for high-end styling */
+.article-body-content blockquote::before {
+  content: '“';
+  font-family: var(--font-serif);
+  font-size: 5rem;
+  color: var(--color-border-hover);
+  position: absolute;
+  top: -24px;
+  left: -12px;
+  opacity: 0.25;
+  line-height: 1;
+  pointer-events: none;
 }
 
 /* Article Share Widget */
@@ -337,7 +378,8 @@
 .author-profile-card {
   background-color: var(--color-bg-offset);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
+  border-left: 4px solid var(--color-trending); /* Left bar accent for editorial credibility */
+  border-radius: var(--radius-md);
   padding: var(--space-xl);
   display: flex;
   align-items: center;
@@ -346,11 +388,11 @@
 }
 
 .author-large-avatar {
-  width: 140px;
-  height: 140px;
-  border-radius: var(--radius-full);
+  width: 120px;
+  height: 120px;
+  border-radius: var(--radius-md); /* Sharp author photo */
   object-fit: cover;
-  border: 4px solid var(--color-border-hover);
+  border: 1px solid var(--color-border);
 }
 
 .author-profile-info {
@@ -359,20 +401,24 @@
 
 .author-profile-name {
   font-family: var(--font-serif);
-  font-size: 1.85rem;
-  font-weight: 700;
+  font-size: 1.75rem;
+  font-weight: 800;
   margin-bottom: var(--space-xs);
+  color: var(--color-text);
 }
 
 .author-profile-title {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--color-accent);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  color: var(--color-trending);
   margin-bottom: var(--space-md);
 }
 
 .author-profile-bio {
   font-size: 0.95rem;
+  line-height: 1.6;
   color: var(--color-text-muted);
   margin-bottom: var(--space-lg);
 }
