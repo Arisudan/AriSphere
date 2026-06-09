@@ -1,0 +1,16 @@
+{
+  "name": "arisphere",
+  "version": "2.0.0",
+  "description": "AriSphere Version 2 - Premium Digital Media Publication",
+  "main": "js/app.js",
+  "scripts": {
+    "build": "node build.js",
+    "start": "node scratch/server.js"
+  },
+  "devDependencies": {
+    "jsdom": "^24.1.0"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

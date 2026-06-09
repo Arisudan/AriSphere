@@ -1,0 +1,7 @@
+# Robots.txt - Search Engine Crawler directives for AriSphere
+
+User-agent: *
+Allow: /
+
+# Sitemap Target
+Sitemap: http://localhost:3000/sitemap.xml

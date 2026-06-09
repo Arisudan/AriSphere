@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Search Console Site Verification -->
+  <meta name="google-site-verification" content="GSC_VERIFICATION_TOKEN_placeholder">
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-GA_MEASUREMENT_ID"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    // Initial configuration loaded dynamically based on Cookie Consent banner options
+  </script>
+  
+  <!-- Default SEO Meta Tags (Overridden dynamically by router.js) -->
+  <title>AriSphere | Where Trends Meet Perspective</title>
+  <meta name="description" content="AriSphere is a premium digital publication and media magazine tracking technology shifts, cognitive AI innovations, global business policies, and cultural insights.">
+  <meta name="robots" content="index, follow">
+  
+  <!-- Canonical Link -->
+  <link rel="canonical" href="http://localhost:3000/">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="AriSphere | Where Trends Meet Perspective">
+  <meta property="og:description" content="AriSphere is a premium digital publication and media magazine tracking technology shifts, cognitive AI innovations, global business policies, and cultural insights.">
+  <meta property="og:url" content="http://localhost:3000/">
+  <meta property="og:image" content="/assets/images/business-cover.png">
+  <meta property="og:site_name" content="AriSphere">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AriSphere | Where Trends Meet Perspective">
+  <meta name="twitter:description" content="AriSphere is a premium digital publication and media magazine tracking technology shifts, cognitive AI innovations, global business policies, and cultural insights.">
+  <meta name="twitter:image" content="/assets/images/business-cover.png">
+
+  <!-- Favicon / Brand Styling -->
+  <meta name="theme-color" content="#0f172a">
+
+  <!-- Font & Resource Preloading / Optimizations -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  </noscript>
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <link rel="stylesheet" href="/css/pages.css">
+
+  <!-- Dynamic JSON-LD Script Tag for SEO Structured Data (Updated by router) -->
+  <script type="application/ld+json" id="jsonld-schema">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "AriSphere",
+      "alternateName": "AriSphere Magazine",
+      "url": "http://localhost:3000/",
+      "description": "Where Trends Meet Perspective"
+    }
+  </script>
+</head>
+<body>
+
+  <!-- Top Sticky Navigation Shell -->
+  <header class="header-wrapper">
+    <!-- Breaking News Ticker Bar -->
+    <div class="ticker-bar" aria-label="Breaking News">
+      <div class="ticker-title">Breaking</div>
+      <div class="ticker-content" id="ticker-content">
+        <!-- Injected dynamically from db.js trends -->
+      </div>
+    </div>
+
+    <!-- Main Navigation Header -->
+    <div class="container header-main">
+      <!-- Logo Branding -->
+      <a href="/" class="logo-group" aria-label="AriSphere Home">
+        <div class="logo">Ari<span>Sphere</span></div>
+        <div class="logo-tagline">Where Trends Meet Perspective</div>
+      </a>
+
+      <!-- Desktop Nav Menu -->
+      <nav id="nav-menu" aria-label="Primary Navigation">
+        <ul class="nav-menu">
+          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/category/trending" class="nav-link">Trending</a></li>
+          <li><a href="/category/technology" class="nav-link">Technology</a></li>
+          <li><a href="/category/ai" class="nav-link">AI</a></li>
+          <li><a href="/category/world" class="nav-link">World</a></li>
+          <li><a href="/category/business" class="nav-link">Business</a></li>
+          <li><a href="/category/social-media" class="nav-link">Social Media</a></li>
+          <li><a href="/category/insights" class="nav-link">Insights</a></li>
+        </ul>
+      </nav>
+
+      <!-- Nav Action Controls -->
+      <div class="header-actions">
+        <!-- Live Search Toggle -->
+        <button class="action-btn" id="search-toggle" aria-label="Open Search Box" title="Search Publications">
+          <svg style="width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </button>
+
+        <!-- Dark/Light Theme Switching -->
+        <button class="action-btn" id="theme-toggle" aria-label="Switch Theme Mode" title="Toggle Theme">
+          <!-- Light Mode Icon (Sun) -->
+          <svg class="theme-icon-light" style="width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"/>
+          </svg>
+          <!-- Dark Mode Icon (Moon) -->
+          <svg class="theme-icon-dark" style="width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+          </svg>
+        </button>
+
+        <!-- Mobile Navigation Hamburger -->
+        <button class="action-btn hamburger-btn" id="mobile-hamburger" aria-label="Toggle Navigation Menu">
+          <svg style="width:24px;height:24px;fill:currentColor" viewBox="0 0 24 24">
+            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sticky Reading Progress Bar -->
+  <div class="progress-container" aria-hidden="true">
+    <div class="progress-bar" id="reading-progress"></div>
+  </div>
+
+  <!-- Router Mount Element (Dynamic views will load here) -->
+  <main id="main-viewport" class="main-content" aria-live="polite">
+    <!-- Loading placeholder during routing initialization -->
+    <div style="display:flex; justify-content:center; align-items:center; height:50vh;">
+      <svg style="width:50px;height:50px;animation:spin 1s linear infinite;color:var(--color-accent);" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="32" />
+      </svg>
+    </div>
+  </main>
+
+  <!-- Newsletter Signup Block Placement -->
+  <section class="container" aria-label="Newsletter Subscription">
+    <div class="newsletter-box">
+      <div class="newsletter-inner">
+        <h2 class="newsletter-title">Subscribe to the AriSphere Digest</h2>
+        <p class="newsletter-desc">Get our weekly perspectives on cognitive tech, world shifts, and digital philosophy delivered direct to your inbox.</p>
+        <form class="newsletter-form">
+          <input class="form-control" type="email" placeholder="Enter your email address" required aria-label="Email address for subscription">
+          <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer Section -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <!-- Footer Brand Info -->
+      <div class="footer-brand">
+        <div class="logo">Ari<span>Sphere</span></div>
+        <p class="footer-description">AriSphere covers shifts in design philosophy, technology infrastructure, business scales, and emerging media trends.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-icon" aria-label="Twitter X" title="Twitter X"><svg style="width:16px;height:16px;fill:currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+          <a href="#" class="social-icon" aria-label="Facebook" title="Facebook"><svg style="width:16px;height:16px;fill:currentColor" viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.8z"/></svg></a>
+          <a href="#" class="social-icon" aria-label="LinkedIn" title="LinkedIn"><svg style="width:16px;height:16px;fill:currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div>
+        <h3 class="footer-title">Categories</h3>
+        <ul class="footer-links">
+          <li><a href="/category/technology">Technology</a></li>
+          <li><a href="/category/ai">Cognitive AI</a></li>
+          <li><a href="/category/world">World Affairs</a></li>
+          <li><a href="/category/business">Business Shifts</a></li>
+          <li><a href="/category/insights">Insights</a></li>
+        </ul>
+      </div>
+
+      <!-- General Links -->
+      <div>
+        <h3 class="footer-title">Publication</h3>
+        <ul class="footer-links">
+          <li><a href="/author/arisudan">Editorial Board</a></li>
+          <li><a href="/contact">Pitch a Story</a></li>
+          <li><a href="/contact">Connect Support</a></li>
+          <li><a href="/privacy">Legal Policy</a></li>
+        </ul>
+      </div>
+
+      <!-- Footer Ad Placement Slot -->
+      <div>
+        <h3 class="footer-title">AriSphere Partner</h3>
+        <div class="adsense-placement ad-sidebar" id="adsense-footer-sidebar" style="margin:0; min-height:150px;">
+          <div class="adsense-label" style="font-size: 0.7rem;">Sponsor slot</div>
+          <div class="adsense-slot-info" style="font-size: 0.6rem;">Fluid Ad Container</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Copyright Information -->
+    <div class="container footer-bottom">
+      <p>&copy; 2026 AriSphere Digital Media. All rights reserved. Where Trends Meet Perspective.</p>
+      <div class="footer-bottom-links">
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/contact">Contact Us</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Search Full Screen Dialog Modal -->
+  <div class="search-modal" id="search-modal" role="dialog" aria-modal="true" aria-label="Search articles">
+    <div class="search-container">
+      <div class="search-header">
+        <input type="search" class="search-input" id="search-input" placeholder="Search perspective..." aria-label="Type keywords to search articles">
+        <button class="close-search-btn" id="close-search" aria-label="Close Search Overlay">✕</button>
+      </div>
+      <div class="search-results-box" id="search-results">
+        <div class="search-no-results">Type keywords to search our publications...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cookie Consent Banner -->
+  <div class="cookie-banner" id="cookie-banner" role="dialog" aria-live="polite" aria-label="Cookie consent banner" style="display: none;">
+    <div class="cookie-container">
+      <div class="cookie-content">
+        <p><strong>Cookie Preference</strong>: We use cookies to analyze reading habits and support contextual AdSense placements. Read our <a href="/privacy">Privacy Policy</a> to understand details.</p>
+      </div>
+      <div class="cookie-buttons">
+        <button class="btn btn-secondary" id="cookie-decline">Decline</button>
+        <button class="btn btn-primary" id="cookie-accept">Accept All</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Popups Target Container -->
+  <div class="toast-container" id="toast-container" aria-live="assertive"></div>
+
+  <!-- JavaScript Loading -->
+  <script src="/js/db.js"></script>
+  <script src="/js/router.js"></script>
+  <script src="/js/app.js"></script>
+
+</body>
+</html>
