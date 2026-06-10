@@ -49,8 +49,16 @@ async function runBuild() {
   
   // 2. Read template HTML file and code dependencies
   const indexHtml = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
-  const dbCode = fs.readFileSync(path.join(__dirname, 'js', 'db.js'), 'utf8');
+  let dbCode = fs.readFileSync(path.join(__dirname, 'js', 'db.js'), 'utf8');
   const routerCode = fs.readFileSync(path.join(__dirname, 'js', 'router.js'), 'utf8');
+  
+  // Inject Supabase environment keys in-memory for compile-time database evaluations
+  const envSupabaseUrl = process.env.SUPABASE_URL || '';
+  const envSupabaseKey = process.env.SUPABASE_KEY || '';
+  if (envSupabaseUrl && envSupabaseKey) {
+    dbCode = dbCode.replace('https://YOUR_SUPABASE_PROJECT_URL.supabase.co', envSupabaseUrl);
+    dbCode = dbCode.replace('YOUR_SUPABASE_ANON_KEY_HERE', envSupabaseKey);
+  }
   
   // 3. Load DB in a mock Node environment to inspect paths
   console.log('Loading database content schema...');
@@ -238,6 +246,10 @@ Sitemap: ${SITE_URL}/sitemap.xml
   copyDir(path.join(__dirname, 'css'), path.join(DIST_DIR, 'css'));
   copyDir(path.join(__dirname, 'js'), path.join(DIST_DIR, 'js'));
   copyDir(path.join(__dirname, 'assets'), path.join(DIST_DIR, 'assets'));
+  
+  // Overwrite compiled js/db.js with the injected credentials version
+  fs.writeFileSync(path.join(DIST_DIR, 'js', 'db.js'), dbCode, 'utf8');
+  console.log('API credentials successfully injected into compiled assets.');
   
   // Copy vercel.json configuration
   fs.copyFileSync(path.join(__dirname, 'vercel.json'), path.join(DIST_DIR, 'vercel.json'));
