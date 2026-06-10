@@ -13,9 +13,9 @@ const CATEGORIES = {
 const AUTHORS = {
   arisudan: {
     username: 'arisudan',
-    name: 'Ari Sudan',
+    name: 'Arisudan',
     title: 'Founder, Publisher & Editor-in-Chief',
-    bio: 'Ari Sudan is the founder and editor-in-chief of AriSphere. An experienced journalist, digital media architect, and former systems developer, Ari has spent over 15 years tracking cognitive AI evolution, the geopolitics of hardware chips, and digital attention philosophy. He holds a degree in Computer Science and Media Studies and directs the editorial vision at AriSphere.',
+    bio: 'Arisudan is the founder and editor-in-chief of AriSphere. An experienced journalist, digital media architect, and former systems developer, Ari has spent over 15 years tracking cognitive AI evolution, the geopolitics of hardware chips, and digital attention philosophy. He holds a degree in Computer Science and Media Studies and directs the editorial vision at AriSphere.',
     avatar: '/assets/images/author.png',
     articlesCount: 142,
     contact: 'arisudan@arisphere.com',
@@ -930,10 +930,10 @@ const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY_HERE';
 
 // Check if credentials are set and not default placeholders
 function isSupabaseConfigured() {
-  return SUPABASE_URL && 
-         SUPABASE_KEY && 
-         !SUPABASE_URL.includes('YOUR_SUPABASE') && 
-         !SUPABASE_KEY.includes('YOUR_SUPABASE');
+  return SUPABASE_URL &&
+    SUPABASE_KEY &&
+    !SUPABASE_URL.includes('YOUR_SUPABASE') &&
+    !SUPABASE_KEY.includes('YOUR_SUPABASE');
 }
 
 async function fetchFromSupabase(endpoint) {
@@ -1005,9 +1005,9 @@ async function searchArticles(query) {
       console.warn('Supabase fetch failed, using local DB fallback.', err);
     }
   }
-  return ARTICLES.filter(a => 
-    a.title.toLowerCase().includes(q) || 
-    a.subtitle.toLowerCase().includes(q) || 
+  return ARTICLES.filter(a =>
+    a.title.toLowerCase().includes(q) ||
+    a.subtitle.toLowerCase().includes(q) ||
     a.excerpt.toLowerCase().includes(q) ||
     a.tags.some(t => t.toLowerCase().includes(q))
   );
@@ -1016,7 +1016,7 @@ async function searchArticles(query) {
 async function getRelatedArticles(currentArticleId, limit = 3) {
   const current = await getArticleById(currentArticleId);
   if (!current) return [];
-  
+
   if (isSupabaseConfigured()) {
     try {
       const data = await fetchFromSupabase(`articles?category=eq.${current.category}&id=neq.${current.id}&limit=${limit}&select=*`);
@@ -1025,7 +1025,7 @@ async function getRelatedArticles(currentArticleId, limit = 3) {
       console.warn('Supabase fetch failed, using local DB fallback.', err);
     }
   }
-  
+
   return ARTICLES
     .filter(a => a.id !== current.id)
     .map(a => {

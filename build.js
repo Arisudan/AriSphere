@@ -56,7 +56,20 @@ async function runBuild() {
   console.log('Loading database content schema...');
   const mockWindow = { location: { origin: SITE_URL } };
   const dbModule = new Function('window', 'fetch', 'console', dbCode);
-  dbModule(mockWindow, async () => ({ ok: false }), console);
+  
+  // Wrap fetch to support Node environment safety and enable live Supabase querying during compilation
+  const fetchWrapper = async (url, options) => {
+    try {
+      if (typeof fetch === 'function') {
+        return await fetch(url, options);
+      }
+    } catch (err) {
+      console.warn(`SSG fetch warning for ${url}:`, err.message);
+    }
+    return { ok: false, statusText: 'Fetch unavailable or failed' };
+  };
+  
+  dbModule(mockWindow, fetchWrapper, console);
   const db = mockWindow.AriSphereDB;
   
   if (!db) {
@@ -64,7 +77,17 @@ async function runBuild() {
     process.exit(1);
   }
   
-  console.log(`Database loaded: ${db.ARTICLES.length} articles, ${Object.keys(db.CATEGORIES).length} categories found.`);
+  // Fetch active articles list (either live from Supabase or fallback local ones)
+  console.log('Fetching active articles from database/CMS...');
+  let activeArticles = [];
+  try {
+    activeArticles = await db.getLatestArticles(1000);
+  } catch (err) {
+    console.warn('Failed to retrieve articles via DB query wrapper, using local ARTICLES fallback.', err);
+    activeArticles = db.ARTICLES;
+  }
+  
+  console.log(`Database loaded: ${activeArticles.length} active articles, ${Object.keys(db.CATEGORIES).length} categories found.`);
   
   // 4. Compile dynamic URL lists
   const pathsToRender = [
@@ -88,7 +111,7 @@ async function runBuild() {
   });
   
   // Add article paths
-  db.ARTICLES.forEach(art => {
+  activeArticles.forEach(art => {
     pathsToRender.push(`/article/${art.id}`);
   });
   
@@ -101,7 +124,7 @@ async function runBuild() {
   });
   
   // Setup JSDOM window mocks
-  dom.window.fetch = async () => ({ ok: false });
+  dom.window.fetch = fetchWrapper; // Enable routing functions to use fetch wrapper if needed
   dom.window.scrollTo = () => {};
   dom.window.AriSphereDB = db; // Bind pre-evaluated db
   
@@ -191,8 +214,8 @@ async function runBuild() {
     <priority>0.50</priority>
   </url>
 
-  <!-- Publications (${db.ARTICLES.length} Articles) -->
-  ${db.ARTICLES.map(art => `  <url><loc>${SITE_URL}/article/${art.id}</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>`).join('\n')}
+  <!-- Publications (${activeArticles.length} Articles) -->
+  ${activeArticles.map(art => `  <url><loc>${SITE_URL}/article/${art.id}</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>`).join('\n')}
 </urlset>
 `;
   fs.writeFileSync(path.join(DIST_DIR, 'sitemap.xml'), sitemapXML, 'utf8');
