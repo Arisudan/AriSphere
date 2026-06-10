@@ -78,13 +78,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     const tickerItems = [...trendingArticles, ...trendingArticles];
     
     tickerContainer.innerHTML = tickerItems.map(art => `
-      <div class="ticker-item" onclick="window.history.pushState(null, '', '/article/${art.id}'); window.dispatchEvent(new CustomEvent('pushstate-route'));">
+      <a class="ticker-item" href="/article/${art.id}">
         ⚡ ${art.title}
-      </div>
+      </a>
     `).join('');
   }
 
-  // --- 4. Global Search Dialog Overlay ---
+  // --- 4. Global Search Dialog Overlay (With Trapped WCAG Focus & Accessibility) ---
   const searchToggleBtn = document.getElementById('search-toggle');
   const searchModal = document.getElementById('search-modal');
   const closeSearchBtn = document.getElementById('close-search');
@@ -92,23 +92,78 @@ document.addEventListener('DOMContentLoaded', async () => {
   const searchResultsBox = document.getElementById('search-results');
 
   if (searchToggleBtn && searchModal && closeSearchBtn && searchInput && searchResultsBox) {
-    
-    // Toggle Search Modal Active
-    searchToggleBtn.addEventListener('click', () => {
+    let activeTriggerElement = null;
+
+    const openSearch = () => {
+      activeTriggerElement = document.activeElement; // Track the element that triggered the modal
       searchModal.classList.add('active');
+      searchModal.setAttribute('aria-hidden', 'false');
+      if (searchToggleBtn) searchToggleBtn.setAttribute('aria-expanded', 'true');
       searchInput.value = '';
       searchResultsBox.innerHTML = '<div class="search-no-results">Type keywords to search our publications...</div>';
       setTimeout(() => searchInput.focus(), 150);
-    });
+    };
 
-    closeSearchBtn.addEventListener('click', () => {
+    const closeSearch = () => {
       searchModal.classList.remove('active');
+      searchModal.setAttribute('aria-hidden', 'true');
+      if (searchToggleBtn) {
+        searchToggleBtn.setAttribute('aria-expanded', 'false');
+        if (activeTriggerElement) {
+          activeTriggerElement.focus();
+        } else {
+          searchToggleBtn.focus();
+        }
+      }
+    };
+
+    // Toggle Search Modal Active
+    searchToggleBtn.addEventListener('click', openSearch);
+    closeSearchBtn.addEventListener('click', closeSearch);
+
+    // Close search on ESC key or Trap focus within the modal
+    window.addEventListener('keydown', (e) => {
+      if (searchModal.classList.contains('active')) {
+        if (e.key === 'Escape') {
+          closeSearch();
+        } else if (e.key === 'Tab') {
+          // Dynamic query of visible focusable items within search modal
+          const focusable = Array.from(searchModal.querySelectorAll(
+            'input, button, a[href]'
+          )).filter(el => el.offsetWidth > 0 || el.offsetHeight > 0 || el.getClientRects().length > 0);
+
+          if (focusable.length > 0) {
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+
+            if (e.shiftKey) {
+              if (document.activeElement === first) {
+                last.focus();
+                e.preventDefault();
+              }
+            } else {
+              if (document.activeElement === last) {
+                first.focus();
+                e.preventDefault();
+              }
+            }
+          } else {
+            e.preventDefault();
+          }
+        }
+      }
     });
 
-    // Close search on ESC key
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && searchModal.classList.contains('active')) {
-        searchModal.classList.remove('active');
+    // Close search overlay and clear focus constraints on routing
+    searchResultsBox.addEventListener('click', (e) => {
+      const resultLink = e.target.closest('.search-result-item');
+      if (resultLink) {
+        // Only close search modal for normal left clicks (not Ctrl, Shift, Cmd, Alt, or middle clicks)
+        if (!(e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button !== 0)) {
+          searchModal.classList.remove('active');
+          searchModal.setAttribute('aria-hidden', 'true');
+          if (searchToggleBtn) searchToggleBtn.setAttribute('aria-expanded', 'false');
+        }
       }
     });
 
@@ -128,7 +183,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         searchResultsBox.innerHTML = results.map(art => `
-          <div class="search-result-item" onclick="window.history.pushState(null, '', '/article/${art.id}'); window.dispatchEvent(new CustomEvent('pushstate-route')); document.getElementById('search-modal').classList.remove('active');">
+          <a class="search-result-item" href="/article/${art.id}">
             <img class="search-result-img" src="${art.image}" alt="${art.title}" loading="lazy" width="80" height="60">
             <div class="search-result-info">
               <h4 class="search-result-title">${art.title}</h4>
@@ -138,7 +193,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <span>${art.publishDate}</span>
               </div>
             </div>
-          </div>
+          </a>
         `).join('');
       });
     });

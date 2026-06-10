@@ -241,6 +241,8 @@
 
 .article-featured-img {
   width: 100%;
+  height: auto;
+  aspect-ratio: 760 / 500;
   max-height: 520px;
   object-fit: cover;
   border: 1px solid var(--color-border);

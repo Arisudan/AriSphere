@@ -59,19 +59,40 @@
   }
 
   // Helper: Get base canonical URL origin
+  const PRODUCTION_URL = 'https://arisphere.vercel.app';
   function getBaseURL() {
-    return window.location.origin;
+    const origin = window.location.origin;
+    if (origin.includes('localhost') || origin.includes('127.0.0.1') || origin.includes('//192.168.')) {
+      return PRODUCTION_URL;
+    }
+    if (origin.includes('.vercel.app') && !origin.includes('arisphere.vercel.app')) {
+      return PRODUCTION_URL;
+    }
+    return origin;
   }
 
   // Helper: Safe date parsing to prevent RangeErrors (Finding C)
   function safeISODate(dateStr) {
+    if (!dateStr || typeof dateStr !== 'string') {
+      try {
+        return new Date().toISOString().split('T')[0];
+      } catch (e) {
+        return '2026-06-10';
+      }
+    }
     try {
       const d = new Date(dateStr);
       if (!isNaN(d.getTime())) {
         return d.toISOString().split('T')[0];
       }
-    } catch (e) {}
-    return new Date().toISOString().split('T')[0];
+    } catch (e) {
+      console.warn('safeISODate parsing failed for:', dateStr, e);
+    }
+    try {
+      return new Date().toISOString().split('T')[0];
+    } catch (e) {
+      return '2026-06-10';
+    }
   }
 
   // SEO & Schema Injections
@@ -162,15 +183,16 @@
   async function handleRoute() {
     let path = window.location.pathname || '/';
     
+    // Normalize path by removing search params or hash fragments if present in the string
+    path = path.split('?')[0].split('#')[0];
+    
     // Normalize clean URL path redirects
     if (path.endsWith('/index.html')) {
       path = path.slice(0, -10);
     }
     
-    // Strip trailing slashes to prevent matching failures (Finding B)
-    if (path.length > 1 && path.endsWith('/')) {
-      path = path.slice(0, -1);
-    }
+    // Strip trailing slashes (e.g. /article/1/ -> /article/1, but keep / as /)
+    path = path.replace(/\/+$/, '');
     
     if (path === '') path = '/';
     
@@ -214,6 +236,16 @@
 
       // Trigger fade-in
       viewport.classList.remove('fade-out');
+
+      // Set focus to the viewport or its main heading for WCAG accessibility focus management
+      const mainHeading = viewport.querySelector('h1');
+      if (mainHeading) {
+        mainHeading.setAttribute('tabindex', '-1');
+        mainHeading.focus();
+      } else {
+        viewport.setAttribute('tabindex', '-1');
+        viewport.focus();
+      }
     }, 200); // matches the transition timing
   }
 
@@ -322,7 +354,7 @@
           <div class="hero-sidebar">
             <h3 class="widget-title">Trending This Week</h3>
             ${trendingWeek.map(art => `
-              <div class="hero-sidebar-item" onclick="window.history.pushState(null, '', '/article/${art.id}'); window.dispatchEvent(new CustomEvent('pushstate-route'));">
+              <a class="hero-sidebar-item" href="/article/${art.id}">
                 <img class="hero-sidebar-img" src="${art.image}" alt="${art.title}" loading="lazy" width="90" height="90">
                 <div class="hero-sidebar-info">
                   <h4 class="hero-sidebar-title">${art.title}</h4>
@@ -331,7 +363,7 @@
                     <span>${art.readTime}</span>
                   </div>
                 </div>
-              </div>
+              </a>
             `).join('')}
           </div>
         </section>
@@ -776,13 +808,13 @@
                 <h3 class="widget-title">Related Stories</h3>
                 <div style="display: flex; flex-direction: column; gap: var(--space-md);">
                   ${related.map(art => `
-                    <div style="display: flex; gap: var(--space-sm); cursor: pointer;" onclick="window.history.pushState(null, '', '/article/${art.id}'); window.dispatchEvent(new CustomEvent('pushstate-route'));">
+                    <a href="/article/${art.id}" style="display: flex; gap: var(--space-sm); cursor: pointer; color: inherit; text-decoration: none;">
                       <img style="width: 70px; height: 70px; object-fit: cover; border-radius: var(--radius-sm);" src="${art.image}" alt="${art.title}" loading="lazy" width="70" height="70">
                       <div>
                         <h4 style="font-size: 0.85rem; font-weight: 700; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${art.title}</h4>
                         <span class="badge ${art.category}" style="font-size: 0.6rem; padding: 2px 4px; margin-top: 4px;">${db.CATEGORIES[art.category].name}</span>
                       </div>
-                    </div>
+                    </a>
                   `).join('')}
                 </div>
               </div>
@@ -1181,7 +1213,7 @@
         <!-- Mission Grid -->
         <section class="about-grid">
           <div class="about-visual">
-            <img src="/assets/images/business-cover.png" alt="AriSphere Editorial Room" style="width: 100%; height: auto; display: block; border-radius: var(--radius-lg);" loading="eager" width="600" height="400">
+            <img src="/assets/images/business-cover.png" alt="AriSphere Editorial Room" style="width: 100%; height: auto; aspect-ratio: 600 / 400; display: block; border-radius: var(--radius-lg);" loading="eager" width="600" height="400">
           </div>
           <div class="about-mission-box">
             <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 700; margin-bottom: var(--space-md);">Core Coverage & Editorial Pillars</h2>
@@ -1481,13 +1513,13 @@
           resultsBox.innerHTML = `
             <div style="background-color: var(--color-bg-offset); border: 1px solid var(--color-border); border-radius: var(--radius-md); overflow: hidden; max-height: 250px; overflow-y: auto; box-shadow: var(--shadow-md);">
               ${results.map(art => `
-                <div style="display: flex; gap: var(--space-sm); padding: var(--space-sm); border-bottom: 1px solid var(--color-border); cursor: pointer;" onclick="window.history.pushState(null, '', '/article/${art.id}'); window.dispatchEvent(new CustomEvent('pushstate-route'));">
+                <a href="/article/${art.id}" style="display: flex; gap: var(--space-sm); padding: var(--space-sm); border-bottom: 1px solid var(--color-border); cursor: pointer; color: inherit; text-decoration: none;">
                   <img src="${art.image}" alt="${art.title}" style="width: 50px; height: 40px; object-fit: cover; border-radius: var(--radius-sm);">
                   <div style="display: flex; flex-direction: column; justify-content: center;">
                     <div style="font-size: 0.85rem; font-weight: 600; line-height: 1.3; color: var(--color-text); display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden;">${art.title}</div>
                     <span class="badge ${art.category}" style="font-size: 0.55rem; padding: 1px 3px; align-self: flex-start; margin-top: 2px;">${window.AriSphereDB.CATEGORIES[art.category].name}</span>
                   </div>
-                </div>
+                </a>
               `).join('')}
             </div>
           `;

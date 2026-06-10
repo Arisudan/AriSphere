@@ -964,7 +964,8 @@ async function getArticleById(id) {
       console.warn('Supabase fetch failed, using local DB fallback.', err);
     }
   }
-  return ARTICLES.find(a => a.id === parseInt(id));
+  // Hardened ID comparison: safely compare as strings to support UUIDs, string IDs, and integers
+  return ARTICLES.find(a => String(a.id) === String(id));
 }
 
 async function getArticlesByCategory(category) {

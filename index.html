@@ -21,7 +21,7 @@
   <meta name="robots" content="index, follow">
   
   <!-- Canonical Link -->
-  <link rel="canonical" href="http://localhost:3000/">
+  <link rel="canonical" href="https://arisphere.vercel.app/">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
@@ -103,7 +103,7 @@
       <!-- Nav Action Controls -->
       <div class="header-actions">
         <!-- Live Search Toggle -->
-        <button class="action-btn" id="search-toggle" aria-label="Open Search Box" title="Search Publications">
+        <button class="action-btn" id="search-toggle" aria-label="Open Search Box" title="Search Publications" aria-haspopup="dialog" aria-expanded="false" aria-controls="search-modal">
           <svg style="width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
           </svg>
@@ -218,7 +218,7 @@
   </footer>
 
   <!-- Search Full Screen Dialog Modal -->
-  <div class="search-modal" id="search-modal" role="dialog" aria-modal="true" aria-label="Search articles">
+  <div class="search-modal" id="search-modal" role="dialog" aria-modal="true" aria-label="Search articles" aria-hidden="true">
     <div class="search-container">
       <div class="search-header">
         <input type="search" class="search-input" id="search-input" placeholder="Search perspective..." aria-label="Type keywords to search articles">
