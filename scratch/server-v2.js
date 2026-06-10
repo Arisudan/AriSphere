@@ -19,6 +19,12 @@ const publicDirectory = useDist ? distPath : path.join(__dirname, '..');
 console.log(`\nInitializing local server...`);
 console.log(`Serving assets from: ${publicDirectory} [Mode: ${useDist ? 'PRODUCTION (dist)' : 'DEVELOPMENT (source root)'}]`);
 
+app.use(express.json());
+
+// API Routes
+const subscribeHandler = require('../api/subscribe');
+app.post('/api/subscribe', subscribeHandler);
+
 // Serve static assets (js, css, images, sitemap, robots, etc.) directly if they exist
 app.use(express.static(publicDirectory, {
   extensions: ['html'], // Allow omitting .html suffix

@@ -1,0 +1,8 @@
+# Robots.txt - Search Engine Crawler directives for AriSphere
+User-agent: *
+Allow: /
+
+# Sitemap Targets
+Sitemap: https://arisphere.vercel.app/sitemap.xml
+Sitemap: https://arisphere.vercel.app/sitemap-categories.xml
+Sitemap: https://arisphere.vercel.app/sitemap-authors.xml

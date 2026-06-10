@@ -1,0 +1,269 @@
+/* AriSphere Editor Portal & Admin Dashboard Stylesheet */
+
+.admin-portal-wrapper {
+  padding: var(--space-xl) 0;
+  min-height: 70vh;
+}
+
+/* Glassmorphic Login Portal Card */
+.admin-login-card {
+  max-width: 420px;
+  margin: var(--space-xxl) auto;
+  background-color: var(--color-bg-offset);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-lg);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.admin-login-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.admin-login-title {
+  font-family: var(--font-serif);
+  font-size: 1.85rem;
+  margin-bottom: var(--space-xs);
+  color: var(--color-text);
+  text-align: center;
+}
+
+.admin-login-subtitle {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-bottom: var(--space-lg);
+}
+
+.admin-form-group {
+  margin-bottom: var(--space-md);
+}
+
+.admin-label {
+  display: block;
+  font-size: 0.825rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--color-text);
+  letter-spacing: 0.02em;
+}
+
+.admin-input, .admin-select, .admin-textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.admin-input:focus, .admin-select:focus, .admin-textarea:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(30, 41, 59, 0.08);
+}
+
+.admin-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+  border: none;
+}
+
+.admin-btn-primary {
+  background-color: var(--color-accent);
+  color: white;
+}
+
+.admin-btn-primary:hover {
+  background-color: #1e293b;
+  transform: translateY(-1px);
+}
+
+.admin-btn-secondary {
+  background-color: var(--color-bg-offset);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.admin-btn-secondary:hover {
+  background-color: var(--color-border);
+}
+
+.admin-btn-danger {
+  background-color: #ef4444;
+  color: white;
+}
+
+.admin-btn-danger:hover {
+  background-color: #dc2626;
+}
+
+/* Dashboard Header & Container Layout */
+.admin-dashboard-container {
+  background-color: var(--color-bg-offset);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-md);
+  margin-bottom: var(--space-xl);
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+.admin-dashboard-title {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  margin: 0;
+  color: var(--color-text);
+}
+
+.admin-user-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+/* Article Management Dashboard Table */
+.admin-table-wrapper {
+  overflow-x: auto;
+  margin-top: var(--space-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.875rem;
+}
+
+.admin-table th, .admin-table td {
+  padding: var(--space-md);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.admin-table th {
+  background-color: var(--color-bg);
+  font-weight: 600;
+  color: var(--color-text-light);
+  font-size: 0.775rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.admin-table tr:hover td {
+  background-color: rgba(0, 0, 0, 0.01);
+}
+
+/* Custom Badges & Toggle Status Markers */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: var(--radius-full);
+  font-size: 0.725rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.status-badge.published {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
+  border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.status-badge.draft {
+  background-color: rgba(249, 115, 22, 0.1);
+  color: #ea580c;
+  border: 1px solid rgba(249, 115, 22, 0.2);
+}
+
+.admin-indicator {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-size: 0.65rem;
+  font-weight: 600;
+  margin-right: 4px;
+}
+
+.admin-indicator.active {
+  background-color: var(--color-accent);
+  color: white;
+}
+
+.admin-indicator.inactive {
+  background-color: var(--color-border);
+  color: var(--color-text-muted);
+}
+
+/* Modal Form Styles */
+.admin-form-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.admin-form-header {
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-sm);
+  margin-bottom: var(--space-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+}
+
+.admin-form-full {
+  grid-column: span 2;
+}
+
+.admin-checkbox-group {
+  display: flex;
+  gap: var(--space-lg);
+  flex-wrap: wrap;
+  padding: var(--space-sm) 0;
+}
+
+.admin-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--color-text);
+}
+
+.admin-checkbox-label input {
+  cursor: pointer;
+}

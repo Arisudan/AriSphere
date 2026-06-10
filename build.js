@@ -105,7 +105,8 @@ async function runBuild() {
     '/privacy',
     '/disclaimer',
     '/terms',
-    '/editorial-policy'
+    '/editorial-policy',
+    '/admin' // Pre-render admin workspace static skeleton
   ];
   
   // Add category paths
@@ -118,7 +119,7 @@ async function runBuild() {
     pathsToRender.push(`/author/${username}`);
   });
   
-  // Add article paths
+  // Add article paths (only published articles are returned in activeArticles)
   activeArticles.forEach(art => {
     pathsToRender.push(`/article/${art.id}`);
   });
@@ -172,9 +173,52 @@ async function runBuild() {
   dom.window.close();
   console.log('Pre-rendering of HTML completed successfully.');
   
-  // 7. Generate Dynamic sitemap.xml
+  // XML Escape Helper
+  function escapeXml(unsafe) {
+    if (!unsafe) return '';
+    return unsafe.replace(/[<>&'"]/g, function (c) {
+      switch (c) {
+        case '<': return '&lt;';
+        case '>': return '&gt;';
+        case '&': return '&amp;';
+        case '\'': return '&apos;';
+        case '"': return '&quot;';
+        default: return c;
+      }
+    });
+  }
+
+  // 7. Generate Dynamic rss.xml (Latest 20 published articles)
+  console.log('Generating dynamic rss.xml...');
+  const latestPublished = activeArticles
+    .filter(art => (art.status || 'published') === 'published')
+    .sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate))
+    .slice(0, 20);
+
+  const rssXML = `<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>AriSphere</title>
+    <link>${SITE_URL}</link>
+    <description>Where Trends Meet Perspective</description>
+    <atom:link href="${SITE_URL}/rss.xml" rel="self" type="application/rss+xml" />
+    ${latestPublished.map(art => `    <item>
+      <title>${escapeXml(art.title)}</title>
+      <link>${SITE_URL}/article/${art.id}</link>
+      <guid>${SITE_URL}/article/${art.id}</guid>
+      <pubDate>${new Date(art.publishDate).toUTCString()}</pubDate>
+      <description>${escapeXml(art.excerpt || '')}</description>
+      <category>${escapeXml(db.CATEGORIES[art.category]?.name || art.category)}</category>
+    </item>`).join('\n')}
+  </channel>
+</rss>`;
+
+  fs.writeFileSync(path.join(DIST_DIR, 'rss.xml'), rssXML, 'utf8');
+  console.log('Dynamic rss.xml generated.');
+
+  // 8. Generate Dynamic sitemap.xml
   console.log('Generating dynamic sitemap.xml...');
-  let sitemapXML = `<?xml version="1.0" encoding="UTF-8"?>
+  const sitemapXML = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Core Views -->
   <url>
@@ -192,15 +236,6 @@ async function runBuild() {
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
-
-  <!-- Categories -->
-  ${Object.keys(db.CATEGORIES).map(catId => `  <url>
-    <loc>${SITE_URL}/category/${catId}</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.80</priority>
-  </url>`).join('\n')}
-
-  <!-- Legal & Policies -->
   <url>
     <loc>${SITE_URL}/privacy</loc>
     <changefreq>yearly</changefreq>
@@ -222,21 +257,51 @@ async function runBuild() {
     <priority>0.50</priority>
   </url>
 
-  <!-- Publications (${activeArticles.length} Articles) -->
+  <!-- Publications (${activeArticles.length} Published Articles) -->
   ${activeArticles.map(art => `  <url><loc>${SITE_URL}/article/${art.id}</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>`).join('\n')}
-</urlset>
-`;
+</urlset>`;
+
   fs.writeFileSync(path.join(DIST_DIR, 'sitemap.xml'), sitemapXML, 'utf8');
   console.log('Dynamic sitemap.xml generated.');
 
-  // 8. Generate robots.txt
+  // 9. Generate Dynamic sitemap-categories.xml
+  console.log('Generating dynamic sitemap-categories.xml...');
+  const categoryXML = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  ${Object.keys(db.CATEGORIES).map(catId => `  <url>
+    <loc>${SITE_URL}/category/${catId}</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.80</priority>
+  </url>`).join('\n')}
+</urlset>`;
+
+  fs.writeFileSync(path.join(DIST_DIR, 'sitemap-categories.xml'), categoryXML, 'utf8');
+  console.log('Dynamic sitemap-categories.xml generated.');
+
+  // 10. Generate Dynamic sitemap-authors.xml
+  console.log('Generating dynamic sitemap-authors.xml...');
+  const authorXML = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  ${Object.keys(db.AUTHORS).map(username => `  <url>
+    <loc>${SITE_URL}/author/${username}</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.70</priority>
+  </url>`).join('\n')}
+</urlset>`;
+
+  fs.writeFileSync(path.join(DIST_DIR, 'sitemap-authors.xml'), authorXML, 'utf8');
+  console.log('Dynamic sitemap-authors.xml generated.');
+
+  // 11. Generate robots.txt
   console.log('Writing robots.txt...');
   const robotsTxt = `# Robots.txt - Search Engine Crawler directives for AriSphere
 User-agent: *
 Allow: /
 
-# Sitemap Target
+# Sitemap Targets
 Sitemap: ${SITE_URL}/sitemap.xml
+Sitemap: ${SITE_URL}/sitemap-categories.xml
+Sitemap: ${SITE_URL}/sitemap-authors.xml
 `;
   fs.writeFileSync(path.join(DIST_DIR, 'robots.txt'), robotsTxt, 'utf8');
   console.log('robots.txt generated.');
