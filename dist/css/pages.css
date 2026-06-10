@@ -931,3 +931,67 @@
   }
 }
 
+/* Editorial Magazine Style Overrides - Phase 3A */
+.card, .widget, .reflections-home-section, .about-visual, .team-card, .legal-card, .article-midpoint-cta {
+  box-shadow: none !important;
+  border: 1px solid var(--color-border) !important;
+}
+
+.section-title::after {
+  display: none !important; /* Clean hairline separation over thick colored underline widgets */
+}
+
+/* Hairline dividers for typographic sections */
+.section-header {
+  border-bottom: 1px solid var(--color-border) !important;
+}
+
+.read-also-box {
+  margin: var(--space-md) 0;
+  padding: var(--space-sm) var(--space-md);
+  border-left: 3px solid var(--color-accent);
+  background-color: var(--color-bg-offset);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+}
+
+.read-also-box a {
+  color: var(--color-text);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.read-also-box a:hover {
+  text-decoration: underline;
+}
+
+.sources-accordion details summary {
+  outline: none;
+}
+
+.sources-accordion details[open] summary .accordion-arrow {
+  transform: rotate(180deg);
+}
+
+.accordion-arrow {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.article-pagination a:hover {
+  border-color: var(--color-accent) !important;
+  transform: translateY(-2px);
+}
+
+/* Scrollbar styling for reflections sidebar */
+.reflections-column::-webkit-scrollbar {
+  width: 4px;
+}
+.reflections-column::-webkit-scrollbar-track {
+  background: transparent;
+}
+.reflections-column::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+}
+

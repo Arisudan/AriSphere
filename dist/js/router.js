@@ -310,12 +310,10 @@
     if (!db) return;
 
     const featured = await db.getFeaturedArticle();
-    const trendingList = await db.getTrendingArticles(4);
     const latestList = await db.getLatestArticles(6);
     const mostRead = await db.getMostReadArticles(5);
-    const trendingWeek = await db.getTrendingThisWeek(3);
     const editorsPicks = await db.getEditorsPicks(4);
-    const reflectionsList = (await db.getArticlesByCategory('reflections')).slice(0, 3);
+    const reflectionsList = (await db.getArticlesByCategory('reflections')).slice(0, 4);
 
     // Dynamic SEO for Home
     const homeSEO = {
@@ -358,18 +356,20 @@
           <div class="adsense-slot-info">Display responsive 728x90</div>
         </div>
 
-        <!-- Hero Editorial Section -->
-        <section class="hero-section">
-          <div class="hero-featured-card card">
-            <img class="hero-featured-img" src="${featured.image}" alt="${featured.title}" loading="eager" width="800" height="520">
-            <div class="hero-featured-overlay"></div>
-            <div class="hero-featured-content">
+        <!-- Hero Editorial Section (Magazine Cover Layout) -->
+        <section class="hero-section" style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-xl); margin-bottom: var(--space-xxl); border-bottom: 1px solid var(--color-border); padding-bottom: var(--space-xl);">
+          
+          <!-- Left Column: Large Featured Cover Story -->
+          <div class="hero-featured-card" style="height: 580px; position: relative; border-radius: var(--radius-md); overflow: hidden; display: flex; align-items: flex-end; border: 1px solid var(--color-border); box-shadow: none;">
+            <img class="hero-featured-img" src="${featured.image}" alt="${featured.title}" loading="eager" width="800" height="580" style="position: absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:1;">
+            <div class="hero-featured-overlay" style="position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to top, rgba(9, 13, 22, 0.95) 0%, rgba(9, 13, 22, 0.5) 60%, rgba(9, 13, 22, 0.1) 100%); z-index:2;"></div>
+            <div class="hero-featured-content" style="position: relative; z-index: 3; padding: var(--space-xl); color: #ffffff;">
               <span class="badge ${featured.category}">${db.CATEGORIES[featured.category].name}</span>
-              <h1 class="hero-featured-title">
-                <a href="/article/${featured.id}">${featured.title}</a>
+              <h1 class="hero-featured-title" style="font-family: var(--font-serif); font-size: 2.5rem; line-height: 1.2; font-weight: 700; margin: var(--space-sm) 0 var(--space-sm);">
+                <a href="/article/${featured.id}" style="color: #ffffff; text-decoration: none;">${featured.title}</a>
               </h1>
-              <p class="hero-featured-desc">${featured.excerpt}</p>
-              <div class="card-meta" style="color: #cbd5e1;">
+              <p class="hero-featured-desc" style="font-size: 1.05rem; color: #cbd5e1; margin-bottom: var(--space-md); max-width: 650px;">${featured.excerpt}</p>
+              <div class="card-meta" style="color: #94a3b8; font-size: 0.85rem;">
                 <span>By ${db.AUTHORS[featured.author].name}</span>
                 <span class="card-meta-dot"></span>
                 <span>${featured.publishDate}</span>
@@ -379,20 +379,29 @@
             </div>
           </div>
 
-          <div class="hero-sidebar">
-            <h3 class="widget-title">Trending This Week</h3>
-            ${trendingWeek.map(art => `
-              <a class="hero-sidebar-item" href="/article/${art.id}">
-                <img class="hero-sidebar-img" src="${art.image}" alt="${art.title}" loading="lazy" width="90" height="90">
-                <div class="hero-sidebar-info">
-                  <h4 class="hero-sidebar-title">${art.title}</h4>
-                  <div class="card-meta">
-                    <span class="badge ${art.category}">${db.CATEGORIES[art.category].name}</span>
-                    <span>${art.readTime}</span>
+          <!-- Right Column: Reflections & Narratives with Pull Quotes -->
+          <div class="hero-sidebar reflections-column" style="display: flex; flex-direction: column; gap: var(--space-md); height: 580px; overflow-y: auto; padding-right: var(--space-xs); box-shadow: none;">
+            <h2 style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 700; border-bottom: 2px solid var(--cat-reflections); padding-bottom: var(--space-xs); margin: 0 0 var(--space-sm) 0; color: var(--color-text);">Reflections & Stories</h2>
+            ${reflectionsList.map(art => `
+              <div class="reflection-story-item" style="padding: var(--space-sm) 0 var(--space-md) 0; border-bottom: 1px solid var(--color-border); display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                  <h3 style="font-family: var(--font-serif); font-size: 1.1rem; line-height: 1.35; font-weight: 700; margin: 0 0 6px 0;">
+                    <a href="/article/${art.id}" style="color: var(--color-text); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--cat-reflections)'" onmouseout="this.style.color='var(--color-text)'">${art.title}</a>
+                  </h3>
+                  <!-- pull quote style -->
+                  <blockquote style="font-family: var(--font-serif); font-size: 0.875rem; font-style: italic; border-left: 2px solid var(--cat-reflections); padding-left: var(--space-sm); margin: var(--space-xs) 0 var(--space-sm) 0; color: var(--color-text-muted); line-height: 1.4;">
+                    "${art.excerpt}"
+                  </blockquote>
+                </div>
+                <div style="display: flex; align-items: center; gap: var(--space-xs); margin-top: 4px;">
+                  <img src="${db.AUTHORS[art.author].avatar}" alt="${db.AUTHORS[art.author].name}" style="width: 24px; height: 24px; border-radius: var(--radius-full); object-fit: cover;" loading="lazy">
+                  <div style="font-size: 0.75rem; color: var(--color-text-muted);">
+                    <strong>By ${db.AUTHORS[art.author].name}</strong> &middot; ${art.readTime}
                   </div>
                 </div>
-              </a>
+              </div>
             `).join('')}
+            ${reflectionsList.length === 0 ? `<p style="color: var(--color-text-muted); font-size: 0.9rem;">No reflections published yet.</p>` : ''}
           </div>
         </section>
 
@@ -402,32 +411,55 @@
           <div class="adsense-slot-info">Display fluid feed banner</div>
         </div>
 
-        <!-- Latest Articles & Sidebar Column Grid -->
-        <div class="grid-two-col">
-          <section class="latest-section">
-            <div class="section-header">
-              <h2 class="section-title">Latest Perspective</h2>
-              <a href="/category/technology" class="badge">View Tech Grid →</a>
-            </div>
-            <div class="grid-three-col" style="grid-template-columns: repeat(2, 1fr);">
-              ${latestList.map(art => `
-                <article class="card">
-                  <div class="card-img-wrapper">
-                    <img class="card-img" src="${art.image}" alt="${art.title}" loading="lazy" width="400" height="250">
+        <!-- Editor's Picks Section -->
+        <section class="editors-picks-section" style="margin-top: var(--space-xl); border-bottom: 1px solid var(--color-border); padding-bottom: var(--space-xl); margin-bottom: var(--space-xl);">
+          <div class="section-header" style="border-bottom: 2px solid var(--color-border); padding-bottom: var(--space-xs); margin-bottom: var(--space-lg); box-shadow: none;">
+            <h2 class="section-title" style="font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; margin:0;">Editor's Picks</h2>
+          </div>
+          <div class="grid-three-col" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-md);">
+            ${editorsPicks.map(art => `
+              <article class="card" style="margin-bottom: 0; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-sm); box-shadow: none; overflow: hidden; transition: border-color 0.2s;" onmouseover="this.style.borderColor='var(--color-accent)'" onmouseout="this.style.borderColor='var(--color-border)'">
+                <div class="card-img-wrapper" style="aspect-ratio: 16/9; overflow: hidden; position: relative;">
+                  <img class="card-img" src="${art.image}" alt="${art.title}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform var(--transition-slow);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+                </div>
+                <div class="card-body" style="padding: var(--space-sm);">
+                  <div class="card-meta" style="margin-bottom: 4px;">
+                    <span class="badge ${art.category}" style="font-size: 0.6rem; padding: 2px 4px;">${db.CATEGORIES[art.category].name}</span>
                   </div>
-                  <div class="card-body">
-                    <div class="card-meta">
-                      <span class="badge ${art.category}">${db.CATEGORIES[art.category].name}</span>
+                  <h3 class="card-title" style="font-family: var(--font-serif); font-size: 0.95rem; line-height: 1.35; margin: 0; font-weight: 700; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                    <a href="/article/${art.id}" style="text-decoration: none; color: inherit;">${art.title}</a>
+                  </h3>
+                </div>
+              </article>
+            `).join('')}
+          </div>
+        </section>
+
+        <!-- Latest Perspective & Sidebar -->
+        <div class="grid-two-col" style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-xl); margin-bottom: var(--space-xl);">
+          <section class="latest-section">
+            <div class="section-header" style="border-bottom: 2px solid var(--color-border); padding-bottom: var(--space-xs); margin-bottom: var(--space-lg); box-shadow: none;">
+              <h2 class="section-title" style="font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; margin:0;">Latest Perspective</h2>
+            </div>
+            <div class="grid-three-col" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-md);">
+              ${latestList.map(art => `
+                <article class="card" style="margin-bottom: 0; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-sm); box-shadow: none; overflow: hidden; transition: border-color 0.2s;" onmouseover="this.style.borderColor='var(--color-accent)'" onmouseout="this.style.borderColor='var(--color-border)'">
+                  <div class="card-img-wrapper" style="aspect-ratio: 16/10; overflow: hidden; position: relative;">
+                    <img class="card-img" src="${art.image}" alt="${art.title}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform var(--transition-slow);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+                  </div>
+                  <div class="card-body" style="padding: var(--space-sm);">
+                    <div class="card-meta" style="margin-bottom: 6px;">
+                      <span class="badge ${art.category}" style="font-size: 0.6rem; padding: 2px 4px;">${db.CATEGORIES[art.category].name}</span>
                       <span class="card-meta-dot"></span>
                       <span>${art.publishDate}</span>
                     </div>
-                    <h3 class="card-title">
-                      <a href="/article/${art.id}">${art.title}</a>
+                    <h3 class="card-title" style="font-family: var(--font-serif); font-size: 1.05rem; line-height: 1.35; margin-bottom: 6px; font-weight: 700; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                      <a href="/article/${art.id}" style="text-decoration: none; color: inherit;">${art.title}</a>
                     </h3>
-                    <p class="card-excerpt">${art.excerpt}</p>
-                    <div class="card-author-footer">
-                      <img class="author-avatar" src="${db.AUTHORS[art.author].avatar}" alt="${db.AUTHORS[art.author].name}" loading="lazy" width="32" height="32">
-                      <a href="/author/${art.author}" class="author-name">${db.AUTHORS[art.author].name}</a>
+                    <p class="card-excerpt" style="font-size: 0.85rem; line-height: 1.45; color: var(--color-text-muted); margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${art.excerpt}</p>
+                    <div class="card-author-footer" style="display: flex; align-items: center; gap: 8px;">
+                      <img class="author-avatar" src="${db.AUTHORS[art.author].avatar}" alt="${db.AUTHORS[art.author].name}" loading="lazy" style="width: 24px; height: 24px; border-radius: var(--radius-full); object-fit: cover;">
+                      <a href="/author/${art.author}" class="author-name" style="font-size: 0.8rem; color: var(--color-text); font-weight: 600; text-decoration: none;">By ${db.AUTHORS[art.author].name}</a>
                     </div>
                   </div>
                 </article>
@@ -435,20 +467,20 @@
             </div>
           </section>
 
-          <!-- Sidebar Widgets -->
+          <!-- Sidebar sticky column -->
           <aside class="sidebar-column">
             <div class="sidebar-sticky">
               <!-- Most Read List -->
-              <div class="widget">
-                <h3 class="widget-title">Most Read</h3>
-                <div class="trending-widget-list">
+              <div class="widget" style="background: var(--color-bg-offset); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: var(--space-md); box-shadow: none;">
+                <h3 class="widget-title" style="font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; margin-bottom: var(--space-md); border-bottom: 2px solid var(--color-border); padding-bottom: 4px;">Most Read</h3>
+                <div class="trending-widget-list" style="display: flex; flex-direction: column; gap: var(--space-md);">
                   ${mostRead.map((art, idx) => `
-                    <div class="trending-widget-item">
-                      <span class="trending-widget-number">0${idx + 1}</span>
+                    <div class="trending-widget-item" style="display: flex; gap: var(--space-sm);">
+                      <span class="trending-widget-number" style="font-family: var(--font-serif); font-size: 1.4rem; font-weight: 700; color: var(--color-accent); line-height: 1;">0${idx + 1}</span>
                       <div class="trending-widget-info">
-                        <a href="/article/${art.id}" class="trending-widget-title">${art.title}</a>
-                        <div class="card-meta" style="margin-top: 4px;">
-                          <span class="badge ${art.category}">${db.CATEGORIES[art.category].name}</span>
+                        <a href="/article/${art.id}" class="trending-widget-title" style="font-size: 0.85rem; font-weight: 700; line-height: 1.3; color: var(--color-text); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--color-accent)'" onmouseout="this.style.color='var(--color-text)'">${art.title}</a>
+                        <div class="card-meta" style="margin-top: 4px; font-size: 0.75rem;">
+                          <span class="badge ${art.category}" style="font-size: 0.55rem; padding: 1px 3px;">${db.CATEGORIES[art.category].name}</span>
                           <span>${art.readTime}</span>
                         </div>
                       </div>
@@ -458,7 +490,7 @@
               </div>
 
               <!-- Sidebar Ad Block -->
-              <div class="adsense-placement ad-sidebar" id="adsense-home-sidebar">
+              <div class="adsense-placement ad-sidebar" id="adsense-home-sidebar" style="box-shadow: none;">
                 <div class="adsense-label">Sticky Rectangular Sidebar Ad</div>
                 <div class="adsense-slot-info">Display size 300x250 / 300x600</div>
               </div>
@@ -466,70 +498,16 @@
           </aside>
         </div>
 
-        <!-- Reflections & Human Perspectives Section -->
-        ${reflectionsList.length > 0 ? `
-        <section class="reflections-home-section">
-          <div class="section-header">
-            <h2 class="section-title">Reflections & Human Perspectives</h2>
-            <a href="/category/reflections" class="badge reflections">View All Reflections →</a>
-          </div>
-          <div class="reflections-grid">
-            ${reflectionsList.map(art => `
-              <div class="reflection-story-card">
-                <div class="reflection-card-header">
-                  <span class="badge reflections" style="font-size: 0.6rem; padding: 2px 4px; margin-bottom: 6px;">${db.CATEGORIES[art.category].name}</span>
-                  <h3 class="reflection-card-title">
-                    <a href="/article/${art.id}">${art.title}</a>
-                  </h3>
-                  <p class="reflection-card-subtitle">${art.excerpt}</p>
-                </div>
-                <div class="reflection-card-footer">
-                  <img class="reflection-author-avatar" src="${db.AUTHORS[art.author].avatar}" alt="${db.AUTHORS[art.author].name}" loading="lazy" width="28" height="28">
-                  <div style="font-size: 0.75rem; color: var(--color-text-light);">
-                    <div style="font-weight: 600; color: var(--color-text);"><a href="/author/${art.author}" style="color: inherit; text-decoration: none;">By ${db.AUTHORS[art.author].name}</a></div>
-                    <div>${art.publishDate} &middot; ${art.readTime}</div>
-                  </div>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        </section>
-        ` : ''}
-
-        <!-- Editor's Picks Grid Section -->
-        <section class="editors-picks-section" style="margin-top: var(--space-xl);">
-          <div class="section-header">
-            <h2 class="section-title">Editor's Picks</h2>
-          </div>
-          <div class="grid-three-col" style="grid-template-columns: repeat(4, 1fr);">
-            ${editorsPicks.map(art => `
-              <article class="card">
-                <div class="card-img-wrapper" style="aspect-ratio: 16/9;">
-                  <img class="card-img" src="${art.image}" alt="${art.title}" loading="lazy" width="300" height="170">
-                </div>
-                <div class="card-body" style="padding: var(--space-md);">
-                  <div class="card-meta" style="margin-bottom: var(--space-xs);">
-                    <span class="badge ${art.category}">${db.CATEGORIES[art.category].name}</span>
-                  </div>
-                  <h3 class="card-title" style="font-size: 1.05rem; margin-bottom: 0;">
-                    <a href="/article/${art.id}">${art.title}</a>
-                  </h3>
-                </div>
-              </article>
-            `).join('')}
-          </div>
-        </section>
-
         <!-- Dynamic Category Matrix Links -->
-        <section class="category-cards-section" style="margin-top: var(--space-xl);">
-          <div class="section-header">
-            <h2 class="section-title">Explore Categories</h2>
+        <section class="category-cards-section" style="margin-top: var(--space-xl); margin-bottom: var(--space-xl); border-top: 1px solid var(--color-border); padding-top: var(--space-xl);">
+          <div class="section-header" style="border-bottom: 2px solid var(--color-border); padding-bottom: var(--space-xs); margin-bottom: var(--space-lg); box-shadow: none;">
+            <h2 class="section-title" style="font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; margin:0;">Explore Topics</h2>
           </div>
-          <div class="grid-three-col" style="grid-template-columns: repeat(6, 1fr); gap: var(--space-md);">
+          <div class="category-pills-list" style="display: flex; gap: var(--space-sm); flex-wrap: wrap; justify-content: center;">
             ${Object.keys(db.CATEGORIES).filter(k => k !== 'trending').map(key => {
               const cat = db.CATEGORIES[key];
               return `
-                <a href="/category/${cat.id}" class="badge ${cat.id}" style="text-align: center; padding: var(--space-md); font-size: 0.8rem; border-radius: var(--radius-md);">
+                <a href="/category/${cat.id}" class="badge ${cat.id}" style="text-align: center; padding: 10px 20px; font-size: 0.85rem; border-radius: var(--radius-full); font-weight: 600; text-decoration: none;">
                   ${cat.name}
                 </a>
               `;
@@ -704,6 +682,24 @@
     const breadcrumbsHTML = buildBreadcrumbsHTML(pathArray);
     const breadcrumbsSchema = buildBreadcrumbSchema(pathArray);
 
+    // Fetch all articles to compute pagination
+    let allArticles = [];
+    if (db.isSupabaseConfigured && db.isSupabaseConfigured()) {
+      try {
+        const data = await db.fetchFromSupabase('articles?status=eq.published&order=id.asc&select=*');
+        allArticles = data.map(db.mapDatabaseArticle);
+      } catch (err) {
+        console.warn("Failed to fetch all articles for pagination, falling back to local ARTICLES.", err);
+        allArticles = db.ARTICLES.filter(a => (a.status || 'published') === 'published').sort((a, b) => a.id - b.id);
+      }
+    } else {
+      allArticles = db.ARTICLES.filter(a => (a.status || 'published') === 'published').sort((a, b) => a.id - b.id);
+    }
+    
+    const currentIndex = allArticles.findIndex(a => String(a.id) === String(article.id));
+    const prevArticle = currentIndex > 0 ? allArticles[currentIndex - 1] : null;
+    const nextArticle = currentIndex < allArticles.length - 1 ? allArticles[currentIndex + 1] : null;
+
     // Dynamic SEO & Structured Data Schema for Article
     const articleSEO = {
       title: article.title,
@@ -744,13 +740,64 @@
 
     const isReflection = article.category === 'reflections';
     let bodyHTML = article.content;
+    const paragraphs = bodyHTML.split('</p>');
+    
+    // Fetch up to 2 related articles for inline linking
+    const relatedLinks = await db.getRelatedArticles(article.id, 2);
+    const insertions = [];
 
-    // Inject Midpoint Newsletter CTA for Reflections
-    if (isReflection) {
-      const paragraphs = bodyHTML.split('</p>');
-      if (paragraphs.length > 2) {
-        const midpoint = Math.floor(paragraphs.length / 2);
-        const ctaHTML = `
+    if (relatedLinks && relatedLinks.length > 0 && paragraphs.length >= 3) {
+      if (relatedLinks.length === 1) {
+        const idx = Math.floor(paragraphs.length / 2);
+        insertions.push({
+          index: idx,
+          html: `
+            <div class="read-also-box animate-pulse" style="margin: var(--space-md) 0; padding: var(--space-sm) var(--space-md); border-left: 3px solid var(--color-accent); background-color: var(--color-bg-offset); font-family: var(--font-sans); font-size: 0.95rem;">
+              <strong style="color: var(--color-accent); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; display: block; margin-bottom: 2px;">Read Also</strong>
+              <a href="/article/${relatedLinks[0].id}" style="color: var(--color-text); font-weight: 700; text-decoration: none; border-bottom: 1px solid transparent; transition: border-bottom 0.2s;" onmouseover="this.style.borderBottomColor='var(--color-text)'" onmouseout="this.style.borderBottomColor='transparent'">
+                ${relatedLinks[0].title}
+              </a>
+            </div>
+          `
+        });
+      } else if (relatedLinks.length === 2) {
+        const idx1 = Math.floor(paragraphs.length / 3);
+        const idx2 = Math.floor((paragraphs.length * 2) / 3);
+        insertions.push({
+          index: idx1,
+          html: `
+            <div class="read-also-box animate-pulse" style="margin: var(--space-md) 0; padding: var(--space-sm) var(--space-md); border-left: 3px solid var(--color-accent); background-color: var(--color-bg-offset); font-family: var(--font-sans); font-size: 0.95rem;">
+              <strong style="color: var(--color-accent); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; display: block; margin-bottom: 2px;">Read Also</strong>
+              <a href="/article/${relatedLinks[0].id}" style="color: var(--color-text); font-weight: 700; text-decoration: none; border-bottom: 1px solid transparent; transition: border-bottom 0.2s;" onmouseover="this.style.borderBottomColor='var(--color-text)'" onmouseout="this.style.borderBottomColor='transparent'">
+                ${relatedLinks[0].title}
+              </a>
+            </div>
+          `
+        });
+        insertions.push({
+          index: idx2,
+          html: `
+            <div class="read-also-box animate-pulse" style="margin: var(--space-md) 0; padding: var(--space-sm) var(--space-md); border-left: 3px solid var(--color-accent); background-color: var(--color-bg-offset); font-family: var(--font-sans); font-size: 0.95rem;">
+              <strong style="color: var(--color-accent); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; display: block; margin-bottom: 2px;">Read Also</strong>
+              <a href="/article/${relatedLinks[1].id}" style="color: var(--color-text); font-weight: 700; text-decoration: none; border-bottom: 1px solid transparent; transition: border-bottom 0.2s;" onmouseover="this.style.borderBottomColor='var(--color-text)'" onmouseout="this.style.borderBottomColor='transparent'">
+                ${relatedLinks[1].title}
+              </a>
+            </div>
+          `
+        });
+      }
+    }
+
+    // Midpoint Newsletter CTA for reflections
+    if (isReflection && paragraphs.length > 2) {
+      const midpoint = Math.floor(paragraphs.length / 2);
+      let targetIdx = midpoint;
+      if (insertions.some(ins => ins.index === targetIdx)) {
+        targetIdx = Math.min(paragraphs.length - 1, targetIdx + 1);
+      }
+      insertions.push({
+        index: targetIdx,
+        html: `
           <div class="article-midpoint-cta">
             <h4>Subscribe to the AriSphere Digest</h4>
             <p>Get our weekly perspectives on cognitive tech, world shifts, and digital philosophy delivered direct to your inbox.</p>
@@ -761,11 +808,16 @@
               </div>
             </form>
           </div>
-        `;
-        paragraphs.splice(midpoint, 0, ctaHTML);
-        bodyHTML = paragraphs.join('</p>');
-      }
+        `
+      });
     }
+
+    // Apply insertions from last to first
+    insertions.sort((a, b) => b.index - a.index);
+    insertions.forEach(ins => {
+      paragraphs.splice(ins.index, 0, ins.html);
+    });
+    bodyHTML = paragraphs.join('</p>');
 
     let html = `
       <div class="container">
@@ -788,6 +840,8 @@
                   <span class="card-meta-dot"></span>
                   <span>Published: ${article.publishDate}</span>
                   <span class="card-meta-dot"></span>
+                  <span>Updated: ${article.lastUpdatedDate || article.publishDate}</span>
+                  <span class="card-meta-dot"></span>
                   <span>${article.readTime}</span>
                   <span class="card-meta-dot"></span>
                   <span style="color:var(--color-accent); font-weight:600;">👁 ${article.views} views</span>
@@ -795,21 +849,42 @@
                 <h1 class="article-title">${article.title}</h1>
                 <p class="article-subtitle">${article.subtitle}</p>
 
-                ${!isReflection ? `
                 <!-- Source Attribution Block -->
-                <div style="font-size:0.775rem; color:var(--color-text-light); margin:-8px 0 16px; font-weight:600; font-family:var(--font-sans);">
+                ${article.sourceAttribution ? `
+                <div style="font-size:0.775rem; color:var(--color-text-light); margin:-8px 0 12px; font-weight:600; font-family:var(--font-sans);">
                   Attribution: <span>${article.sourceAttribution}</span>
                 </div>
+                ` : ''}
                 
-                <!-- Author Bio Header -->
-                <div class="article-author-meta">
-                  <img class="author-avatar" style="width: 44px; height: 44px;" src="${authorInfo.avatar}" alt="${authorInfo.name}" loading="lazy" width="44" height="44">
-                  <div>
-                    <div style="font-weight: 700;"><a href="/author/${authorInfo.username}">${authorInfo.name}</a></div>
-                    <div style="font-size: 0.75rem; color: var(--color-text-light);">${authorInfo.title}</div>
+                <!-- Author Bio & Trust Badges Header -->
+                <div class="article-author-meta" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-md); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border); padding: var(--space-sm) 0; margin-top: var(--space-md); margin-bottom: var(--space-md);">
+                  <div style="display: flex; align-items: center; gap: var(--space-sm);">
+                    <img class="author-avatar" style="width: 40px; height: 40px; border-radius: var(--radius-full);" src="${authorInfo.avatar}" alt="${authorInfo.name}" loading="lazy" width="40" height="40">
+                    <div>
+                      <div style="font-weight: 700; font-family: var(--font-sans);"><a href="/author/${authorInfo.username}" style="color: var(--color-text); text-decoration: none;">By ${authorInfo.name}</a></div>
+                      <div style="font-size: 0.75rem; color: var(--color-text-muted); font-family: var(--font-sans);">${authorInfo.title}</div>
+                    </div>
+                  </div>
+                  
+                  <div class="trust-badges" style="display: flex; gap: var(--space-xs); align-items: center; flex-wrap: wrap;">
+                    ${article.factChecked ? `
+                      <span class="trust-badge fact-checked" title="This article has been verified by our editorial fact-checking team." style="font-size: 0.7rem; font-weight: 600; padding: 4px 8px; border-radius: var(--radius-sm); border: 1px solid #10b981; color: #10b981; background-color: rgba(16, 185, 129, 0.05); display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-sans);">
+                        <svg width="10" height="10" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="fill: none;">
+                          <path d="M10 3L4.5 8.5L2 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Fact Checked
+                      </span>
+                    ` : ''}
+                    ${article.editoriallyReviewed ? `
+                      <span class="trust-badge editorially-reviewed" title="This article has been peer-reviewed and approved by our editors." style="font-size: 0.7rem; font-weight: 600; padding: 4px 8px; border-radius: var(--radius-sm); border: 1px solid var(--color-accent); color: var(--color-accent); background-color: rgba(194, 65, 12, 0.05); display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-sans);">
+                        <svg width="10" height="10" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="fill: none;">
+                          <path d="M10 3L4.5 8.5L2 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Editorially Reviewed
+                      </span>
+                    ` : ''}
                   </div>
                 </div>
-                ` : ''}
               </header>
 
               <!-- Main Hero Image -->
@@ -843,6 +918,32 @@
               <div class="article-tags" style="display: flex; gap: var(--space-sm); flex-wrap: wrap; margin: var(--space-lg) 0;">
                 ${article.tags.map(tag => `<span class="badge" style="background-color: var(--color-bg-offset); border: 1px solid var(--color-border); color: var(--color-text-muted); text-transform: none; font-weight: 500;">#${tag}</span>`).join('')}
               </div>
+
+              <!-- Expandable Sources Accordion Panel -->
+              ${article.sources && article.sources.length > 0 ? `
+              <div class="sources-accordion" style="margin: var(--space-md) 0; border: 1px solid var(--color-border); border-radius: var(--radius-md); overflow: hidden; background: var(--color-bg-offset);">
+                <details style="width: 100%;">
+                  <summary style="padding: var(--space-md); font-weight: 600; cursor: pointer; user-select: none; display: flex; align-items: center; justify-content: space-between; font-family: var(--font-serif); font-size: 1.1rem; color: var(--color-text);">
+                    <span style="display: flex; align-items: center; gap: var(--space-xs);">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-accent);"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                      Sources & Citations (${article.sources.length})
+                    </span>
+                    <span class="accordion-arrow" style="font-size: 0.8rem; color: var(--color-text-muted);">▼</span>
+                  </summary>
+                  <div class="sources-content" style="padding: 0 var(--space-md) var(--space-md) var(--space-md); border-top: 1px solid var(--color-border); background-color: var(--color-bg);">
+                    <ul style="list-style-type: disc; padding-left: var(--space-lg); margin: var(--space-sm) 0 0 0; display: flex; flex-direction: column; gap: var(--space-xs);">
+                      ${article.sources.map(src => `
+                        <li style="font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.5; text-align: left;">
+                          <a href="${src.url}" target="_blank" rel="noopener" style="color: var(--color-accent); text-decoration: none; font-weight: 500; border-bottom: 1px dashed transparent; transition: border-bottom 0.2s;" onmouseover="this.style.borderBottomColor='var(--color-accent)'" onmouseout="this.style.borderBottomColor='transparent'">
+                            ${src.name}
+                          </a>
+                        </li>
+                      `).join('')}
+                    </ul>
+                  </div>
+                </details>
+              </div>
+              ` : ''}
 
               <!-- Interactive Social Share Widget (including WhatsApp share option) -->
               <div class="article-share-bar">
@@ -885,6 +986,22 @@
                 </div>
               </section>
               ` : ''}
+
+              <!-- Previous / Next Story Navigation Cards -->
+              <nav class="article-pagination" aria-label="Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); border-top: 1px solid var(--color-border); margin: var(--space-xl) 0; padding-top: var(--space-lg); flex-wrap: wrap;">
+                ${prevArticle ? `
+                  <a href="/article/${prevArticle.id}" class="pagination-link prev" style="display: flex; flex-direction: column; text-decoration: none; color: inherit; width: 48%; min-width: 200px; padding: var(--space-sm) var(--space-md); border: 1px solid var(--color-border); border-radius: var(--radius-md); background-color: var(--color-bg-offset); transition: transform 0.2s, border-color 0.2s;" onmouseover="this.style.borderColor='var(--color-accent)'; this.style.transform='translateX(-4px)'" onmouseout="this.style.borderColor='var(--color-border)'; this.style.transform='none'">
+                    <span style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-muted); font-family: var(--font-sans); margin-bottom: 4px; display: block; text-align: left;">← Previous Story</span>
+                    <span style="font-family: var(--font-serif); font-size: 0.95rem; font-weight: 700; line-height: 1.3; color: var(--color-text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-align: left;">${prevArticle.title}</span>
+                  </a>
+                ` : `<div style="width: 48%; min-width: 200px;"></div>`}
+                ${nextArticle ? `
+                  <a href="/article/${nextArticle.id}" class="pagination-link next" style="display: flex; flex-direction: column; align-items: flex-end; text-align: right; text-decoration: none; color: inherit; width: 48%; min-width: 200px; padding: var(--space-sm) var(--space-md); border: 1px solid var(--color-border); border-radius: var(--radius-md); background-color: var(--color-bg-offset); transition: transform 0.2s, border-color 0.2s;" onmouseover="this.style.borderColor='var(--color-accent)'; this.style.transform='translateX(4px)'" onmouseout="this.style.borderColor='var(--color-border)'; this.style.transform='none'">
+                    <span style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-muted); font-family: var(--font-sans); margin-bottom: 4px; display: block; text-align: right;">Next Story →</span>
+                    <span style="font-family: var(--font-serif); font-size: 0.95rem; font-weight: 700; line-height: 1.3; color: var(--color-text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-align: right;">${nextArticle.title}</span>
+                  </a>
+                ` : `<div style="width: 48%; min-width: 200px;"></div>`}
+              </nav>
 
               <!-- Interactive Mock Comment Section -->
               <section class="comment-section">
@@ -1056,6 +1173,8 @@
     }
 
     const writtenArticles = await db.getArticlesByAuthor(username);
+    const recentArticles = [...writtenArticles].sort((a, b) => b.id - a.id);
+    const popularArticles = [...writtenArticles].sort((a, b) => (b.views || 0) - (a.views || 0));
 
     // Dynamic Breadcrumbs
     const pathArray = [
@@ -1103,6 +1222,26 @@
             <div class="author-profile-title">${author.title}</div>
             <p class="author-profile-bio">${author.bio}</p>
             
+            <!-- Skills & Expertise Tags -->
+            <div class="author-expertise-section" style="margin-top: var(--space-md); margin-bottom: var(--space-md); display: flex; flex-direction: column; gap: var(--space-sm);">
+              ${author.expertise ? `
+                <div>
+                  <strong style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); display: block; margin-bottom: 4px;">Expertise</strong>
+                  <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+                    ${author.expertise.map(exp => `<span class="badge ${username === 'arisudan' ? 'reflections' : 'technology'}" style="font-size: 0.7rem; padding: 4px 8px; border-radius: var(--radius-sm); font-family: var(--font-sans); font-weight: 600;">${exp}</span>`).join('')}
+                  </div>
+                </div>
+              ` : ''}
+              ${author.skills ? `
+                <div>
+                  <strong style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); display: block; margin-bottom: 4px;">Skills</strong>
+                  <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+                    ${author.skills.map(skill => `<span class="badge" style="font-size: 0.7rem; padding: 3px 6px; border-radius: var(--radius-sm); background-color: var(--color-bg-offset); border: 1px solid var(--color-border); color: var(--color-text); font-family: var(--font-sans); text-transform: none; font-weight: 500;">${skill}</span>`).join('')}
+                  </div>
+                </div>
+              ` : ''}
+            </div>
+
             <div style="font-size: 0.8rem; font-weight: 600; color: var(--color-text-light); margin-bottom: var(--space-md);">
               <span>Editorial Board Member</span>
               <span class="card-meta-dot" style="display:inline-block; margin: 0 var(--space-xs); vertical-align:middle;"></span>
@@ -1135,30 +1274,56 @@
           </div>
         </header>
 
-        <!-- Dynamic list of articles authored -->
-        <section class="author-articles-list">
-          <div class="section-header">
-            <h2 class="section-title">Authored by ${author.name}</h2>
-          </div>
-          <div class="grid-three-col" style="grid-template-columns: repeat(3, 1fr);">
-            ${writtenArticles.map(art => `
-              <article class="card">
-                <div class="card-img-wrapper">
-                  <img class="card-img" src="${art.image}" alt="${art.title}" loading="lazy" width="400" height="250">
-                </div>
-                <div class="card-body">
-                  <div class="card-meta">
-                    <span class="badge ${art.category}">${db.CATEGORIES[art.category].name}</span>
-                    <span class="card-meta-dot"></span>
-                    <span>${art.publishDate}</span>
-                  </div>
-                  <h3 class="card-title">
-                    <a href="/article/${art.id}">${art.title}</a>
-                  </h3>
-                  <p class="card-excerpt">${art.excerpt}</p>
-                </div>
-              </article>
-            `).join('')}
+        <!-- Two Parallel Publication Blocks -->
+        <section class="author-publications" style="margin-top: var(--space-xl); margin-bottom: var(--space-xl);">
+          <div class="grid-two-col" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-xl);">
+            
+            <!-- Left Column: Recent Articles -->
+            <div>
+              <h2 style="font-family: var(--font-serif); font-size: 1.4rem; border-bottom: 2px solid var(--color-border); padding-bottom: var(--space-xs); margin-bottom: var(--space-md); color: var(--color-text);">Recent Articles</h2>
+              <div style="display: flex; flex-direction: column; gap: var(--space-md);">
+                ${recentArticles.map(art => `
+                  <article class="card" style="margin-bottom: 0; background: var(--color-bg-offset); border: 1px solid var(--color-border);">
+                    <div class="card-body" style="padding: var(--space-md);">
+                      <div class="card-meta" style="margin-bottom: var(--space-xs);">
+                        <span class="badge ${art.category}">${db.CATEGORIES[art.category].name}</span>
+                        <span class="card-meta-dot"></span>
+                        <span>${art.publishDate}</span>
+                      </div>
+                      <h3 class="card-title" style="font-size: 1.1rem; margin-bottom: var(--space-xs); line-height: 1.3;">
+                        <a href="/article/${art.id}" style="text-decoration: none; color: inherit;">${art.title}</a>
+                      </h3>
+                      <p class="card-excerpt" style="font-size: 0.85rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${art.excerpt}</p>
+                    </div>
+                  </article>
+                `).join('')}
+                ${recentArticles.length === 0 ? `<p style="color: var(--color-text-muted);">No articles published yet.</p>` : ''}
+              </div>
+            </div>
+
+            <!-- Right Column: Most Popular Articles -->
+            <div>
+              <h2 style="font-family: var(--font-serif); font-size: 1.4rem; border-bottom: 2px solid var(--color-border); padding-bottom: var(--space-xs); margin-bottom: var(--space-md); color: var(--color-text);">Most Popular</h2>
+              <div style="display: flex; flex-direction: column; gap: var(--space-md);">
+                ${popularArticles.map(art => `
+                  <article class="card" style="margin-bottom: 0; background: var(--color-bg-offset); border: 1px solid var(--color-border);">
+                    <div class="card-body" style="padding: var(--space-md);">
+                      <div class="card-meta" style="margin-bottom: var(--space-xs);">
+                        <span class="badge ${art.category}">${db.CATEGORIES[art.category].name}</span>
+                        <span class="card-meta-dot"></span>
+                        <span style="color: var(--color-accent); font-weight: 600;">👁 ${art.views} views</span>
+                      </div>
+                      <h3 class="card-title" style="font-size: 1.1rem; margin-bottom: var(--space-xs); line-height: 1.3;">
+                        <a href="/article/${art.id}" style="text-decoration: none; color: inherit;">${art.title}</a>
+                      </h3>
+                      <p class="card-excerpt" style="font-size: 0.85rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${art.excerpt}</p>
+                    </div>
+                  </article>
+                `).join('')}
+                ${popularArticles.length === 0 ? `<p style="color: var(--color-text-muted);">No articles published yet.</p>` : ''}
+              </div>
+            </div>
+
           </div>
         </section>
       </div>
@@ -1934,6 +2099,15 @@
               </div>
 
               <div class="admin-form-group">
+                <label class="admin-label" for="art-image-alt">Cover Image Alt Text (Accessibility)</label>
+                <input class="admin-input" type="text" id="art-image-alt" placeholder="Alt text description for screen readers" value="${isEdit ? escapeHtml(article.imageAlt || '') : ''}">
+              </div>
+
+              <!-- Dynamic Cover Image Quality Warnings -->
+              <div class="admin-form-group admin-form-full" id="cover-image-warnings" style="display:none; padding:8px 12px; border-radius:var(--radius-sm); border:1px solid #fdba74; background-color:#fffbeb; color:#c2410c; font-size:0.8rem; font-family:var(--font-sans);">
+              </div>
+
+              <div class="admin-form-group">
                 <label class="admin-label" for="art-tags">Tags (Comma Separated)</label>
                 <input class="admin-input" type="text" id="art-tags" placeholder="AI, Technology, Global, Reflections" value="${isEdit ? escapeHtml(article.tags.join(', ')) : ''}">
               </div>
@@ -1946,9 +2120,14 @@
                 </select>
               </div>
 
-              <div class="admin-form-group">
-                <label class="admin-label">Publish Options</label>
-                <div class="admin-checkbox-group">
+              <div class="admin-form-group admin-form-full">
+                <label class="admin-label" for="art-sources">Sources & Citations (JSON Array of {name, url})</label>
+                <textarea class="admin-textarea" id="art-sources" rows="2" placeholder='[{"name": "MIT Technology Review", "url": "https://www.technologyreview.com"}]' style="font-family:monospace; font-size:0.8rem;">${isEdit ? escapeHtml(JSON.stringify(article.sources || [])) : '[]'}</textarea>
+              </div>
+
+              <div class="admin-form-group admin-form-full">
+                <label class="admin-label">Publish Options & Trust Badges</label>
+                <div class="admin-checkbox-group" style="display: flex; gap: var(--space-md); flex-wrap: wrap;">
                   <label class="admin-checkbox-label">
                     <input type="checkbox" id="art-feat" ${isEdit && article.featured ? 'checked' : ''}> Featured
                   </label>
@@ -1960,6 +2139,12 @@
                   </label>
                   <label class="admin-checkbox-label">
                     <input type="checkbox" id="art-editor" ${isEdit && article.editorsPick ? 'checked' : ''}> Editor's Pick
+                  </label>
+                  <label class="admin-checkbox-label">
+                    <input type="checkbox" id="art-fact" ${!isEdit || article.factChecked ? 'checked' : ''}> ✓ Fact Checked Badge
+                  </label>
+                  <label class="admin-checkbox-label">
+                    <input type="checkbox" id="art-review" ${!isEdit || article.editoriallyReviewed ? 'checked' : ''}> ✓ Editorially Reviewed Badge
                   </label>
                 </div>
               </div>
@@ -1980,10 +2165,82 @@
       // Cover Image Mock Buttons wire
       document.getElementById('btn-mock-img-ai').addEventListener('click', () => {
         document.getElementById('art-image').value = 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=800';
+        validateCoverImage();
       });
       document.getElementById('btn-mock-img-ref').addEventListener('click', () => {
         document.getElementById('art-image').value = 'https://images.unsplash.com/photo-1517059224940-d4af9eec41b7?auto=format&fit=crop&q=80&w=800';
+        validateCoverImage();
       });
+
+      // Cover Image Quality Warnings Validator
+      function validateCoverImage() {
+        const imageInput = document.getElementById('art-image');
+        const altInput = document.getElementById('art-image-alt');
+        const warningBox = document.getElementById('cover-image-warnings');
+        if (!imageInput || !altInput || !warningBox) return;
+
+        const url = imageInput.value.trim();
+        const alt = altInput.value.trim();
+        const warnings = [];
+
+        // 1. Accessibility Alt check
+        if (!alt) {
+          warnings.push("<strong>Accessibility Warning</strong>: Image Alt Text is empty. Screen readers will not be able to describe this image.");
+        }
+
+        if (url) {
+          // 2. WebP Extension check
+          const urlLower = url.toLowerCase();
+          const cleanUrl = urlLower.split('?')[0].split('#')[0];
+          if (!cleanUrl.endsWith('.webp')) {
+            warnings.push("<strong>Performance Warning</strong>: Image format is not WebP. High-resolution PNGs/JPEGs increase page load time. Recommended extension: .webp");
+          }
+
+          // 3. Image pre-load for dimensions and ratio
+          const tempImg = new Image();
+          tempImg.onload = function() {
+            const w = this.width;
+            const h = this.height;
+            const ratio = w / h;
+            if (ratio < 1.3 || ratio > 1.8) {
+              const displayWarning = `<strong>Ratio Warning</strong>: Cover image aspect ratio is ${ratio.toFixed(2)}:1 (recommended is 1.50 to 1.77, e.g. 16:9). Actual size: ${w}x${h}px.`;
+              if (!warnings.some(x => x.includes("Ratio Warning"))) {
+                warnings.push(displayWarning);
+                renderWarnings();
+              }
+            }
+          };
+          tempImg.onerror = function() {
+            if (!warnings.some(x => x.includes("Unable to load image"))) {
+              warnings.push("<strong>Ratio Warning</strong>: Unable to pre-load image dimensions. Verify the URL is valid and public.");
+              renderWarnings();
+            }
+          };
+          tempImg.src = url;
+        }
+
+        function renderWarnings() {
+          if (warnings.length > 0) {
+            warningBox.innerHTML = '<ul style="list-style-type: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px;">' + warnings.map(w => `<li style="display: flex; gap: 6px; align-items: flex-start;"><span style="color:#f97316;">⚠</span> <div>${w}</div></li>`).join('') + '</ul>';
+            warningBox.style.display = 'block';
+          } else {
+            warningBox.style.display = 'none';
+          }
+        }
+
+        renderWarnings();
+      }
+
+      // Wire Cover Image real-time input listeners
+      const imgInp = document.getElementById('art-image');
+      const altInp = document.getElementById('art-image-alt');
+      imgInp.addEventListener('input', validateCoverImage);
+      imgInp.addEventListener('change', validateCoverImage);
+      altInp.addEventListener('input', validateCoverImage);
+      altInp.addEventListener('change', validateCoverImage);
+
+      // Run initial validation check
+      setTimeout(validateCoverImage, 400);
 
       // Submit Form Handler
       document.getElementById('admin-article-form').addEventListener('submit', async (e) => {
@@ -1992,6 +2249,21 @@
         const saveBtn = document.getElementById('btn-form-save');
         saveBtn.disabled = true;
         saveBtn.innerHTML = 'Saving...';
+
+        // Parse sources citations from JSON textarea
+        let sourcesArray = [];
+        try {
+          const sourcesText = document.getElementById('art-sources').value.trim();
+          sourcesArray = sourcesText ? JSON.parse(sourcesText) : [];
+          if (!Array.isArray(sourcesArray)) {
+            throw new Error("Sources must be a JSON array.");
+          }
+        } catch (err) {
+          alert('Save failed: Invalid JSON in Sources & Citations field. It must be a valid JSON array like: [{"name": "MIT Technology Review", "url": "https://www.technologyreview.com"}]');
+          saveBtn.disabled = false;
+          saveBtn.innerHTML = 'Save Article';
+          return;
+        }
 
         const tagsString = document.getElementById('art-tags').value;
         const tagsArray = tagsString ? tagsString.split(',').map(t => t.trim()).filter(t => t !== '') : [];
@@ -2004,12 +2276,16 @@
           category: document.getElementById('art-category').value,
           author: document.getElementById('art-author').value,
           image: document.getElementById('art-image').value.trim(),
+          imageAlt: document.getElementById('art-image-alt').value.trim(),
           tags: tagsArray,
           status: document.getElementById('art-status').value,
           featured: document.getElementById('art-feat').checked,
           trending: document.getElementById('art-trend').checked,
           trendingThisWeek: document.getElementById('art-trend-week').checked,
-          editorsPick: document.getElementById('art-editor').checked
+          editorsPick: document.getElementById('art-editor').checked,
+          sources: sourcesArray,
+          factChecked: document.getElementById('art-fact').checked,
+          editoriallyReviewed: document.getElementById('art-review').checked
         };
 
         try {

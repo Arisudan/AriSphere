@@ -143,6 +143,26 @@
             <div class="author-profile-title">Global Analyst &amp; Columnist</div>
             <p class="author-profile-bio">Marcus writes on global economics, trade pathways, and international relations. His writing highlights historic cycles in current modern trends.</p>
             
+            <!-- Skills & Expertise Tags -->
+            <div class="author-expertise-section" style="margin-top: var(--space-md); margin-bottom: var(--space-md); display: flex; flex-direction: column; gap: var(--space-sm);">
+              
+                <div>
+                  <strong style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); display: block; margin-bottom: 4px;">Expertise</strong>
+                  <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+                    <span class="badge technology" style="font-size: 0.7rem; padding: 4px 8px; border-radius: var(--radius-sm); font-family: var(--font-sans); font-weight: 600;">Global Economy</span><span class="badge technology" style="font-size: 0.7rem; padding: 4px 8px; border-radius: var(--radius-sm); font-family: var(--font-sans); font-weight: 600;">Trade Policies</span><span class="badge technology" style="font-size: 0.7rem; padding: 4px 8px; border-radius: var(--radius-sm); font-family: var(--font-sans); font-weight: 600;">Semiconductor Supply Chains</span><span class="badge technology" style="font-size: 0.7rem; padding: 4px 8px; border-radius: var(--radius-sm); font-family: var(--font-sans); font-weight: 600;">Infrastructure Investments</span>
+                  </div>
+                </div>
+              
+              
+                <div>
+                  <strong style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); display: block; margin-bottom: 4px;">Skills</strong>
+                  <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+                    <span class="badge" style="font-size: 0.7rem; padding: 3px 6px; border-radius: var(--radius-sm); background-color: var(--color-bg-offset); border: 1px solid var(--color-border); color: var(--color-text); font-family: var(--font-sans); text-transform: none; font-weight: 500;">Macroeconomic Modeling</span><span class="badge" style="font-size: 0.7rem; padding: 3px 6px; border-radius: var(--radius-sm); background-color: var(--color-bg-offset); border: 1px solid var(--color-border); color: var(--color-text); font-family: var(--font-sans); text-transform: none; font-weight: 500;">Supply Chain Analysis</span><span class="badge" style="font-size: 0.7rem; padding: 3px 6px; border-radius: var(--radius-sm); background-color: var(--color-bg-offset); border: 1px solid var(--color-border); color: var(--color-text); font-family: var(--font-sans); text-transform: none; font-weight: 500;">Geopolitical Strategy</span><span class="badge" style="font-size: 0.7rem; padding: 3px 6px; border-radius: var(--radius-sm); background-color: var(--color-bg-offset); border: 1px solid var(--color-border); color: var(--color-text); font-family: var(--font-sans); text-transform: none; font-weight: 500;">Financial Journalism</span>
+                  </div>
+                </div>
+              
+            </div>
+
             <div style="font-size: 0.8rem; font-weight: 600; color: var(--color-text-light); margin-bottom: var(--space-md);">
               <span>Editorial Board Member</span>
               <span class="card-meta-dot" style="display:inline-block; margin: 0 var(--space-xs); vertical-align:middle;"></span>
@@ -167,47 +187,84 @@
           </div>
         </header>
 
-        <!-- Dynamic list of articles authored -->
-        <section class="author-articles-list">
-          <div class="section-header">
-            <h2 class="section-title">Authored by Marcus Aurelius</h2>
-          </div>
-          <div class="grid-three-col" style="grid-template-columns: repeat(3, 1fr);">
+        <!-- Two Parallel Publication Blocks -->
+        <section class="author-publications" style="margin-top: var(--space-xl); margin-bottom: var(--space-xl);">
+          <div class="grid-two-col" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-xl);">
             
-              <article class="card">
-                <div class="card-img-wrapper">
-                  <img class="card-img" src="/assets/images/business-cover.png" alt="The Great Shift: Global Supply Chains and the Return of Nearshoring" loading="lazy" width="400" height="250">
-                </div>
-                <div class="card-body">
-                  <div class="card-meta">
-                    <span class="badge business">Business</span>
-                    <span class="card-meta-dot"></span>
-                    <span>June 6, 2026</span>
-                  </div>
-                  <h3 class="card-title">
-                    <a href="/article/2">The Great Shift: Global Supply Chains and the Return of Nearshoring</a>
-                  </h3>
-                  <p class="card-excerpt">Global economic nodes are fragmenting. We analyze the macro-trends pushing manufacturing back to domestic borders and nearshore centers.</p>
-                </div>
-              </article>
-            
-              <article class="card">
-                <div class="card-img-wrapper">
-                  <img class="card-img" src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="The Geopolitics of Semiconductors: The Island Supply Chain Paradox" loading="lazy" width="400" height="250">
-                </div>
-                <div class="card-body">
-                  <div class="card-meta">
-                    <span class="badge world">World</span>
-                    <span class="card-meta-dot"></span>
-                    <span>June 2, 2026</span>
-                  </div>
-                  <h3 class="card-title">
-                    <a href="/article/5">The Geopolitics of Semiconductors: The Island Supply Chain Paradox</a>
-                  </h3>
-                  <p class="card-excerpt">Semiconductor value chain is highly centralized. We map global dependencies and the race to fund local fabrication plants.</p>
-                </div>
-              </article>
-            
+            <!-- Left Column: Recent Articles -->
+            <div>
+              <h2 style="font-family: var(--font-serif); font-size: 1.4rem; border-bottom: 2px solid var(--color-border); padding-bottom: var(--space-xs); margin-bottom: var(--space-md); color: var(--color-text);">Recent Articles</h2>
+              <div style="display: flex; flex-direction: column; gap: var(--space-md);">
+                
+                  <article class="card" style="margin-bottom: 0; background: var(--color-bg-offset); border: 1px solid var(--color-border);">
+                    <div class="card-body" style="padding: var(--space-md);">
+                      <div class="card-meta" style="margin-bottom: var(--space-xs);">
+                        <span class="badge world">World</span>
+                        <span class="card-meta-dot"></span>
+                        <span>June 2, 2026</span>
+                      </div>
+                      <h3 class="card-title" style="font-size: 1.1rem; margin-bottom: var(--space-xs); line-height: 1.3;">
+                        <a href="/article/5" style="text-decoration: none; color: inherit;">The Geopolitics of Semiconductors: The Island Supply Chain Paradox</a>
+                      </h3>
+                      <p class="card-excerpt" style="font-size: 0.85rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">Semiconductor value chain is highly centralized. We map global dependencies and the race to fund local fabrication plants.</p>
+                    </div>
+                  </article>
+                
+                  <article class="card" style="margin-bottom: 0; background: var(--color-bg-offset); border: 1px solid var(--color-border);">
+                    <div class="card-body" style="padding: var(--space-md);">
+                      <div class="card-meta" style="margin-bottom: var(--space-xs);">
+                        <span class="badge business">Business</span>
+                        <span class="card-meta-dot"></span>
+                        <span>June 6, 2026</span>
+                      </div>
+                      <h3 class="card-title" style="font-size: 1.1rem; margin-bottom: var(--space-xs); line-height: 1.3;">
+                        <a href="/article/2" style="text-decoration: none; color: inherit;">The Great Shift: Global Supply Chains and the Return of Nearshoring</a>
+                      </h3>
+                      <p class="card-excerpt" style="font-size: 0.85rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">Global economic nodes are fragmenting. We analyze the macro-trends pushing manufacturing back to domestic borders and nearshore centers.</p>
+                    </div>
+                  </article>
+                
+                
+              </div>
+            </div>
+
+            <!-- Right Column: Most Popular Articles -->
+            <div>
+              <h2 style="font-family: var(--font-serif); font-size: 1.4rem; border-bottom: 2px solid var(--color-border); padding-bottom: var(--space-xs); margin-bottom: var(--space-md); color: var(--color-text);">Most Popular</h2>
+              <div style="display: flex; flex-direction: column; gap: var(--space-md);">
+                
+                  <article class="card" style="margin-bottom: 0; background: var(--color-bg-offset); border: 1px solid var(--color-border);">
+                    <div class="card-body" style="padding: var(--space-md);">
+                      <div class="card-meta" style="margin-bottom: var(--space-xs);">
+                        <span class="badge world">World</span>
+                        <span class="card-meta-dot"></span>
+                        <span style="color: var(--color-accent); font-weight: 600;">👁 11200 views</span>
+                      </div>
+                      <h3 class="card-title" style="font-size: 1.1rem; margin-bottom: var(--space-xs); line-height: 1.3;">
+                        <a href="/article/5" style="text-decoration: none; color: inherit;">The Geopolitics of Semiconductors: The Island Supply Chain Paradox</a>
+                      </h3>
+                      <p class="card-excerpt" style="font-size: 0.85rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">Semiconductor value chain is highly centralized. We map global dependencies and the race to fund local fabrication plants.</p>
+                    </div>
+                  </article>
+                
+                  <article class="card" style="margin-bottom: 0; background: var(--color-bg-offset); border: 1px solid var(--color-border);">
+                    <div class="card-body" style="padding: var(--space-md);">
+                      <div class="card-meta" style="margin-bottom: var(--space-xs);">
+                        <span class="badge business">Business</span>
+                        <span class="card-meta-dot"></span>
+                        <span style="color: var(--color-accent); font-weight: 600;">👁 9840 views</span>
+                      </div>
+                      <h3 class="card-title" style="font-size: 1.1rem; margin-bottom: var(--space-xs); line-height: 1.3;">
+                        <a href="/article/2" style="text-decoration: none; color: inherit;">The Great Shift: Global Supply Chains and the Return of Nearshoring</a>
+                      </h3>
+                      <p class="card-excerpt" style="font-size: 0.85rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">Global economic nodes are fragmenting. We analyze the macro-trends pushing manufacturing back to domestic borders and nearshore centers.</p>
+                    </div>
+                  </article>
+                
+                
+              </div>
+            </div>
+
           </div>
         </section>
       </div>

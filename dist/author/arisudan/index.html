@@ -143,6 +143,26 @@
             <div class="author-profile-title">Founder, Publisher &amp; Editor-in-Chief</div>
             <p class="author-profile-bio">Arisudan is the founder and editor-in-chief of AriSphere. An experienced journalist, digital media architect, and former systems developer, Ari has spent over 15 years tracking cognitive AI evolution, the geopolitics of hardware chips, and digital attention philosophy. He holds a degree in Computer Science and Media Studies and directs the editorial vision at AriSphere.</p>
             
+            <!-- Skills & Expertise Tags -->
+            <div class="author-expertise-section" style="margin-top: var(--space-md); margin-bottom: var(--space-md); display: flex; flex-direction: column; gap: var(--space-sm);">
+              
+                <div>
+                  <strong style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); display: block; margin-bottom: 4px;">Expertise</strong>
+                  <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+                    <span class="badge reflections" style="font-size: 0.7rem; padding: 4px 8px; border-radius: var(--radius-sm); font-family: var(--font-sans); font-weight: 600;">Cognitive AI</span><span class="badge reflections" style="font-size: 0.7rem; padding: 4px 8px; border-radius: var(--radius-sm); font-family: var(--font-sans); font-weight: 600;">Hardware Geopolitics</span><span class="badge reflections" style="font-size: 0.7rem; padding: 4px 8px; border-radius: var(--radius-sm); font-family: var(--font-sans); font-weight: 600;">Digital Attention Philosophy</span><span class="badge reflections" style="font-size: 0.7rem; padding: 4px 8px; border-radius: var(--radius-sm); font-family: var(--font-sans); font-weight: 600;">Full-Stack Engineering</span>
+                  </div>
+                </div>
+              
+              
+                <div>
+                  <strong style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); display: block; margin-bottom: 4px;">Skills</strong>
+                  <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
+                    <span class="badge" style="font-size: 0.7rem; padding: 3px 6px; border-radius: var(--radius-sm); background-color: var(--color-bg-offset); border: 1px solid var(--color-border); color: var(--color-text); font-family: var(--font-sans); text-transform: none; font-weight: 500;">Systems Architecture</span><span class="badge" style="font-size: 0.7rem; padding: 3px 6px; border-radius: var(--radius-sm); background-color: var(--color-bg-offset); border: 1px solid var(--color-border); color: var(--color-text); font-family: var(--font-sans); text-transform: none; font-weight: 500;">Technical Journalism</span><span class="badge" style="font-size: 0.7rem; padding: 3px 6px; border-radius: var(--radius-sm); background-color: var(--color-bg-offset); border: 1px solid var(--color-border); color: var(--color-text); font-family: var(--font-sans); text-transform: none; font-weight: 500;">Database Design</span><span class="badge" style="font-size: 0.7rem; padding: 3px 6px; border-radius: var(--radius-sm); background-color: var(--color-bg-offset); border: 1px solid var(--color-border); color: var(--color-text); font-family: var(--font-sans); text-transform: none; font-weight: 500;">AI Research</span>
+                  </div>
+                </div>
+              
+            </div>
+
             <div style="font-size: 0.8rem; font-weight: 600; color: var(--color-text-light); margin-bottom: var(--space-md);">
               <span>Editorial Board Member</span>
               <span class="card-meta-dot" style="display:inline-block; margin: 0 var(--space-xs); vertical-align:middle;"></span>
@@ -175,98 +195,168 @@
           </div>
         </header>
 
-        <!-- Dynamic list of articles authored -->
-        <section class="author-articles-list">
-          <div class="section-header">
-            <h2 class="section-title">Authored by Arisudan</h2>
-          </div>
-          <div class="grid-three-col" style="grid-template-columns: repeat(3, 1fr);">
+        <!-- Two Parallel Publication Blocks -->
+        <section class="author-publications" style="margin-top: var(--space-xl); margin-bottom: var(--space-xl);">
+          <div class="grid-two-col" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-xl);">
             
-              <article class="card">
-                <div class="card-img-wrapper">
-                  <img class="card-img" src="/assets/images/ai-cover.png" alt="The Silicon Mind: Navigating the Intersection of Cognitive AI and Creative Writing" loading="lazy" width="400" height="250">
-                </div>
-                <div class="card-body">
-                  <div class="card-meta">
-                    <span class="badge ai">AI</span>
-                    <span class="card-meta-dot"></span>
-                    <span>June 8, 2026</span>
-                  </div>
-                  <h3 class="card-title">
-                    <a href="/article/1">The Silicon Mind: Navigating the Intersection of Cognitive AI and Creative Writing</a>
-                  </h3>
-                  <p class="card-excerpt">As artificial intelligence systems enter creative sectors, authors and technologists debate where engineering stops and creative soul begins.</p>
-                </div>
-              </article>
-            
-              <article class="card">
-                <div class="card-img-wrapper">
-                  <img class="card-img" src="https://images.unsplash.com/photo-1552581234-2612b75de6d6?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Echoes of the Agora: How Micro-Communities are Reshaping Public Discourse" loading="lazy" width="400" height="250">
-                </div>
-                <div class="card-body">
-                  <div class="card-meta">
-                    <span class="badge social-media">Social Media</span>
-                    <span class="card-meta-dot"></span>
-                    <span>June 4, 2026</span>
-                  </div>
-                  <h3 class="card-title">
-                    <a href="/article/4">Echoes of the Agora: How Micro-Communities are Reshaping Public Discourse</a>
-                  </h3>
-                  <p class="card-excerpt">Public social media feeds are giving way to gated Discord rooms and private telegram hubs. We look at what this means for political debate.</p>
-                </div>
-              </article>
-            
-              <article class="card">
-                <div class="card-img-wrapper">
-                  <img class="card-img" src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="What Jayem Automotive Taught Me About Real Engineering" loading="lazy" width="400" height="250">
-                </div>
-                <div class="card-body">
-                  <div class="card-meta">
-                    <span class="badge reflections">Reflections</span>
-                    <span class="card-meta-dot"></span>
-                    <span>June 9, 2026</span>
-                  </div>
-                  <h3 class="card-title">
-                    <a href="/article/7">What Jayem Automotive Taught Me About Real Engineering</a>
-                  </h3>
-                  <p class="card-excerpt">My time at Jayem Automotive redefined what engineering means to me. Here are the core lessons from the shop floor and building real hardware.</p>
-                </div>
-              </article>
-            
-              <article class="card">
-                <div class="card-img-wrapper">
-                  <img class="card-img" src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Building AriSphere From Zero to Production" loading="lazy" width="400" height="250">
-                </div>
-                <div class="card-body">
-                  <div class="card-meta">
-                    <span class="badge reflections">Reflections</span>
-                    <span class="card-meta-dot"></span>
-                    <span>June 10, 2026</span>
-                  </div>
-                  <h3 class="card-title">
-                    <a href="/article/6">Building AriSphere From Zero to Production</a>
-                  </h3>
-                  <p class="card-excerpt">Building a modern web application requires balancing architecture decisions. Here is how I structured AriSphere's static compiler and database fallback layer.</p>
-                </div>
-              </article>
-            
-              <article class="card">
-                <div class="card-img-wrapper">
-                  <img class="card-img" src="https://images.unsplash.com/photo-1517059224940-d4af9eec41b7?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="The Reality of Pursuing Embedded Systems in India" loading="lazy" width="400" height="250">
-                </div>
-                <div class="card-body">
-                  <div class="card-meta">
-                    <span class="badge reflections">Reflections</span>
-                    <span class="card-meta-dot"></span>
-                    <span>June 8, 2026</span>
-                  </div>
-                  <h3 class="card-title">
-                    <a href="/article/8">The Reality of Pursuing Embedded Systems in India</a>
-                  </h3>
-                  <p class="card-excerpt">Finding hardware roles in India is challenging. I analyze the market realities and how students can navigate them.</p>
-                </div>
-              </article>
-            
+            <!-- Left Column: Recent Articles -->
+            <div>
+              <h2 style="font-family: var(--font-serif); font-size: 1.4rem; border-bottom: 2px solid var(--color-border); padding-bottom: var(--space-xs); margin-bottom: var(--space-md); color: var(--color-text);">Recent Articles</h2>
+              <div style="display: flex; flex-direction: column; gap: var(--space-md);">
+                
+                  <article class="card" style="margin-bottom: 0; background: var(--color-bg-offset); border: 1px solid var(--color-border);">
+                    <div class="card-body" style="padding: var(--space-md);">
+                      <div class="card-meta" style="margin-bottom: var(--space-xs);">
+                        <span class="badge reflections">Reflections</span>
+                        <span class="card-meta-dot"></span>
+                        <span>June 8, 2026</span>
+                      </div>
+                      <h3 class="card-title" style="font-size: 1.1rem; margin-bottom: var(--space-xs); line-height: 1.3;">
+                        <a href="/article/8" style="text-decoration: none; color: inherit;">The Reality of Pursuing Embedded Systems in India</a>
+                      </h3>
+                      <p class="card-excerpt" style="font-size: 0.85rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">Finding hardware roles in India is challenging. I analyze the market realities and how students can navigate them.</p>
+                    </div>
+                  </article>
+                
+                  <article class="card" style="margin-bottom: 0; background: var(--color-bg-offset); border: 1px solid var(--color-border);">
+                    <div class="card-body" style="padding: var(--space-md);">
+                      <div class="card-meta" style="margin-bottom: var(--space-xs);">
+                        <span class="badge reflections">Reflections</span>
+                        <span class="card-meta-dot"></span>
+                        <span>June 9, 2026</span>
+                      </div>
+                      <h3 class="card-title" style="font-size: 1.1rem; margin-bottom: var(--space-xs); line-height: 1.3;">
+                        <a href="/article/7" style="text-decoration: none; color: inherit;">What Jayem Automotive Taught Me About Real Engineering</a>
+                      </h3>
+                      <p class="card-excerpt" style="font-size: 0.85rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">My time at Jayem Automotive redefined what engineering means to me. Here are the core lessons from the shop floor and building real hardware.</p>
+                    </div>
+                  </article>
+                
+                  <article class="card" style="margin-bottom: 0; background: var(--color-bg-offset); border: 1px solid var(--color-border);">
+                    <div class="card-body" style="padding: var(--space-md);">
+                      <div class="card-meta" style="margin-bottom: var(--space-xs);">
+                        <span class="badge reflections">Reflections</span>
+                        <span class="card-meta-dot"></span>
+                        <span>June 10, 2026</span>
+                      </div>
+                      <h3 class="card-title" style="font-size: 1.1rem; margin-bottom: var(--space-xs); line-height: 1.3;">
+                        <a href="/article/6" style="text-decoration: none; color: inherit;">Building AriSphere From Zero to Production</a>
+                      </h3>
+                      <p class="card-excerpt" style="font-size: 0.85rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">Building a modern web application requires balancing architecture decisions. Here is how I structured AriSphere's static compiler and database fallback layer.</p>
+                    </div>
+                  </article>
+                
+                  <article class="card" style="margin-bottom: 0; background: var(--color-bg-offset); border: 1px solid var(--color-border);">
+                    <div class="card-body" style="padding: var(--space-md);">
+                      <div class="card-meta" style="margin-bottom: var(--space-xs);">
+                        <span class="badge social-media">Social Media</span>
+                        <span class="card-meta-dot"></span>
+                        <span>June 4, 2026</span>
+                      </div>
+                      <h3 class="card-title" style="font-size: 1.1rem; margin-bottom: var(--space-xs); line-height: 1.3;">
+                        <a href="/article/4" style="text-decoration: none; color: inherit;">Echoes of the Agora: How Micro-Communities are Reshaping Public Discourse</a>
+                      </h3>
+                      <p class="card-excerpt" style="font-size: 0.85rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">Public social media feeds are giving way to gated Discord rooms and private telegram hubs. We look at what this means for political debate.</p>
+                    </div>
+                  </article>
+                
+                  <article class="card" style="margin-bottom: 0; background: var(--color-bg-offset); border: 1px solid var(--color-border);">
+                    <div class="card-body" style="padding: var(--space-md);">
+                      <div class="card-meta" style="margin-bottom: var(--space-xs);">
+                        <span class="badge ai">AI</span>
+                        <span class="card-meta-dot"></span>
+                        <span>June 8, 2026</span>
+                      </div>
+                      <h3 class="card-title" style="font-size: 1.1rem; margin-bottom: var(--space-xs); line-height: 1.3;">
+                        <a href="/article/1" style="text-decoration: none; color: inherit;">The Silicon Mind: Navigating the Intersection of Cognitive AI and Creative Writing</a>
+                      </h3>
+                      <p class="card-excerpt" style="font-size: 0.85rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">As artificial intelligence systems enter creative sectors, authors and technologists debate where engineering stops and creative soul begins.</p>
+                    </div>
+                  </article>
+                
+                
+              </div>
+            </div>
+
+            <!-- Right Column: Most Popular Articles -->
+            <div>
+              <h2 style="font-family: var(--font-serif); font-size: 1.4rem; border-bottom: 2px solid var(--color-border); padding-bottom: var(--space-xs); margin-bottom: var(--space-md); color: var(--color-text);">Most Popular</h2>
+              <div style="display: flex; flex-direction: column; gap: var(--space-md);">
+                
+                  <article class="card" style="margin-bottom: 0; background: var(--color-bg-offset); border: 1px solid var(--color-border);">
+                    <div class="card-body" style="padding: var(--space-md);">
+                      <div class="card-meta" style="margin-bottom: var(--space-xs);">
+                        <span class="badge ai">AI</span>
+                        <span class="card-meta-dot"></span>
+                        <span style="color: var(--color-accent); font-weight: 600;">👁 14520 views</span>
+                      </div>
+                      <h3 class="card-title" style="font-size: 1.1rem; margin-bottom: var(--space-xs); line-height: 1.3;">
+                        <a href="/article/1" style="text-decoration: none; color: inherit;">The Silicon Mind: Navigating the Intersection of Cognitive AI and Creative Writing</a>
+                      </h3>
+                      <p class="card-excerpt" style="font-size: 0.85rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">As artificial intelligence systems enter creative sectors, authors and technologists debate where engineering stops and creative soul begins.</p>
+                    </div>
+                  </article>
+                
+                  <article class="card" style="margin-bottom: 0; background: var(--color-bg-offset); border: 1px solid var(--color-border);">
+                    <div class="card-body" style="padding: var(--space-md);">
+                      <div class="card-meta" style="margin-bottom: var(--space-xs);">
+                        <span class="badge social-media">Social Media</span>
+                        <span class="card-meta-dot"></span>
+                        <span style="color: var(--color-accent); font-weight: 600;">👁 8710 views</span>
+                      </div>
+                      <h3 class="card-title" style="font-size: 1.1rem; margin-bottom: var(--space-xs); line-height: 1.3;">
+                        <a href="/article/4" style="text-decoration: none; color: inherit;">Echoes of the Agora: How Micro-Communities are Reshaping Public Discourse</a>
+                      </h3>
+                      <p class="card-excerpt" style="font-size: 0.85rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">Public social media feeds are giving way to gated Discord rooms and private telegram hubs. We look at what this means for political debate.</p>
+                    </div>
+                  </article>
+                
+                  <article class="card" style="margin-bottom: 0; background: var(--color-bg-offset); border: 1px solid var(--color-border);">
+                    <div class="card-body" style="padding: var(--space-md);">
+                      <div class="card-meta" style="margin-bottom: var(--space-xs);">
+                        <span class="badge reflections">Reflections</span>
+                        <span class="card-meta-dot"></span>
+                        <span style="color: var(--color-accent); font-weight: 600;">👁 1540 views</span>
+                      </div>
+                      <h3 class="card-title" style="font-size: 1.1rem; margin-bottom: var(--space-xs); line-height: 1.3;">
+                        <a href="/article/8" style="text-decoration: none; color: inherit;">The Reality of Pursuing Embedded Systems in India</a>
+                      </h3>
+                      <p class="card-excerpt" style="font-size: 0.85rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">Finding hardware roles in India is challenging. I analyze the market realities and how students can navigate them.</p>
+                    </div>
+                  </article>
+                
+                  <article class="card" style="margin-bottom: 0; background: var(--color-bg-offset); border: 1px solid var(--color-border);">
+                    <div class="card-body" style="padding: var(--space-md);">
+                      <div class="card-meta" style="margin-bottom: var(--space-xs);">
+                        <span class="badge reflections">Reflections</span>
+                        <span class="card-meta-dot"></span>
+                        <span style="color: var(--color-accent); font-weight: 600;">👁 1205 views</span>
+                      </div>
+                      <h3 class="card-title" style="font-size: 1.1rem; margin-bottom: var(--space-xs); line-height: 1.3;">
+                        <a href="/article/6" style="text-decoration: none; color: inherit;">Building AriSphere From Zero to Production</a>
+                      </h3>
+                      <p class="card-excerpt" style="font-size: 0.85rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">Building a modern web application requires balancing architecture decisions. Here is how I structured AriSphere's static compiler and database fallback layer.</p>
+                    </div>
+                  </article>
+                
+                  <article class="card" style="margin-bottom: 0; background: var(--color-bg-offset); border: 1px solid var(--color-border);">
+                    <div class="card-body" style="padding: var(--space-md);">
+                      <div class="card-meta" style="margin-bottom: var(--space-xs);">
+                        <span class="badge reflections">Reflections</span>
+                        <span class="card-meta-dot"></span>
+                        <span style="color: var(--color-accent); font-weight: 600;">👁 940 views</span>
+                      </div>
+                      <h3 class="card-title" style="font-size: 1.1rem; margin-bottom: var(--space-xs); line-height: 1.3;">
+                        <a href="/article/7" style="text-decoration: none; color: inherit;">What Jayem Automotive Taught Me About Real Engineering</a>
+                      </h3>
+                      <p class="card-excerpt" style="font-size: 0.85rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">My time at Jayem Automotive redefined what engineering means to me. Here are the core lessons from the shop floor and building real hardware.</p>
+                    </div>
+                  </article>
+                
+                
+              </div>
+            </div>
+
           </div>
         </section>
       </div>

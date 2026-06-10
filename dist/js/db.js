@@ -24,7 +24,9 @@ const AUTHORS = {
       twitter: 'https://x.com/arisudan_mock',
       linkedin: 'https://linkedin.com/in/arisudan-mock',
       github: 'https://github.com/arisudan-mock'
-    }
+    },
+    skills: ['Systems Architecture', 'Technical Journalism', 'Database Design', 'AI Research'],
+    expertise: ['Cognitive AI', 'Hardware Geopolitics', 'Digital Attention Philosophy', 'Full-Stack Engineering']
   },
   elenavance: {
     username: 'elenavance',
@@ -36,7 +38,9 @@ const AUTHORS = {
     social: {
       twitter: '#',
       linkedin: '#'
-    }
+    },
+    skills: ['Embedded Firmware', 'Low-Level C', 'PCB Routing', 'Technical Reporting'],
+    expertise: ['Embedded Systems', 'Consumer Electronics', 'Technology Policy', 'Mobile Hardware']
   },
   marcusaurelius: {
     username: 'marcusaurelius',
@@ -48,7 +52,9 @@ const AUTHORS = {
     social: {
       linkedin: '#',
       twitter: '#'
-    }
+    },
+    skills: ['Macroeconomic Modeling', 'Supply Chain Analysis', 'Geopolitical Strategy', 'Financial Journalism'],
+    expertise: ['Global Economy', 'Trade Policies', 'Semiconductor Supply Chains', 'Infrastructure Investments']
   }
 };
 
@@ -1102,6 +1108,7 @@ function mapDatabaseArticle(row) {
     publishDate: row.publish_date,
     readTime: row.read_time,
     image: row.image_url,
+    imageAlt: row.image_alt || '',
     tags: Array.isArray(row.tags) ? row.tags : (typeof row.tags === 'string' ? JSON.parse(row.tags) : []),
     featured: !!row.featured,
     trending: !!row.trending,
@@ -1110,10 +1117,16 @@ function mapDatabaseArticle(row) {
     views: row.views || 0,
     status: row.status || 'draft',
     createdAt: row.created_at,
-    updatedAt: row.updated_at
+    updatedAt: row.updated_at,
+    sources: Array.isArray(row.sources) ? row.sources : (typeof row.sources === 'string' ? JSON.parse(row.sources) : []),
+    factChecked: row.fact_checked !== undefined ? !!row.fact_checked : true,
+    editoriallyReviewed: row.editorially_reviewed !== undefined ? !!row.editorially_reviewed : true
   };
   
-  mapped.lastUpdatedDate = mapped.publishDate;
+  const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+  mapped.lastUpdatedDate = row.updated_at 
+    ? new Date(row.updated_at).toLocaleDateString('en-US', dateOptions) 
+    : row.publish_date;
   
   // Custom source attribution mapper to match local post-process logic
   if (mapped.id === 1) mapped.sourceAttribution = 'AriSphere AI Lab & MIT Tech Review';
@@ -1344,13 +1357,17 @@ async function createArticleAdmin(articleData) {
       publish_date: articleData.publishDate || new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
       read_time: articleData.readTime || '5 min read',
       image_url: articleData.image || '/assets/images/business-cover.png',
+      image_alt: articleData.imageAlt || '',
       tags: articleData.tags || [],
       featured: !!articleData.featured,
       trending: !!articleData.trending,
       trending_this_week: !!articleData.trendingThisWeek,
       editors_pick: !!articleData.editorsPick,
       status: articleData.status || 'draft',
-      views: 0
+      views: 0,
+      sources: articleData.sources || [],
+      fact_checked: articleData.factChecked !== undefined ? !!articleData.factChecked : true,
+      editorially_reviewed: articleData.editoriallyReviewed !== undefined ? !!articleData.editoriallyReviewed : true
     };
     const { data, error } = await supabaseClient
       .from('articles')
@@ -1367,8 +1384,13 @@ async function createArticleAdmin(articleData) {
       publishDate: articleData.publishDate || new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
       readTime: articleData.readTime || '5 min read',
       image: articleData.image || '/assets/images/business-cover.png',
+      imageAlt: articleData.imageAlt || '',
       tags: articleData.tags || [],
-      status: articleData.status || 'draft'
+      status: articleData.status || 'draft',
+      sources: articleData.sources || [],
+      factChecked: articleData.factChecked !== undefined ? !!articleData.factChecked : true,
+      editoriallyReviewed: articleData.editoriallyReviewed !== undefined ? !!articleData.editoriallyReviewed : true,
+      updatedAt: new Date().toISOString()
     };
     ARTICLES.push(newArt);
     return newArt;
@@ -1387,12 +1409,17 @@ async function updateArticleAdmin(id, articleData) {
       publish_date: articleData.publishDate,
       read_time: articleData.readTime,
       image_url: articleData.image,
+      image_alt: articleData.imageAlt || '',
       tags: articleData.tags,
       featured: !!articleData.featured,
       trending: !!articleData.trending,
       trending_this_week: !!articleData.trendingThisWeek,
       editors_pick: !!articleData.editorsPick,
-      status: articleData.status
+      status: articleData.status,
+      sources: articleData.sources || [],
+      fact_checked: articleData.factChecked !== undefined ? !!articleData.factChecked : true,
+      editorially_reviewed: articleData.editoriallyReviewed !== undefined ? !!articleData.editoriallyReviewed : true,
+      updated_at: new Date().toISOString()
     };
     const { data, error } = await supabaseClient
       .from('articles')
@@ -1407,7 +1434,12 @@ async function updateArticleAdmin(id, articleData) {
       ARTICLES[idx] = {
         ...ARTICLES[idx],
         ...articleData,
-        tags: articleData.tags || ARTICLES[idx].tags
+        tags: articleData.tags || ARTICLES[idx].tags,
+        imageAlt: articleData.imageAlt !== undefined ? articleData.imageAlt : (ARTICLES[idx].imageAlt || ''),
+        sources: articleData.sources || ARTICLES[idx].sources || [],
+        factChecked: articleData.factChecked !== undefined ? !!articleData.factChecked : (ARTICLES[idx].factChecked !== undefined ? ARTICLES[idx].factChecked : true),
+        editoriallyReviewed: articleData.editoriallyReviewed !== undefined ? !!articleData.editoriallyReviewed : (ARTICLES[idx].editoriallyReviewed !== undefined ? ARTICLES[idx].editoriallyReviewed : true),
+        updatedAt: new Date().toISOString()
       };
       return ARTICLES[idx];
     }
@@ -1436,15 +1468,47 @@ async function deleteArticleAdmin(id) {
 // Post-process articles to inject default published, last updated dates, and source attribution
 ARTICLES.forEach(art => {
   art.lastUpdatedDate = art.publishDate;
+  art.updatedAt = art.updatedAt || new Date(art.publishDate || Date.now()).toISOString();
   art.sourceAttribution = 'AriSphere Editorial Desk';
+  art.factChecked = art.factChecked !== undefined ? art.factChecked : true;
+  art.editoriallyReviewed = art.editoriallyReviewed !== undefined ? art.editoriallyReviewed : true;
+  art.sources = art.sources || [];
 });
 
 // Explicit source attributions for high priority featured articles
-if (ARTICLES[0]) ARTICLES[0].sourceAttribution = 'AriSphere AI Lab & MIT Tech Review';
-if (ARTICLES[1]) ARTICLES[1].sourceAttribution = 'Bloomberg Supply Chain Reports';
-if (ARTICLES[2]) ARTICLES[2].sourceAttribution = 'IBM Quantum Labs & IEEE Spectrum';
-if (ARTICLES[3]) ARTICLES[3].sourceAttribution = 'Pew Research Center Analytics';
-if (ARTICLES[4]) ARTICLES[4].sourceAttribution = 'TSMC Technical Disclosures & Taiwan Tech';
+if (ARTICLES[0]) {
+  ARTICLES[0].sourceAttribution = 'AriSphere AI Lab & MIT Tech Review';
+  ARTICLES[0].sources = [
+    { name: 'MIT Technology Review', url: 'https://www.technologyreview.com' },
+    { name: 'Stanford Human-Centered AI', url: 'https://hai.stanford.edu' }
+  ];
+}
+if (ARTICLES[1]) {
+  ARTICLES[1].sourceAttribution = 'Bloomberg Supply Chain Reports';
+  ARTICLES[1].sources = [
+    { name: 'Bloomberg Economics', url: 'https://www.bloomberg.com' },
+    { name: 'Reuters Supply Chain Index', url: 'https://www.reuters.com' }
+  ];
+}
+if (ARTICLES[2]) {
+  ARTICLES[2].sourceAttribution = 'IBM Quantum Labs & IEEE Spectrum';
+  ARTICLES[2].sources = [
+    { name: 'IEEE Spectrum Quantum', url: 'https://spectrum.ieee.org' },
+    { name: 'IBM Research Quantum', url: 'https://research.ibm.com' }
+  ];
+}
+if (ARTICLES[3]) {
+  ARTICLES[3].sourceAttribution = 'Pew Research Center Analytics';
+  ARTICLES[3].sources = [
+    { name: 'Pew Research Internet Project', url: 'https://www.pewresearch.org' }
+  ];
+}
+if (ARTICLES[4]) {
+  ARTICLES[4].sourceAttribution = 'TSMC Technical Disclosures & Taiwan Tech';
+  ARTICLES[4].sources = [
+    { name: 'TSMC Annual Disclosures', url: 'https://www.tsmc.com' }
+  ];
+}
 
 // Export for window context
 window.AriSphereDB = {
