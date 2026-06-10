@@ -63,6 +63,17 @@
     return window.location.origin;
   }
 
+  // Helper: Safe date parsing to prevent RangeErrors (Finding C)
+  function safeISODate(dateStr) {
+    try {
+      const d = new Date(dateStr);
+      if (!isNaN(d.getTime())) {
+        return d.toISOString().split('T')[0];
+      }
+    } catch (e) {}
+    return new Date().toISOString().split('T')[0];
+  }
+
   // SEO & Schema Injections
   function applySEO(meta) {
     const canonicalUrl = getBaseURL() + (window.location.pathname === '/' ? '' : window.location.pathname);
@@ -124,7 +135,12 @@
     });
 
     // 7. GA4 SPA Virtual Page Tracking integration
-    if (typeof gtag === 'function' && localStorage.getItem('cookie-consent') === 'accepted') {
+    let hasConsent = false;
+    try {
+      hasConsent = localStorage.getItem('cookie-consent') === 'accepted';
+    } catch (e) {}
+    
+    if (typeof gtag === 'function' && hasConsent) {
       gtag('config', 'G-GA_MEASUREMENT_ID', {
         'page_title': finalTitle,
         'page_path': window.location.pathname
@@ -150,6 +166,12 @@
     if (path.endsWith('/index.html')) {
       path = path.slice(0, -10);
     }
+    
+    // Strip trailing slashes to prevent matching failures (Finding B)
+    if (path.length > 1 && path.endsWith('/')) {
+      path = path.slice(0, -1);
+    }
+    
     if (path === '') path = '/';
     
     const viewport = document.getElementById(ROUTER_CONTAINER_ID);
@@ -603,8 +625,8 @@
         },
         'headline': article.title,
         'image': [article.image],
-        'datePublished': new Date(article.publishDate).toISOString().split('T')[0],
-        'dateModified': new Date(article.lastUpdatedDate).toISOString().split('T')[0],
+        'datePublished': safeISODate(article.publishDate),
+        'dateModified': safeISODate(article.lastUpdatedDate),
         'author': {
           '@type': 'Person',
           'name': authorInfo.name,

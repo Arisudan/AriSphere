@@ -7,9 +7,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
+  // Safe LocalStorage Wrapper to prevent crashes when storage is disabled
+  const safeStorage = {
+    getItem: (key) => {
+      try { return localStorage.getItem(key); } catch (e) { return null; }
+    },
+    setItem: (key, val) => {
+      try { localStorage.setItem(key, val); } catch (e) {}
+    }
+  };
+
   // --- 1. Light / Dark Theme Management ---
   const themeToggle = document.getElementById('theme-toggle');
-  const storedTheme = localStorage.getItem('theme') || 'light';
+  const storedTheme = safeStorage.getItem('theme') || 'light';
   
   // Set initial theme
   document.documentElement.setAttribute('data-theme', storedTheme);
@@ -20,7 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
       
       document.documentElement.setAttribute('data-theme', newTheme);
-      localStorage.setItem('theme', newTheme);
+      safeStorage.setItem('theme', newTheme);
       
       // Toast notification
       showToast(`Switched to ${newTheme} theme`);
@@ -235,7 +245,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const cookieDeclineBtn = document.getElementById('cookie-decline');
 
   if (cookieBanner && cookieAcceptBtn && cookieDeclineBtn) {
-    const consent = localStorage.getItem('cookie-consent');
+    const consent = safeStorage.getItem('cookie-consent');
     if (!consent) {
       // Show banner after short delay for animations
       setTimeout(() => {
@@ -247,14 +257,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     cookieAcceptBtn.addEventListener('click', () => {
-      localStorage.setItem('cookie-consent', 'accepted');
+      safeStorage.setItem('cookie-consent', 'accepted');
       closeCookieBanner();
       initializeGA4();
       showToast('Analytics & personalization cookies accepted');
     });
 
     cookieDeclineBtn.addEventListener('click', () => {
-      localStorage.setItem('cookie-consent', 'declined');
+      safeStorage.setItem('cookie-consent', 'declined');
       closeCookieBanner();
       showToast('Cookies declined. Privacy lock active.');
     });
@@ -327,6 +337,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // --- 10. Global URL Click Interceptor (HTML5 History API) ---
   document.addEventListener('click', (e) => {
+    // Check for modifier keys or non-left-click buttons to preserve browser defaults (e.g. Open in New Tab)
+    if (e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button !== 0) {
+      return;
+    }
     const anchor = e.target.closest('a');
     if (anchor) {
       const href = anchor.getAttribute('href');
