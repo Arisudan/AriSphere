@@ -14,26 +14,26 @@
   </script>
   
   <!-- Default SEO Meta Tags (Overridden dynamically by router.js) -->
-  <title>AriSphere | Where Trends Meet Perspective</title>
-  <meta name="description" content="AriSphere is a premium digital publication and media magazine tracking technology shifts, cognitive AI innovations, global business policies, and cultural insights.">
+  <title>Home | AriSphere - Where Trends Meet Perspective</title>
+  <meta name="description" content="AriSphere: Where Trends Meet Perspective. Read the latest analysis on Technology, AI, Global Economics, Business, Social Media networks, and cultural insights.">
   <meta name="robots" content="index, follow">
   
   <!-- Canonical Link -->
-  <link rel="canonical" href="https://arisphere.vercel.app/">
+  <link rel="canonical" href="https://arisphere.vercel.app">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="AriSphere | Where Trends Meet Perspective">
-  <meta property="og:description" content="AriSphere is a premium digital publication and media magazine tracking technology shifts, cognitive AI innovations, global business policies, and cultural insights.">
-  <meta property="og:url" content="http://localhost:3000/">
-  <meta property="og:image" content="/assets/images/business-cover.png">
+  <meta property="og:title" content="Home | AriSphere - Where Trends Meet Perspective">
+  <meta property="og:description" content="AriSphere: Where Trends Meet Perspective. Read the latest analysis on Technology, AI, Global Economics, Business, Social Media networks, and cultural insights.">
+  <meta property="og:url" content="https://arisphere.vercel.app">
+  <meta property="og:image" content="/assets/images/ai-cover.png">
   <meta property="og:site_name" content="AriSphere">
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="AriSphere | Where Trends Meet Perspective">
-  <meta name="twitter:description" content="AriSphere is a premium digital publication and media magazine tracking technology shifts, cognitive AI innovations, global business policies, and cultural insights.">
-  <meta name="twitter:image" content="/assets/images/business-cover.png">
+  <meta name="twitter:title" content="Home | AriSphere - Where Trends Meet Perspective">
+  <meta name="twitter:description" content="AriSphere: Where Trends Meet Perspective. Read the latest analysis on Technology, AI, Global Economics, Business, Social Media networks, and cultural insights.">
+  <meta name="twitter:image" content="/assets/images/ai-cover.png">
 
   <!-- Favicon / Brand Styling -->
   <meta name="theme-color" content="#0f172a">
@@ -56,16 +56,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <!-- Dynamic JSON-LD Script Tag for SEO Structured Data (Updated by router) -->
-  <script type="application/ld+json" id="jsonld-schema">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "AriSphere",
-      "alternateName": "AriSphere Magazine",
-      "url": "http://localhost:3000/",
-      "description": "Where Trends Meet Perspective"
-    }
-  </script>
+  <script type="application/ld+json" id="jsonld-schema">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://arisphere.vercel.app/#website","url":"https://arisphere.vercel.app/","name":"AriSphere","description":"Where Trends Meet Perspective","publisher":{"@id":"https://arisphere.vercel.app/#organization"}},{"@type":"Organization","@id":"https://arisphere.vercel.app/#organization","name":"AriSphere","url":"https://arisphere.vercel.app/","logo":{"@type":"ImageObject","url":"https://arisphere.vercel.app/assets/images/business-cover.png"}}]}]}</script>
 </head>
 <body>
 
@@ -90,7 +81,7 @@
       <!-- Desktop Nav Menu -->
       <nav id="nav-menu" aria-label="Primary Navigation">
         <ul class="nav-menu">
-          <li><a href="/" class="nav-link">Home</a></li>
+          <li><a href="/" class="nav-link active">Home</a></li>
           <li><a href="/category/trending" class="nav-link">Trending</a></li>
           <li><a href="/category/technology" class="nav-link">Technology</a></li>
           <li><a href="/category/ai" class="nav-link">AI</a></li>
@@ -139,14 +130,423 @@
   </div>
 
   <!-- Router Mount Element (Dynamic views will load here) -->
-  <main id="main-viewport" class="main-content fade-out" aria-live="polite">
-    <!-- Loading placeholder during routing initialization -->
-    <div style="display:flex; justify-content:center; align-items:center; height:50vh;">
-      <svg style="width:50px;height:50px;animation:spin 1s linear infinite;color:var(--color-accent);" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="32"></circle>
-      </svg>
-    </div>
-  </main>
+  <main id="main-viewport" class="main-content" aria-live="polite">
+      <div class="container">
+        <!-- Top Leaderboard Advertisement Placement -->
+        <div class="adsense-placement ad-leaderboard" id="adsense-home-top">
+          <div class="adsense-label">AriSphere Core Banner</div>
+          <div class="adsense-slot-info">Display responsive 728x90</div>
+        </div>
+
+        <!-- Hero Editorial Section (Magazine Cover Layout) -->
+        <section class="hero-section">
+          
+          <!-- Left Column: Large Featured Cover Story -->
+          <div class="hero-featured-card">
+            <img class="hero-featured-img" src="/assets/images/ai-cover.png" alt="The Silicon Mind: Navigating the Intersection of Cognitive AI and Creative Writing" loading="eager" fetchpriority="high" width="800" height="580">
+            <div class="hero-featured-overlay"></div>
+            <div class="hero-featured-content">
+              <span class="badge ai">AI</span>
+              <h1 class="hero-featured-title" tabindex="-1">
+                <a href="/article/1">The Silicon Mind: Navigating the Intersection of Cognitive AI and Creative Writing</a>
+              </h1>
+              <p class="hero-featured-desc">As artificial intelligence systems enter creative sectors, authors and technologists debate where engineering stops and creative soul begins.</p>
+              <div class="card-meta">
+                <span>By Arisudan</span>
+                <span class="card-meta-dot"></span>
+                <span>June 8, 2026</span>
+                <span class="card-meta-dot"></span>
+                <span>6 min read</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Reflections & Narratives with Pull Quotes -->
+          <div class="hero-sidebar reflections-column">
+            <h2>Reflections &amp; Stories</h2>
+            
+              <div class="reflection-story-item">
+                <div>
+                  <h3>
+                    <a href="/article/8">The Reality of Pursuing Embedded Systems in India</a>
+                  </h3>
+                  <!-- pull quote style -->
+                  <blockquote>
+                    "Finding hardware roles in India is challenging. I analyze the market realities and how students can navigate them."
+                  </blockquote>
+                </div>
+                <div class="reflection-story-meta">
+                  <img src="/assets/images/author.png" alt="Arisudan" loading="lazy">
+                  <div class="reflection-story-meta-text">
+                    <strong>By Arisudan</strong> · 8 min read
+                  </div>
+                </div>
+              </div>
+            
+              <div class="reflection-story-item">
+                <div>
+                  <h3>
+                    <a href="/article/7">What Jayem Automotive Taught Me About Real Engineering</a>
+                  </h3>
+                  <!-- pull quote style -->
+                  <blockquote>
+                    "My time at Jayem Automotive redefined what engineering means to me. Here are the core lessons from the shop floor and building real hardware."
+                  </blockquote>
+                </div>
+                <div class="reflection-story-meta">
+                  <img src="/assets/images/author.png" alt="Arisudan" loading="lazy">
+                  <div class="reflection-story-meta-text">
+                    <strong>By Arisudan</strong> · 7 min read
+                  </div>
+                </div>
+              </div>
+            
+              <div class="reflection-story-item">
+                <div>
+                  <h3>
+                    <a href="/article/6">Building AriSphere From Zero to Production</a>
+                  </h3>
+                  <!-- pull quote style -->
+                  <blockquote>
+                    "Building a modern web application requires balancing architecture decisions. Here is how I structured AriSphere's static compiler and database fallback layer."
+                  </blockquote>
+                </div>
+                <div class="reflection-story-meta">
+                  <img src="/assets/images/author.png" alt="Arisudan" loading="lazy">
+                  <div class="reflection-story-meta-text">
+                    <strong>By Arisudan</strong> · 6 min read
+                  </div>
+                </div>
+              </div>
+            
+            
+          </div>
+        </section>
+
+        <!-- Inline Feed Advertisement Placement -->
+        <div class="adsense-placement ad-infeed" id="adsense-home-infeed-1">
+          <div class="adsense-label">In-Feed Responsive Placements</div>
+          <div class="adsense-slot-info">Display fluid feed banner</div>
+        </div>
+
+        <!-- Editor's Picks Section -->
+        <section class="editors-picks-section">
+          <div class="section-header">
+            <h2 class="section-title">Editor's Picks</h2>
+          </div>
+          <div class="grid-four-col">
+            
+              <article class="card">
+                <div class="card-img-wrapper">
+                  <img class="card-img" src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="What Jayem Automotive Taught Me About Real Engineering" loading="lazy">
+                </div>
+                <div class="card-body">
+                  <div class="card-meta">
+                    <span class="badge reflections">Reflections</span>
+                  </div>
+                  <h3 class="card-title">
+                    <a href="/article/7">What Jayem Automotive Taught Me About Real Engineering</a>
+                  </h3>
+                </div>
+              </article>
+            
+              <article class="card">
+                <div class="card-img-wrapper">
+                  <img class="card-img" src="/assets/images/ai-cover.png" alt="The Silicon Mind: Navigating the Intersection of Cognitive AI and Creative Writing" loading="lazy">
+                </div>
+                <div class="card-body">
+                  <div class="card-meta">
+                    <span class="badge ai">AI</span>
+                  </div>
+                  <h3 class="card-title">
+                    <a href="/article/1">The Silicon Mind: Navigating the Intersection of Cognitive AI and Creative Writing</a>
+                  </h3>
+                </div>
+              </article>
+            
+              <article class="card">
+                <div class="card-img-wrapper">
+                  <img class="card-img" src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Building AriSphere From Zero to Production" loading="lazy">
+                </div>
+                <div class="card-body">
+                  <div class="card-meta">
+                    <span class="badge reflections">Reflections</span>
+                  </div>
+                  <h3 class="card-title">
+                    <a href="/article/6">Building AriSphere From Zero to Production</a>
+                  </h3>
+                </div>
+              </article>
+            
+              <article class="card">
+                <div class="card-img-wrapper">
+                  <img class="card-img" src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Quantum Leap: Silicon Valley Races Towards Commercial Qubit Computers" loading="lazy">
+                </div>
+                <div class="card-body">
+                  <div class="card-meta">
+                    <span class="badge technology">Technology</span>
+                  </div>
+                  <h3 class="card-title">
+                    <a href="/article/3">Quantum Leap: Silicon Valley Races Towards Commercial Qubit Computers</a>
+                  </h3>
+                </div>
+              </article>
+            
+          </div>
+        </section>
+
+        <!-- Latest Perspective & Sidebar -->
+        <div class="grid-two-col">
+          <section class="latest-section">
+            <div class="section-header">
+              <h2 class="section-title">Latest Perspective</h2>
+            </div>
+            <div class="grid-two-col-equal">
+              
+                <article class="card">
+                  <div class="card-img-wrapper">
+                    <img class="card-img" src="https://images.unsplash.com/photo-1517059224940-d4af9eec41b7?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="The Reality of Pursuing Embedded Systems in India" loading="lazy">
+                  </div>
+                  <div class="card-body">
+                    <div class="card-meta">
+                      <span class="badge reflections">Reflections</span>
+                      <span class="card-meta-dot"></span>
+                      <span>June 8, 2026</span>
+                    </div>
+                    <h3 class="card-title">
+                      <a href="/article/8">The Reality of Pursuing Embedded Systems in India</a>
+                    </h3>
+                    <p class="card-excerpt">Finding hardware roles in India is challenging. I analyze the market realities and how students can navigate them.</p>
+                    <div class="card-author-footer">
+                      <img class="author-avatar" src="/assets/images/author.png" alt="Arisudan" loading="lazy">
+                      <a href="/author/arisudan" class="author-name">By Arisudan</a>
+                    </div>
+                  </div>
+                </article>
+              
+                <article class="card">
+                  <div class="card-img-wrapper">
+                    <img class="card-img" src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="What Jayem Automotive Taught Me About Real Engineering" loading="lazy">
+                  </div>
+                  <div class="card-body">
+                    <div class="card-meta">
+                      <span class="badge reflections">Reflections</span>
+                      <span class="card-meta-dot"></span>
+                      <span>June 9, 2026</span>
+                    </div>
+                    <h3 class="card-title">
+                      <a href="/article/7">What Jayem Automotive Taught Me About Real Engineering</a>
+                    </h3>
+                    <p class="card-excerpt">My time at Jayem Automotive redefined what engineering means to me. Here are the core lessons from the shop floor and building real hardware.</p>
+                    <div class="card-author-footer">
+                      <img class="author-avatar" src="/assets/images/author.png" alt="Arisudan" loading="lazy">
+                      <a href="/author/arisudan" class="author-name">By Arisudan</a>
+                    </div>
+                  </div>
+                </article>
+              
+                <article class="card">
+                  <div class="card-img-wrapper">
+                    <img class="card-img" src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Building AriSphere From Zero to Production" loading="lazy">
+                  </div>
+                  <div class="card-body">
+                    <div class="card-meta">
+                      <span class="badge reflections">Reflections</span>
+                      <span class="card-meta-dot"></span>
+                      <span>June 10, 2026</span>
+                    </div>
+                    <h3 class="card-title">
+                      <a href="/article/6">Building AriSphere From Zero to Production</a>
+                    </h3>
+                    <p class="card-excerpt">Building a modern web application requires balancing architecture decisions. Here is how I structured AriSphere's static compiler and database fallback layer.</p>
+                    <div class="card-author-footer">
+                      <img class="author-avatar" src="/assets/images/author.png" alt="Arisudan" loading="lazy">
+                      <a href="/author/arisudan" class="author-name">By Arisudan</a>
+                    </div>
+                  </div>
+                </article>
+              
+                <article class="card">
+                  <div class="card-img-wrapper">
+                    <img class="card-img" src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="The Geopolitics of Semiconductors: The Island Supply Chain Paradox" loading="lazy">
+                  </div>
+                  <div class="card-body">
+                    <div class="card-meta">
+                      <span class="badge world">World</span>
+                      <span class="card-meta-dot"></span>
+                      <span>June 2, 2026</span>
+                    </div>
+                    <h3 class="card-title">
+                      <a href="/article/5">The Geopolitics of Semiconductors: The Island Supply Chain Paradox</a>
+                    </h3>
+                    <p class="card-excerpt">Semiconductor value chain is highly centralized. We map global dependencies and the race to fund local fabrication plants.</p>
+                    <div class="card-author-footer">
+                      <img class="author-avatar" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&amp;fit=crop&amp;q=80&amp;w=200" alt="Marcus Aurelius" loading="lazy">
+                      <a href="/author/marcusaurelius" class="author-name">By Marcus Aurelius</a>
+                    </div>
+                  </div>
+                </article>
+              
+                <article class="card">
+                  <div class="card-img-wrapper">
+                    <img class="card-img" src="https://images.unsplash.com/photo-1552581234-2612b75de6d6?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Echoes of the Agora: How Micro-Communities are Reshaping Public Discourse" loading="lazy">
+                  </div>
+                  <div class="card-body">
+                    <div class="card-meta">
+                      <span class="badge social-media">Social Media</span>
+                      <span class="card-meta-dot"></span>
+                      <span>June 4, 2026</span>
+                    </div>
+                    <h3 class="card-title">
+                      <a href="/article/4">Echoes of the Agora: How Micro-Communities are Reshaping Public Discourse</a>
+                    </h3>
+                    <p class="card-excerpt">Public social media feeds are giving way to gated Discord rooms and private telegram hubs. We look at what this means for political debate.</p>
+                    <div class="card-author-footer">
+                      <img class="author-avatar" src="/assets/images/author.png" alt="Arisudan" loading="lazy">
+                      <a href="/author/arisudan" class="author-name">By Arisudan</a>
+                    </div>
+                  </div>
+                </article>
+              
+                <article class="card">
+                  <div class="card-img-wrapper">
+                    <img class="card-img" src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Quantum Leap: Silicon Valley Races Towards Commercial Qubit Computers" loading="lazy">
+                  </div>
+                  <div class="card-body">
+                    <div class="card-meta">
+                      <span class="badge technology">Technology</span>
+                      <span class="card-meta-dot"></span>
+                      <span>June 5, 2026</span>
+                    </div>
+                    <h3 class="card-title">
+                      <a href="/article/3">Quantum Leap: Silicon Valley Races Towards Commercial Qubit Computers</a>
+                    </h3>
+                    <p class="card-excerpt">Quantum computing is shifting from theoretical physics papers to engineering blueprints. We explore the latest breakthroughs from top hardware labs.</p>
+                    <div class="card-author-footer">
+                      <img class="author-avatar" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&amp;fit=crop&amp;q=80&amp;w=200" alt="Elena Vance" loading="lazy">
+                      <a href="/author/elenavance" class="author-name">By Elena Vance</a>
+                    </div>
+                  </div>
+                </article>
+              
+            </div>
+          </section>
+
+          <!-- Sidebar sticky column -->
+          <aside class="sidebar-column">
+            <div class="sidebar-sticky">
+              <!-- Most Read List -->
+              <div class="widget">
+                <h3 class="widget-title">Most Read</h3>
+                <div class="trending-widget-list">
+                  
+                    <div class="trending-widget-item">
+                      <span class="trending-widget-number">01</span>
+                      <div class="trending-widget-info">
+                        <a href="/article/1" class="trending-widget-title">The Silicon Mind: Navigating the Intersection of Cognitive AI and Creative Writing</a>
+                        <div class="card-meta">
+                          <span class="badge ai">AI</span>
+                          <span>6 min read</span>
+                        </div>
+                      </div>
+                    </div>
+                  
+                    <div class="trending-widget-item">
+                      <span class="trending-widget-number">02</span>
+                      <div class="trending-widget-info">
+                        <a href="/article/3" class="trending-widget-title">Quantum Leap: Silicon Valley Races Towards Commercial Qubit Computers</a>
+                        <div class="card-meta">
+                          <span class="badge technology">Technology</span>
+                          <span>5 min read</span>
+                        </div>
+                      </div>
+                    </div>
+                  
+                    <div class="trending-widget-item">
+                      <span class="trending-widget-number">03</span>
+                      <div class="trending-widget-info">
+                        <a href="/article/5" class="trending-widget-title">The Geopolitics of Semiconductors: The Island Supply Chain Paradox</a>
+                        <div class="card-meta">
+                          <span class="badge world">World</span>
+                          <span>9 min read</span>
+                        </div>
+                      </div>
+                    </div>
+                  
+                    <div class="trending-widget-item">
+                      <span class="trending-widget-number">04</span>
+                      <div class="trending-widget-info">
+                        <a href="/article/2" class="trending-widget-title">The Great Shift: Global Supply Chains and the Return of Nearshoring</a>
+                        <div class="card-meta">
+                          <span class="badge business">Business</span>
+                          <span>8 min read</span>
+                        </div>
+                      </div>
+                    </div>
+                  
+                    <div class="trending-widget-item">
+                      <span class="trending-widget-number">05</span>
+                      <div class="trending-widget-info">
+                        <a href="/article/4" class="trending-widget-title">Echoes of the Agora: How Micro-Communities are Reshaping Public Discourse</a>
+                        <div class="card-meta">
+                          <span class="badge social-media">Social Media</span>
+                          <span>7 min read</span>
+                        </div>
+                      </div>
+                    </div>
+                  
+                </div>
+              </div>
+
+              <!-- Sidebar Ad Block -->
+              <div class="adsense-placement ad-sidebar" id="adsense-home-sidebar">
+                <div class="adsense-label">Sticky Rectangular Sidebar Ad</div>
+                <div class="adsense-slot-info">Display size 300x250 / 300x600</div>
+              </div>
+            </div>
+          </aside>
+        </div>
+
+        <!-- Dynamic Category Matrix Links -->
+        <section class="category-cards-section">
+          <div class="section-header">
+            <h2 class="section-title">Explore Topics</h2>
+          </div>
+          <div class="category-pills-list">
+            
+                <a href="/category/technology" class="badge technology">
+                  Technology
+                </a>
+              
+                <a href="/category/ai" class="badge ai">
+                  AI
+                </a>
+              
+                <a href="/category/world" class="badge world">
+                  World
+                </a>
+              
+                <a href="/category/business" class="badge business">
+                  Business
+                </a>
+              
+                <a href="/category/social-media" class="badge social-media">
+                  Social Media
+                </a>
+              
+                <a href="/category/insights" class="badge insights">
+                  Insights
+                </a>
+              
+                <a href="/category/reflections" class="badge reflections">
+                  Reflections
+                </a>
+              
+          </div>
+        </section>
+
+      </div>
+    </main>
 
   <!-- Newsletter Signup Block Placement -->
   <section class="container" aria-label="Newsletter Subscription">

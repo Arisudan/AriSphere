@@ -267,3 +267,165 @@
 .admin-checkbox-label input {
   cursor: pointer;
 }
+
+/* Editorial QA Panel & Compliance System */
+.editorial-qa-panel {
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  margin-top: var(--space-md);
+  box-shadow: var(--shadow-sm);
+  font-family: var(--font-sans);
+}
+
+.editorial-qa-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-sm);
+}
+
+.editorial-qa-title {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--color-text);
+}
+
+/* Readiness Pill Badges */
+.readiness-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  transition: all var(--transition-fast);
+}
+
+.readiness-badge.ready {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
+  border: 1px solid rgba(34, 197, 94, 0.25);
+}
+
+.readiness-badge.review {
+  background-color: rgba(234, 179, 8, 0.1);
+  color: #ca8a04;
+  border: 1px solid rgba(234, 179, 8, 0.25);
+}
+
+.readiness-badge.improve {
+  background-color: rgba(249, 115, 22, 0.1);
+  color: #ea580c;
+  border: 1px solid rgba(249, 115, 22, 0.25);
+}
+
+.readiness-badge.do-not {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+/* Score Progress Bar */
+.score-bar-container {
+  height: 8px;
+  background-color: var(--color-border);
+  border-radius: var(--radius-full);
+  margin-bottom: var(--space-md);
+  overflow: hidden;
+}
+
+.score-bar-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: var(--radius-full);
+  transition: width var(--transition-normal) ease, background-color var(--transition-normal) ease;
+}
+
+.score-bar-fill.ready {
+  background-color: #22c55e;
+}
+
+.score-bar-fill.review {
+  background-color: #eab308;
+}
+
+.score-bar-fill.improve {
+  background-color: #f97316;
+}
+
+.score-bar-fill.do-not {
+  background-color: #ef4444;
+}
+
+/* Checklist Items */
+.editorial-checks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: var(--space-md);
+}
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.825rem;
+  color: var(--color-text-muted);
+  padding: 4px 0;
+  border-bottom: 1px dashed var(--color-border);
+}
+
+.checklist-item:last-child {
+  border-bottom: none;
+}
+
+.checklist-indicator {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: var(--radius-md);
+}
+
+.checklist-indicator.pass {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
+}
+
+.checklist-indicator.fail {
+  background-color: rgba(249, 115, 22, 0.1);
+  color: #ea580c;
+}
+
+/* Reflections Notice Box */
+.reflections-qa-alert {
+  padding: 10px 12px;
+  background-color: rgba(249, 115, 22, 0.05);
+  border-left: 4px solid var(--cat-reflections);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+  font-size: 0.8rem;
+  margin-bottom: var(--space-md);
+}
+
+.reflections-qa-alert strong {
+  color: var(--cat-reflections);
+}
+
+/* QA Summary Box */
+.qa-summary-box {
+  padding: 8px 12px;
+  background-color: var(--color-bg-offset);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 0.825rem;
+  color: var(--color-text);
+  font-style: italic;
+}
+

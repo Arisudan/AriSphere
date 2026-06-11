@@ -17,6 +17,7 @@ const AUTHORS = {
     name: 'Arisudan',
     title: 'Founder, Publisher & Editor-in-Chief',
     bio: 'Arisudan is the founder and editor-in-chief of AriSphere. An experienced journalist, digital media architect, and former systems developer, Ari has spent over 15 years tracking cognitive AI evolution, the geopolitics of hardware chips, and digital attention philosophy. He holds a degree in Computer Science and Media Studies and directs the editorial vision at AriSphere.',
+    experience: 'Founder of AriSphere. Over 15 years tracking cognitive AI, hardware architectures, and digital attention metrics. Previously developed embedded control systems and managed media platforms.',
     avatar: '/assets/images/author.png',
     articlesCount: 142,
     contact: 'arisudan@arisphere.com',
@@ -33,6 +34,7 @@ const AUTHORS = {
     name: 'Elena Vance',
     title: 'Senior Technology Correspondent',
     bio: 'Elena Vance covers tech policy, digital infrastructure, and consumer electronics. Previously a developer, she writes with technical depth and narrative ease.',
+    experience: 'Embedded Systems Engineer with experience in Automotive Electronics, Real-Time Systems, Embedded Linux, RTOS Design, Hardware Validation, Sensor Calibration, and Intelligent Transportation Technologies.',
     avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200',
     articlesCount: 89,
     social: {
@@ -47,6 +49,7 @@ const AUTHORS = {
     name: 'Marcus Aurelius',
     title: 'Global Analyst & Columnist',
     bio: 'Marcus writes on global economics, trade pathways, and international relations. His writing highlights historic cycles in current modern trends.',
+    experience: 'Macroeconomic analyst with 12+ years analyzing global logistics corridors, industrial manufacturing supply chains, and nearshoring trends across Western and Asian markets.',
     avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=200',
     articlesCount: 64,
     social: {
@@ -1120,7 +1123,8 @@ function mapDatabaseArticle(row) {
     updatedAt: row.updated_at,
     sources: Array.isArray(row.sources) ? row.sources : (typeof row.sources === 'string' ? JSON.parse(row.sources) : []),
     factChecked: row.fact_checked !== undefined ? !!row.fact_checked : true,
-    editoriallyReviewed: row.editorially_reviewed !== undefined ? !!row.editorially_reviewed : true
+    editoriallyReviewed: row.editorially_reviewed !== undefined ? !!row.editorially_reviewed : true,
+    humanReviewed: row.human_reviewed !== undefined ? !!row.human_reviewed : false
   };
   
   const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -1218,6 +1222,9 @@ async function getRelatedArticles(currentArticleId, limit = 3) {
   const current = await getArticleById(currentArticleId, true);
   if (!current) return [];
 
+  // Enforce limits: minimum 2, maximum 5
+  let targetLimit = Math.max(2, Math.min(5, limit));
+
   let candidates = [];
   if (isSupabaseConfigured()) {
     try {
@@ -1234,7 +1241,7 @@ async function getRelatedArticles(currentArticleId, limit = 3) {
   const stopWords = new Set(['the', 'and', 'a', 'of', 'to', 'in', 'is', 'that', 'it', 'for', 'on', 'with', 'as', 'at', 'by', 'an', 'this', 'about', 'from']);
   const currentTitleWords = current.title.toLowerCase().split(/\W+/).filter(w => w.length > 2 && !stopWords.has(w));
 
-  return candidates
+  const scored = candidates
     .map(a => {
       let score = 0;
       if (a.category === current.category) score += 5;
@@ -1249,9 +1256,22 @@ async function getRelatedArticles(currentArticleId, limit = 3) {
       return { article: a, score };
     })
     .filter(item => item.score > 0)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, limit)
-    .map(item => item.article);
+    .sort((a, b) => b.score - a.score);
+
+  let results = scored.slice(0, targetLimit).map(item => item.article);
+
+  // Guarantee minimum of 2: pad with latest published content if necessary
+  if (results.length < 2) {
+    const fallbackCandidates = [...candidates].sort((a, b) => b.id - a.id);
+    for (const cand of fallbackCandidates) {
+      if (results.length >= 2) break;
+      if (!results.some(r => String(r.id) === String(cand.id))) {
+        results.push(cand);
+      }
+    }
+  }
+
+  return results.slice(0, targetLimit);
 }
 
 async function getTrendingArticles(limit = 5, includeDrafts = false) {
@@ -1367,7 +1387,8 @@ async function createArticleAdmin(articleData) {
       views: 0,
       sources: articleData.sources || [],
       fact_checked: articleData.factChecked !== undefined ? !!articleData.factChecked : true,
-      editorially_reviewed: articleData.editoriallyReviewed !== undefined ? !!articleData.editoriallyReviewed : true
+      editorially_reviewed: articleData.editoriallyReviewed !== undefined ? !!articleData.editoriallyReviewed : true,
+      human_reviewed: articleData.humanReviewed !== undefined ? !!articleData.humanReviewed : false
     };
     const { data, error } = await supabaseClient
       .from('articles')
@@ -1390,6 +1411,7 @@ async function createArticleAdmin(articleData) {
       sources: articleData.sources || [],
       factChecked: articleData.factChecked !== undefined ? !!articleData.factChecked : true,
       editoriallyReviewed: articleData.editoriallyReviewed !== undefined ? !!articleData.editoriallyReviewed : true,
+      humanReviewed: articleData.humanReviewed !== undefined ? !!articleData.humanReviewed : false,
       updatedAt: new Date().toISOString()
     };
     ARTICLES.push(newArt);
@@ -1419,6 +1441,7 @@ async function updateArticleAdmin(id, articleData) {
       sources: articleData.sources || [],
       fact_checked: articleData.factChecked !== undefined ? !!articleData.factChecked : true,
       editorially_reviewed: articleData.editoriallyReviewed !== undefined ? !!articleData.editoriallyReviewed : true,
+      human_reviewed: articleData.humanReviewed !== undefined ? !!articleData.humanReviewed : false,
       updated_at: new Date().toISOString()
     };
     const { data, error } = await supabaseClient
@@ -1439,6 +1462,7 @@ async function updateArticleAdmin(id, articleData) {
         sources: articleData.sources || ARTICLES[idx].sources || [],
         factChecked: articleData.factChecked !== undefined ? !!articleData.factChecked : (ARTICLES[idx].factChecked !== undefined ? ARTICLES[idx].factChecked : true),
         editoriallyReviewed: articleData.editoriallyReviewed !== undefined ? !!articleData.editoriallyReviewed : (ARTICLES[idx].editoriallyReviewed !== undefined ? ARTICLES[idx].editoriallyReviewed : true),
+        humanReviewed: articleData.humanReviewed !== undefined ? !!articleData.humanReviewed : (ARTICLES[idx].humanReviewed !== undefined ? ARTICLES[idx].humanReviewed : false),
         updatedAt: new Date().toISOString()
       };
       return ARTICLES[idx];
@@ -1472,6 +1496,7 @@ ARTICLES.forEach(art => {
   art.sourceAttribution = 'AriSphere Editorial Desk';
   art.factChecked = art.factChecked !== undefined ? art.factChecked : true;
   art.editoriallyReviewed = art.editoriallyReviewed !== undefined ? art.editoriallyReviewed : true;
+  art.humanReviewed = art.humanReviewed !== undefined ? art.humanReviewed : true;
   art.sources = art.sources || [];
 });
 
@@ -1510,6 +1535,23 @@ if (ARTICLES[4]) {
   ];
 }
 
+// Subscriber count query for Content Operations Dashboard
+async function getSubscribersCount() {
+  if (isSupabaseConfigured() && supabaseClient) {
+    try {
+      const { count, error } = await supabaseClient
+        .from('subscribers')
+        .select('*', { count: 'exact', head: true });
+      if (!error && count !== null && count !== undefined) {
+        return count;
+      }
+    } catch (err) {
+      console.warn("Failed to get subscribers count from Supabase", err);
+    }
+  }
+  return 128; // Fallback mock subscriber count
+}
+
 // Export for window context
 window.AriSphereDB = {
   CATEGORIES,
@@ -1530,5 +1572,7 @@ window.AriSphereDB = {
   createArticleAdmin,
   updateArticleAdmin,
   deleteArticleAdmin,
+  isSupabaseConfigured,
+  getSubscribersCount,
   supabase: supabaseClient
 };

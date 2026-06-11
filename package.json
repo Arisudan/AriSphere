@@ -5,7 +5,7 @@
   "main": "js/app.js",
   "scripts": {
     "build": "node build.js",
-    "start": "node scratch/server.js"
+    "start": "node scratch/server-v2.js"
   },
   "devDependencies": {
     "jsdom": "^24.1.0"

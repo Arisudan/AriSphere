@@ -1120,7 +1120,8 @@ function mapDatabaseArticle(row) {
     updatedAt: row.updated_at,
     sources: Array.isArray(row.sources) ? row.sources : (typeof row.sources === 'string' ? JSON.parse(row.sources) : []),
     factChecked: row.fact_checked !== undefined ? !!row.fact_checked : true,
-    editoriallyReviewed: row.editorially_reviewed !== undefined ? !!row.editorially_reviewed : true
+    editoriallyReviewed: row.editorially_reviewed !== undefined ? !!row.editorially_reviewed : true,
+    humanReviewed: row.human_reviewed !== undefined ? !!row.human_reviewed : false
   };
   
   const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -1367,7 +1368,8 @@ async function createArticleAdmin(articleData) {
       views: 0,
       sources: articleData.sources || [],
       fact_checked: articleData.factChecked !== undefined ? !!articleData.factChecked : true,
-      editorially_reviewed: articleData.editoriallyReviewed !== undefined ? !!articleData.editoriallyReviewed : true
+      editorially_reviewed: articleData.editoriallyReviewed !== undefined ? !!articleData.editoriallyReviewed : true,
+      human_reviewed: articleData.humanReviewed !== undefined ? !!articleData.humanReviewed : false
     };
     const { data, error } = await supabaseClient
       .from('articles')
@@ -1390,6 +1392,7 @@ async function createArticleAdmin(articleData) {
       sources: articleData.sources || [],
       factChecked: articleData.factChecked !== undefined ? !!articleData.factChecked : true,
       editoriallyReviewed: articleData.editoriallyReviewed !== undefined ? !!articleData.editoriallyReviewed : true,
+      humanReviewed: articleData.humanReviewed !== undefined ? !!articleData.humanReviewed : false,
       updatedAt: new Date().toISOString()
     };
     ARTICLES.push(newArt);
@@ -1419,6 +1422,7 @@ async function updateArticleAdmin(id, articleData) {
       sources: articleData.sources || [],
       fact_checked: articleData.factChecked !== undefined ? !!articleData.factChecked : true,
       editorially_reviewed: articleData.editoriallyReviewed !== undefined ? !!articleData.editoriallyReviewed : true,
+      human_reviewed: articleData.humanReviewed !== undefined ? !!articleData.humanReviewed : false,
       updated_at: new Date().toISOString()
     };
     const { data, error } = await supabaseClient
@@ -1439,6 +1443,7 @@ async function updateArticleAdmin(id, articleData) {
         sources: articleData.sources || ARTICLES[idx].sources || [],
         factChecked: articleData.factChecked !== undefined ? !!articleData.factChecked : (ARTICLES[idx].factChecked !== undefined ? ARTICLES[idx].factChecked : true),
         editoriallyReviewed: articleData.editoriallyReviewed !== undefined ? !!articleData.editoriallyReviewed : (ARTICLES[idx].editoriallyReviewed !== undefined ? ARTICLES[idx].editoriallyReviewed : true),
+        humanReviewed: articleData.humanReviewed !== undefined ? !!articleData.humanReviewed : (ARTICLES[idx].humanReviewed !== undefined ? ARTICLES[idx].humanReviewed : false),
         updatedAt: new Date().toISOString()
       };
       return ARTICLES[idx];
@@ -1472,6 +1477,7 @@ ARTICLES.forEach(art => {
   art.sourceAttribution = 'AriSphere Editorial Desk';
   art.factChecked = art.factChecked !== undefined ? art.factChecked : true;
   art.editoriallyReviewed = art.editoriallyReviewed !== undefined ? art.editoriallyReviewed : true;
+  art.humanReviewed = art.humanReviewed !== undefined ? art.humanReviewed : true;
   art.sources = art.sources || [];
 });
 

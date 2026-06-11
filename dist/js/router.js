@@ -2,6 +2,7 @@
 
 (function () {
   const ROUTER_CONTAINER_ID = 'main-viewport';
+  let activeRouteCount = 0;
   
   // Router definition with clean paths
   const routes = {
@@ -224,11 +225,15 @@
     const viewport = document.getElementById(ROUTER_CONTAINER_ID);
     if (!viewport) return;
     
+    activeRouteCount++;
+    const routeId = activeRouteCount;
+    
     // Add CSS transition fade-out class
     viewport.classList.add('fade-out');
 
     setTimeout(async () => {
       if (typeof document === 'undefined' || !document || !document.head) return;
+      if (routeId !== activeRouteCount) return;
       // Find matching route
       let match = null;
       let params = {};
@@ -357,19 +362,19 @@
         </div>
 
         <!-- Hero Editorial Section (Magazine Cover Layout) -->
-        <section class="hero-section" style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-xl); margin-bottom: var(--space-xxl); border-bottom: 1px solid var(--color-border); padding-bottom: var(--space-xl);">
+        <section class="hero-section">
           
           <!-- Left Column: Large Featured Cover Story -->
-          <div class="hero-featured-card" style="height: 580px; position: relative; border-radius: var(--radius-md); overflow: hidden; display: flex; align-items: flex-end; border: 1px solid var(--color-border); box-shadow: none;">
-            <img class="hero-featured-img" src="${featured.image}" alt="${featured.title}" loading="eager" width="800" height="580" style="position: absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:1;">
-            <div class="hero-featured-overlay" style="position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to top, rgba(9, 13, 22, 0.95) 0%, rgba(9, 13, 22, 0.5) 60%, rgba(9, 13, 22, 0.1) 100%); z-index:2;"></div>
-            <div class="hero-featured-content" style="position: relative; z-index: 3; padding: var(--space-xl); color: #ffffff;">
+          <div class="hero-featured-card">
+            <img class="hero-featured-img" src="${featured.image}" alt="${featured.title}" loading="eager" fetchpriority="high" width="800" height="580">
+            <div class="hero-featured-overlay"></div>
+            <div class="hero-featured-content">
               <span class="badge ${featured.category}">${db.CATEGORIES[featured.category].name}</span>
-              <h1 class="hero-featured-title" style="font-family: var(--font-serif); font-size: 2.5rem; line-height: 1.2; font-weight: 700; margin: var(--space-sm) 0 var(--space-sm);">
-                <a href="/article/${featured.id}" style="color: #ffffff; text-decoration: none;">${featured.title}</a>
+              <h1 class="hero-featured-title">
+                <a href="/article/${featured.id}">${featured.title}</a>
               </h1>
-              <p class="hero-featured-desc" style="font-size: 1.05rem; color: #cbd5e1; margin-bottom: var(--space-md); max-width: 650px;">${featured.excerpt}</p>
-              <div class="card-meta" style="color: #94a3b8; font-size: 0.85rem;">
+              <p class="hero-featured-desc">${featured.excerpt}</p>
+              <div class="card-meta">
                 <span>By ${db.AUTHORS[featured.author].name}</span>
                 <span class="card-meta-dot"></span>
                 <span>${featured.publishDate}</span>
@@ -380,28 +385,28 @@
           </div>
 
           <!-- Right Column: Reflections & Narratives with Pull Quotes -->
-          <div class="hero-sidebar reflections-column" style="display: flex; flex-direction: column; gap: var(--space-md); height: 580px; overflow-y: auto; padding-right: var(--space-xs); box-shadow: none;">
-            <h2 style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 700; border-bottom: 2px solid var(--cat-reflections); padding-bottom: var(--space-xs); margin: 0 0 var(--space-sm) 0; color: var(--color-text);">Reflections & Stories</h2>
+          <div class="hero-sidebar reflections-column">
+            <h2>Reflections & Stories</h2>
             ${reflectionsList.map(art => `
-              <div class="reflection-story-item" style="padding: var(--space-sm) 0 var(--space-md) 0; border-bottom: 1px solid var(--color-border); display: flex; flex-direction: column; justify-content: space-between;">
+              <div class="reflection-story-item">
                 <div>
-                  <h3 style="font-family: var(--font-serif); font-size: 1.1rem; line-height: 1.35; font-weight: 700; margin: 0 0 6px 0;">
-                    <a href="/article/${art.id}" style="color: var(--color-text); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--cat-reflections)'" onmouseout="this.style.color='var(--color-text)'">${art.title}</a>
+                  <h3>
+                    <a href="/article/${art.id}">${art.title}</a>
                   </h3>
                   <!-- pull quote style -->
-                  <blockquote style="font-family: var(--font-serif); font-size: 0.875rem; font-style: italic; border-left: 2px solid var(--cat-reflections); padding-left: var(--space-sm); margin: var(--space-xs) 0 var(--space-sm) 0; color: var(--color-text-muted); line-height: 1.4;">
+                  <blockquote>
                     "${art.excerpt}"
                   </blockquote>
                 </div>
-                <div style="display: flex; align-items: center; gap: var(--space-xs); margin-top: 4px;">
-                  <img src="${db.AUTHORS[art.author].avatar}" alt="${db.AUTHORS[art.author].name}" style="width: 24px; height: 24px; border-radius: var(--radius-full); object-fit: cover;" loading="lazy">
-                  <div style="font-size: 0.75rem; color: var(--color-text-muted);">
+                <div class="reflection-story-meta">
+                  <img src="${db.AUTHORS[art.author].avatar}" alt="${db.AUTHORS[art.author].name}" loading="lazy">
+                  <div class="reflection-story-meta-text">
                     <strong>By ${db.AUTHORS[art.author].name}</strong> &middot; ${art.readTime}
                   </div>
                 </div>
               </div>
             `).join('')}
-            ${reflectionsList.length === 0 ? `<p style="color: var(--color-text-muted); font-size: 0.9rem;">No reflections published yet.</p>` : ''}
+            ${reflectionsList.length === 0 ? `<p class="no-reflections">No reflections published yet.</p>` : ''}
           </div>
         </section>
 
@@ -412,22 +417,22 @@
         </div>
 
         <!-- Editor's Picks Section -->
-        <section class="editors-picks-section" style="margin-top: var(--space-xl); border-bottom: 1px solid var(--color-border); padding-bottom: var(--space-xl); margin-bottom: var(--space-xl);">
-          <div class="section-header" style="border-bottom: 2px solid var(--color-border); padding-bottom: var(--space-xs); margin-bottom: var(--space-lg); box-shadow: none;">
-            <h2 class="section-title" style="font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; margin:0;">Editor's Picks</h2>
+        <section class="editors-picks-section">
+          <div class="section-header">
+            <h2 class="section-title">Editor's Picks</h2>
           </div>
-          <div class="grid-three-col" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-md);">
+          <div class="grid-four-col">
             ${editorsPicks.map(art => `
-              <article class="card" style="margin-bottom: 0; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-sm); box-shadow: none; overflow: hidden; transition: border-color 0.2s;" onmouseover="this.style.borderColor='var(--color-accent)'" onmouseout="this.style.borderColor='var(--color-border)'">
-                <div class="card-img-wrapper" style="aspect-ratio: 16/9; overflow: hidden; position: relative;">
-                  <img class="card-img" src="${art.image}" alt="${art.title}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform var(--transition-slow);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+              <article class="card">
+                <div class="card-img-wrapper">
+                  <img class="card-img" src="${art.image}" alt="${art.title}" loading="lazy">
                 </div>
-                <div class="card-body" style="padding: var(--space-sm);">
-                  <div class="card-meta" style="margin-bottom: 4px;">
-                    <span class="badge ${art.category}" style="font-size: 0.6rem; padding: 2px 4px;">${db.CATEGORIES[art.category].name}</span>
+                <div class="card-body">
+                  <div class="card-meta">
+                    <span class="badge ${art.category}">${db.CATEGORIES[art.category].name}</span>
                   </div>
-                  <h3 class="card-title" style="font-family: var(--font-serif); font-size: 0.95rem; line-height: 1.35; margin: 0; font-weight: 700; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-                    <a href="/article/${art.id}" style="text-decoration: none; color: inherit;">${art.title}</a>
+                  <h3 class="card-title">
+                    <a href="/article/${art.id}">${art.title}</a>
                   </h3>
                 </div>
               </article>
@@ -436,30 +441,30 @@
         </section>
 
         <!-- Latest Perspective & Sidebar -->
-        <div class="grid-two-col" style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-xl); margin-bottom: var(--space-xl);">
+        <div class="grid-two-col">
           <section class="latest-section">
-            <div class="section-header" style="border-bottom: 2px solid var(--color-border); padding-bottom: var(--space-xs); margin-bottom: var(--space-lg); box-shadow: none;">
-              <h2 class="section-title" style="font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; margin:0;">Latest Perspective</h2>
+            <div class="section-header">
+              <h2 class="section-title">Latest Perspective</h2>
             </div>
-            <div class="grid-three-col" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-md);">
+            <div class="grid-two-col-equal">
               ${latestList.map(art => `
-                <article class="card" style="margin-bottom: 0; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-sm); box-shadow: none; overflow: hidden; transition: border-color 0.2s;" onmouseover="this.style.borderColor='var(--color-accent)'" onmouseout="this.style.borderColor='var(--color-border)'">
-                  <div class="card-img-wrapper" style="aspect-ratio: 16/10; overflow: hidden; position: relative;">
-                    <img class="card-img" src="${art.image}" alt="${art.title}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform var(--transition-slow);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+                <article class="card">
+                  <div class="card-img-wrapper">
+                    <img class="card-img" src="${art.image}" alt="${art.title}" loading="lazy">
                   </div>
-                  <div class="card-body" style="padding: var(--space-sm);">
-                    <div class="card-meta" style="margin-bottom: 6px;">
-                      <span class="badge ${art.category}" style="font-size: 0.6rem; padding: 2px 4px;">${db.CATEGORIES[art.category].name}</span>
+                  <div class="card-body">
+                    <div class="card-meta">
+                      <span class="badge ${art.category}">${db.CATEGORIES[art.category].name}</span>
                       <span class="card-meta-dot"></span>
                       <span>${art.publishDate}</span>
                     </div>
-                    <h3 class="card-title" style="font-family: var(--font-serif); font-size: 1.05rem; line-height: 1.35; margin-bottom: 6px; font-weight: 700; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                      <a href="/article/${art.id}" style="text-decoration: none; color: inherit;">${art.title}</a>
+                    <h3 class="card-title">
+                      <a href="/article/${art.id}">${art.title}</a>
                     </h3>
-                    <p class="card-excerpt" style="font-size: 0.85rem; line-height: 1.45; color: var(--color-text-muted); margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${art.excerpt}</p>
-                    <div class="card-author-footer" style="display: flex; align-items: center; gap: 8px;">
-                      <img class="author-avatar" src="${db.AUTHORS[art.author].avatar}" alt="${db.AUTHORS[art.author].name}" loading="lazy" style="width: 24px; height: 24px; border-radius: var(--radius-full); object-fit: cover;">
-                      <a href="/author/${art.author}" class="author-name" style="font-size: 0.8rem; color: var(--color-text); font-weight: 600; text-decoration: none;">By ${db.AUTHORS[art.author].name}</a>
+                    <p class="card-excerpt">${art.excerpt}</p>
+                    <div class="card-author-footer">
+                      <img class="author-avatar" src="${db.AUTHORS[art.author].avatar}" alt="${db.AUTHORS[art.author].name}" loading="lazy">
+                      <a href="/author/${art.author}" class="author-name">By ${db.AUTHORS[art.author].name}</a>
                     </div>
                   </div>
                 </article>
@@ -471,16 +476,16 @@
           <aside class="sidebar-column">
             <div class="sidebar-sticky">
               <!-- Most Read List -->
-              <div class="widget" style="background: var(--color-bg-offset); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: var(--space-md); box-shadow: none;">
-                <h3 class="widget-title" style="font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; margin-bottom: var(--space-md); border-bottom: 2px solid var(--color-border); padding-bottom: 4px;">Most Read</h3>
-                <div class="trending-widget-list" style="display: flex; flex-direction: column; gap: var(--space-md);">
+              <div class="widget">
+                <h3 class="widget-title">Most Read</h3>
+                <div class="trending-widget-list">
                   ${mostRead.map((art, idx) => `
-                    <div class="trending-widget-item" style="display: flex; gap: var(--space-sm);">
-                      <span class="trending-widget-number" style="font-family: var(--font-serif); font-size: 1.4rem; font-weight: 700; color: var(--color-accent); line-height: 1;">0${idx + 1}</span>
+                    <div class="trending-widget-item">
+                      <span class="trending-widget-number">0${idx + 1}</span>
                       <div class="trending-widget-info">
-                        <a href="/article/${art.id}" class="trending-widget-title" style="font-size: 0.85rem; font-weight: 700; line-height: 1.3; color: var(--color-text); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--color-accent)'" onmouseout="this.style.color='var(--color-text)'">${art.title}</a>
-                        <div class="card-meta" style="margin-top: 4px; font-size: 0.75rem;">
-                          <span class="badge ${art.category}" style="font-size: 0.55rem; padding: 1px 3px;">${db.CATEGORIES[art.category].name}</span>
+                        <a href="/article/${art.id}" class="trending-widget-title">${art.title}</a>
+                        <div class="card-meta">
+                          <span class="badge ${art.category}">${db.CATEGORIES[art.category].name}</span>
                           <span>${art.readTime}</span>
                         </div>
                       </div>
@@ -490,7 +495,7 @@
               </div>
 
               <!-- Sidebar Ad Block -->
-              <div class="adsense-placement ad-sidebar" id="adsense-home-sidebar" style="box-shadow: none;">
+              <div class="adsense-placement ad-sidebar" id="adsense-home-sidebar">
                 <div class="adsense-label">Sticky Rectangular Sidebar Ad</div>
                 <div class="adsense-slot-info">Display size 300x250 / 300x600</div>
               </div>
@@ -499,15 +504,15 @@
         </div>
 
         <!-- Dynamic Category Matrix Links -->
-        <section class="category-cards-section" style="margin-top: var(--space-xl); margin-bottom: var(--space-xl); border-top: 1px solid var(--color-border); padding-top: var(--space-xl);">
-          <div class="section-header" style="border-bottom: 2px solid var(--color-border); padding-bottom: var(--space-xs); margin-bottom: var(--space-lg); box-shadow: none;">
-            <h2 class="section-title" style="font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; margin:0;">Explore Topics</h2>
+        <section class="category-cards-section">
+          <div class="section-header">
+            <h2 class="section-title">Explore Topics</h2>
           </div>
-          <div class="category-pills-list" style="display: flex; gap: var(--space-sm); flex-wrap: wrap; justify-content: center;">
+          <div class="category-pills-list">
             ${Object.keys(db.CATEGORIES).filter(k => k !== 'trending').map(key => {
               const cat = db.CATEGORIES[key];
               return `
-                <a href="/category/${cat.id}" class="badge ${cat.id}" style="text-align: center; padding: 10px 20px; font-size: 0.85rem; border-radius: var(--radius-full); font-weight: 600; text-decoration: none;">
+                <a href="/category/${cat.id}" class="badge ${cat.id}">
                   ${cat.name}
                 </a>
               `;
@@ -589,7 +594,7 @@
             ${matchingArticles.length === 0 ? `
               <p class="search-no-results">No articles found in this category.</p>
             ` : `
-              <div class="grid-three-col" style="grid-template-columns: repeat(2, 1fr);">
+              <div class="grid-two-col-equal">
                 ${matchingArticles.map(art => `
                   <article class="card">
                     <div class="card-img-wrapper">
@@ -844,40 +849,40 @@
                   <span class="card-meta-dot"></span>
                   <span>${article.readTime}</span>
                   <span class="card-meta-dot"></span>
-                  <span style="color:var(--color-accent); font-weight:600;">👁 ${article.views} views</span>
+                  <span class="article-views">👁 ${article.views} views</span>
                 </div>
                 <h1 class="article-title">${article.title}</h1>
                 <p class="article-subtitle">${article.subtitle}</p>
 
                 <!-- Source Attribution Block -->
                 ${article.sourceAttribution ? `
-                <div style="font-size:0.775rem; color:var(--color-text-light); margin:-8px 0 12px; font-weight:600; font-family:var(--font-sans);">
+                <div class="article-attribution">
                   Attribution: <span>${article.sourceAttribution}</span>
                 </div>
                 ` : ''}
                 
                 <!-- Author Bio & Trust Badges Header -->
-                <div class="article-author-meta" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-md); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border); padding: var(--space-sm) 0; margin-top: var(--space-md); margin-bottom: var(--space-md);">
-                  <div style="display: flex; align-items: center; gap: var(--space-sm);">
-                    <img class="author-avatar" style="width: 40px; height: 40px; border-radius: var(--radius-full);" src="${authorInfo.avatar}" alt="${authorInfo.name}" loading="lazy" width="40" height="40">
+                <div class="article-author-meta">
+                  <div class="author-avatar-group">
+                    <img class="author-avatar" src="${authorInfo.avatar}" alt="${authorInfo.name}" loading="lazy" width="40" height="40">
                     <div>
-                      <div style="font-weight: 700; font-family: var(--font-sans);"><a href="/author/${authorInfo.username}" style="color: var(--color-text); text-decoration: none;">By ${authorInfo.name}</a></div>
-                      <div style="font-size: 0.75rem; color: var(--color-text-muted); font-family: var(--font-sans);">${authorInfo.title}</div>
+                      <div class="author-meta-name"><a href="/author/${authorInfo.username}">By ${authorInfo.name}</a></div>
+                      <div class="author-meta-title">${authorInfo.title}</div>
                     </div>
                   </div>
                   
-                  <div class="trust-badges" style="display: flex; gap: var(--space-xs); align-items: center; flex-wrap: wrap;">
+                  <div class="trust-badges">
                     ${article.factChecked ? `
-                      <span class="trust-badge fact-checked" title="This article has been verified by our editorial fact-checking team." style="font-size: 0.7rem; font-weight: 600; padding: 4px 8px; border-radius: var(--radius-sm); border: 1px solid #10b981; color: #10b981; background-color: rgba(16, 185, 129, 0.05); display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-sans);">
-                        <svg width="10" height="10" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="fill: none;">
+                      <span class="trust-badge fact-checked" title="This article has been verified by our editorial fact-checking team.">
+                        <svg width="10" height="10" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M10 3L4.5 8.5L2 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                         Fact Checked
                       </span>
                     ` : ''}
                     ${article.editoriallyReviewed ? `
-                      <span class="trust-badge editorially-reviewed" title="This article has been peer-reviewed and approved by our editors." style="font-size: 0.7rem; font-weight: 600; padding: 4px 8px; border-radius: var(--radius-sm); border: 1px solid var(--color-accent); color: var(--color-accent); background-color: rgba(194, 65, 12, 0.05); display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-sans);">
-                        <svg width="10" height="10" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" style="fill: none;">
+                      <span class="trust-badge editorially-reviewed" title="This article has been peer-reviewed and approved by our editors.">
+                        <svg width="10" height="10" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M10 3L4.5 8.5L2 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                         Editorially Reviewed
@@ -897,7 +902,7 @@
                 <div class="story-author-details">
                   <div class="story-author-title">Written By</div>
                   <h3 class="story-author-name"><a href="/author/${authorInfo.username}">${authorInfo.name}</a></h3>
-                  <div class="story-author-title" style="margin-top: 2px;">${authorInfo.title}</div>
+                  <div class="story-author-title">${authorInfo.title}</div>
                   <p class="story-author-bio">${authorInfo.bio}</p>
                 </div>
               </div>
@@ -915,26 +920,26 @@
               </div>
 
               <!-- Article Tags -->
-              <div class="article-tags" style="display: flex; gap: var(--space-sm); flex-wrap: wrap; margin: var(--space-lg) 0;">
-                ${article.tags.map(tag => `<span class="badge" style="background-color: var(--color-bg-offset); border: 1px solid var(--color-border); color: var(--color-text-muted); text-transform: none; font-weight: 500;">#${tag}</span>`).join('')}
+              <div class="article-tags">
+                ${article.tags.map(tag => `<span class="badge">#${tag}</span>`).join('')}
               </div>
 
               <!-- Expandable Sources Accordion Panel -->
               ${article.sources && article.sources.length > 0 ? `
-              <div class="sources-accordion" style="margin: var(--space-md) 0; border: 1px solid var(--color-border); border-radius: var(--radius-md); overflow: hidden; background: var(--color-bg-offset);">
-                <details style="width: 100%;">
-                  <summary style="padding: var(--space-md); font-weight: 600; cursor: pointer; user-select: none; display: flex; align-items: center; justify-content: space-between; font-family: var(--font-serif); font-size: 1.1rem; color: var(--color-text);">
-                    <span style="display: flex; align-items: center; gap: var(--space-xs);">
+              <div class="sources-accordion">
+                <details>
+                  <summary>
+                    <span>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-accent);"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
                       Sources & Citations (${article.sources.length})
                     </span>
-                    <span class="accordion-arrow" style="font-size: 0.8rem; color: var(--color-text-muted);">▼</span>
+                    <span class="accordion-arrow">▼</span>
                   </summary>
-                  <div class="sources-content" style="padding: 0 var(--space-md) var(--space-md) var(--space-md); border-top: 1px solid var(--color-border); background-color: var(--color-bg);">
-                    <ul style="list-style-type: disc; padding-left: var(--space-lg); margin: var(--space-sm) 0 0 0; display: flex; flex-direction: column; gap: var(--space-xs);">
+                  <div class="sources-content">
+                    <ul>
                       ${article.sources.map(src => `
-                        <li style="font-size: 0.9rem; color: var(--color-text-muted); line-height: 1.5; text-align: left;">
-                          <a href="${src.url}" target="_blank" rel="noopener" style="color: var(--color-accent); text-decoration: none; font-weight: 500; border-bottom: 1px dashed transparent; transition: border-bottom 0.2s;" onmouseover="this.style.borderBottomColor='var(--color-accent)'" onmouseout="this.style.borderBottomColor='transparent'">
+                        <li>
+                          <a href="${src.url}" target="_blank" rel="noopener">
                             ${src.name}
                           </a>
                         </li>
@@ -967,18 +972,18 @@
 
               <!-- Related Articles Grid (Recommendation Engine Widget) -->
               ${related.length > 0 ? `
-              <section class="related-articles-section" style="margin-top: var(--space-xl); border-top: 1px solid var(--color-border); padding-top: var(--space-lg); margin-bottom: var(--space-lg);">
+              <section class="related-articles-section">
                 <h3 style="font-family: var(--font-serif); font-size: 1.4rem; margin-bottom: var(--space-md); color: var(--color-text);">Recommended Reading</h3>
-                <div class="grid-three-col" style="grid-template-columns: repeat(3, 1fr); gap: var(--space-md);">
+                <div class="grid-three-col">
                   ${related.map(art => `
-                    <article class="card" style="margin-bottom: 0; background: var(--color-bg-offset);">
-                      <div class="card-img-wrapper" style="aspect-ratio: 16/10;">
-                        <img class="card-img" src="${art.image}" alt="${art.title}" loading="lazy" style="height: 100%; object-fit: cover;">
+                    <article class="card">
+                      <div class="card-img-wrapper">
+                        <img class="card-img" src="${art.image}" alt="${art.title}" loading="lazy">
                       </div>
-                      <div class="card-body" style="padding: var(--space-sm);">
-                        <span class="badge ${art.category}" style="font-size: 0.6rem; padding: 2px 4px; margin-bottom: var(--space-xs); display: inline-block;">${db.CATEGORIES[art.category].name}</span>
-                        <h4 class="card-title" style="font-size: 0.875rem; line-height: 1.35; margin: 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; font-family: var(--font-serif);">
-                          <a href="/article/${art.id}" style="text-decoration: none; color: inherit;">${art.title}</a>
+                      <div class="card-body">
+                        <span class="badge ${art.category}">${db.CATEGORIES[art.category].name}</span>
+                        <h4 class="card-title">
+                          <a href="/article/${art.id}">${art.title}</a>
                         </h4>
                       </div>
                     </article>
@@ -988,17 +993,17 @@
               ` : ''}
 
               <!-- Previous / Next Story Navigation Cards -->
-              <nav class="article-pagination" aria-label="Pagination" style="display: flex; justify-content: space-between; gap: var(--space-md); border-top: 1px solid var(--color-border); margin: var(--space-xl) 0; padding-top: var(--space-lg); flex-wrap: wrap;">
+              <nav class="article-pagination" aria-label="Pagination">
                 ${prevArticle ? `
-                  <a href="/article/${prevArticle.id}" class="pagination-link prev" style="display: flex; flex-direction: column; text-decoration: none; color: inherit; width: 48%; min-width: 200px; padding: var(--space-sm) var(--space-md); border: 1px solid var(--color-border); border-radius: var(--radius-md); background-color: var(--color-bg-offset); transition: transform 0.2s, border-color 0.2s;" onmouseover="this.style.borderColor='var(--color-accent)'; this.style.transform='translateX(-4px)'" onmouseout="this.style.borderColor='var(--color-border)'; this.style.transform='none'">
-                    <span style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-muted); font-family: var(--font-sans); margin-bottom: 4px; display: block; text-align: left;">← Previous Story</span>
-                    <span style="font-family: var(--font-serif); font-size: 0.95rem; font-weight: 700; line-height: 1.3; color: var(--color-text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-align: left;">${prevArticle.title}</span>
+                  <a href="/article/${prevArticle.id}" class="pagination-link prev">
+                    <span class="pagination-label">← Previous Story</span>
+                    <span class="pagination-title">${prevArticle.title}</span>
                   </a>
                 ` : `<div style="width: 48%; min-width: 200px;"></div>`}
                 ${nextArticle ? `
-                  <a href="/article/${nextArticle.id}" class="pagination-link next" style="display: flex; flex-direction: column; align-items: flex-end; text-align: right; text-decoration: none; color: inherit; width: 48%; min-width: 200px; padding: var(--space-sm) var(--space-md); border: 1px solid var(--color-border); border-radius: var(--radius-md); background-color: var(--color-bg-offset); transition: transform 0.2s, border-color 0.2s;" onmouseover="this.style.borderColor='var(--color-accent)'; this.style.transform='translateX(4px)'" onmouseout="this.style.borderColor='var(--color-border)'; this.style.transform='none'">
-                    <span style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-muted); font-family: var(--font-sans); margin-bottom: 4px; display: block; text-align: right;">Next Story →</span>
-                    <span style="font-family: var(--font-serif); font-size: 0.95rem; font-weight: 700; line-height: 1.3; color: var(--color-text); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-align: right;">${nextArticle.title}</span>
+                  <a href="/article/${nextArticle.id}" class="pagination-link next">
+                    <span class="pagination-label">Next Story →</span>
+                    <span class="pagination-title">${nextArticle.title}</span>
                   </a>
                 ` : `<div style="width: 48%; min-width: 200px;"></div>`}
               </nav>
@@ -1027,22 +1032,22 @@
                 </div>
 
                 <!-- Add Comment Form -->
-                <div style="background-color: var(--color-bg-offset); padding: var(--space-lg); border-radius: var(--radius-md); border: 1px solid var(--color-border);">
-                  <h4 style="margin-bottom: var(--space-md); font-family: var(--font-serif);">Leave a Perspective</h4>
+                <div class="comment-form-container">
+                  <h4>Leave a Perspective</h4>
                   <form id="form-comment">
-                    <div class="grid-two-col" style="grid-template-columns: 1fr 1fr; gap: var(--space-md); margin-bottom: var(--space-md);">
-                      <div class="form-group" style="margin: 0;">
+                    <div class="grid-two-col grid-two-col-equal">
+                      <div class="form-group">
                         <label class="form-label" for="comment-user">Your Name</label>
                         <input class="form-control" type="text" id="comment-user" required placeholder="e.g. Jane Doe">
                       </div>
-                      <div class="form-group" style="margin: 0;">
+                      <div class="form-group">
                         <label class="form-label" for="comment-email">Email Address</label>
                         <input class="form-control" type="email" id="comment-email" required placeholder="e.g. jane@example.com">
                       </div>
                     </div>
                     <div class="form-group">
                       <label class="form-label" for="comment-text">Comment</label>
-                      <textarea class="form-control" id="comment-text" required placeholder="Write your thoughts here..." style="min-height: 80px;"></textarea>
+                      <textarea class="form-control" id="comment-text" required placeholder="Write your thoughts here..."></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Post Comment</button>
                   </form>
@@ -1223,50 +1228,50 @@
             <p class="author-profile-bio">${author.bio}</p>
             
             <!-- Skills & Expertise Tags -->
-            <div class="author-expertise-section" style="margin-top: var(--space-md); margin-bottom: var(--space-md); display: flex; flex-direction: column; gap: var(--space-sm);">
+            <div class="author-expertise-section">
               ${author.expertise ? `
                 <div>
-                  <strong style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); display: block; margin-bottom: 4px;">Expertise</strong>
-                  <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
-                    ${author.expertise.map(exp => `<span class="badge ${username === 'arisudan' ? 'reflections' : 'technology'}" style="font-size: 0.7rem; padding: 4px 8px; border-radius: var(--radius-sm); font-family: var(--font-sans); font-weight: 600;">${exp}</span>`).join('')}
+                  <strong>Expertise</strong>
+                  <div class="author-badge-group">
+                    ${author.expertise.map(exp => `<span class="badge ${username === 'arisudan' ? 'reflections' : 'technology'}">${exp}</span>`).join('')}
                   </div>
                 </div>
               ` : ''}
               ${author.skills ? `
                 <div>
-                  <strong style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); display: block; margin-bottom: 4px;">Skills</strong>
-                  <div style="display: flex; gap: var(--space-xs); flex-wrap: wrap;">
-                    ${author.skills.map(skill => `<span class="badge" style="font-size: 0.7rem; padding: 3px 6px; border-radius: var(--radius-sm); background-color: var(--color-bg-offset); border: 1px solid var(--color-border); color: var(--color-text); font-family: var(--font-sans); text-transform: none; font-weight: 500;">${skill}</span>`).join('')}
+                  <strong>Skills</strong>
+                  <div class="author-badge-group">
+                    ${author.skills.map(skill => `<span class="badge badge-skill">${skill}</span>`).join('')}
                   </div>
                 </div>
               ` : ''}
             </div>
 
-            <div style="font-size: 0.8rem; font-weight: 600; color: var(--color-text-light); margin-bottom: var(--space-md);">
+            <div class="author-profile-meta">
               <span>Editorial Board Member</span>
-              <span class="card-meta-dot" style="display:inline-block; margin: 0 var(--space-xs); vertical-align:middle;"></span>
+              <span class="card-meta-dot"></span>
               <span>${writtenArticles.length} publications on AriSphere</span>
             </div>
 
             <!-- Social and Contact Details -->
-            <div class="author-profile-socials" style="display: flex; gap: var(--space-sm); align-items: center; margin-top: var(--space-md);">
+            <div class="author-profile-socials">
               ${author.social?.twitter ? `
-                <a href="${author.social.twitter}" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Twitter X" title="Follow on X" style="width:36px; height:36px; display:flex; align-items:center; justify-content:center; border-radius:var(--radius-full); border:1px solid var(--color-border); color:var(--color-text-muted); background-color:var(--color-bg-offset);">
+                <a href="${author.social.twitter}" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Twitter X" title="Follow on X">
                   <svg style="width:16px;height:16px;fill:currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
                 </a>
               ` : ''}
               ${author.social?.linkedin ? `
-                <a href="${author.social.linkedin}" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="LinkedIn" title="Connect on LinkedIn" style="width:36px; height:36px; display:flex; align-items:center; justify-content:center; border-radius:var(--radius-full); border:1px solid var(--color-border); color:var(--color-text-muted); background-color:var(--color-bg-offset);">
+                <a href="${author.social.linkedin}" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="LinkedIn" title="Connect on LinkedIn">
                   <svg style="width:16px;height:16px;fill:currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
                 </a>
               ` : ''}
               ${author.social?.github ? `
-                <a href="${author.social.github}" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="GitHub" title="View GitHub Profile" style="width:36px; height:36px; display:flex; align-items:center; justify-content:center; border-radius:var(--radius-full); border:1px solid var(--color-border); color:var(--color-text-muted); background-color:var(--color-bg-offset);">
+                <a href="${author.social.github}" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="GitHub" title="View GitHub Profile">
                   <svg style="width:16px;height:16px;fill:currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.11.82-.26.82-.577v-2.234c-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.43.372.82 1.102.82 2.222v3.293c0 .319.22.694.825.576C20.565 21.795 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
                 </a>
               ` : ''}
               ${author.contact ? `
-                <a href="mailto:${author.contact}" class="social-icon" aria-label="Email Address" title="Send Email" style="width:36px; height:36px; display:flex; align-items:center; justify-content:center; border-radius:var(--radius-full); border:1px solid var(--color-border); color:var(--color-text-muted); background-color:var(--color-bg-offset);">
+                <a href="mailto:${author.contact}" class="social-icon" aria-label="Email Address" title="Send Email">
                   <svg style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
                 </a>
               ` : ''}
@@ -1275,25 +1280,25 @@
         </header>
 
         <!-- Two Parallel Publication Blocks -->
-        <section class="author-publications" style="margin-top: var(--space-xl); margin-bottom: var(--space-xl);">
-          <div class="grid-two-col" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-xl);">
+        <section class="author-publications">
+          <div class="grid-two-col grid-two-col-equal">
             
             <!-- Left Column: Recent Articles -->
             <div>
-              <h2 style="font-family: var(--font-serif); font-size: 1.4rem; border-bottom: 2px solid var(--color-border); padding-bottom: var(--space-xs); margin-bottom: var(--space-md); color: var(--color-text);">Recent Articles</h2>
-              <div style="display: flex; flex-direction: column; gap: var(--space-md);">
+              <h2>Recent Articles</h2>
+              <div class="author-cards-column">
                 ${recentArticles.map(art => `
-                  <article class="card" style="margin-bottom: 0; background: var(--color-bg-offset); border: 1px solid var(--color-border);">
-                    <div class="card-body" style="padding: var(--space-md);">
-                      <div class="card-meta" style="margin-bottom: var(--space-xs);">
+                  <article class="card">
+                    <div class="card-body">
+                      <div class="card-meta">
                         <span class="badge ${art.category}">${db.CATEGORIES[art.category].name}</span>
                         <span class="card-meta-dot"></span>
                         <span>${art.publishDate}</span>
                       </div>
-                      <h3 class="card-title" style="font-size: 1.1rem; margin-bottom: var(--space-xs); line-height: 1.3;">
-                        <a href="/article/${art.id}" style="text-decoration: none; color: inherit;">${art.title}</a>
+                      <h3 class="card-title">
+                        <a href="/article/${art.id}">${art.title}</a>
                       </h3>
-                      <p class="card-excerpt" style="font-size: 0.85rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${art.excerpt}</p>
+                      <p class="card-excerpt">${art.excerpt}</p>
                     </div>
                   </article>
                 `).join('')}
@@ -1303,20 +1308,20 @@
 
             <!-- Right Column: Most Popular Articles -->
             <div>
-              <h2 style="font-family: var(--font-serif); font-size: 1.4rem; border-bottom: 2px solid var(--color-border); padding-bottom: var(--space-xs); margin-bottom: var(--space-md); color: var(--color-text);">Most Popular</h2>
-              <div style="display: flex; flex-direction: column; gap: var(--space-md);">
+              <h2>Most Popular</h2>
+              <div class="author-cards-column">
                 ${popularArticles.map(art => `
-                  <article class="card" style="margin-bottom: 0; background: var(--color-bg-offset); border: 1px solid var(--color-border);">
-                    <div class="card-body" style="padding: var(--space-md);">
-                      <div class="card-meta" style="margin-bottom: var(--space-xs);">
+                  <article class="card">
+                    <div class="card-body">
+                      <div class="card-meta">
                         <span class="badge ${art.category}">${db.CATEGORIES[art.category].name}</span>
                         <span class="card-meta-dot"></span>
-                        <span style="color: var(--color-accent); font-weight: 600;">👁 ${art.views} views</span>
+                        <span class="author-article-views">👁 ${art.views} views</span>
                       </div>
-                      <h3 class="card-title" style="font-size: 1.1rem; margin-bottom: var(--space-xs); line-height: 1.3;">
-                        <a href="/article/${art.id}" style="text-decoration: none; color: inherit;">${art.title}</a>
+                      <h3 class="card-title">
+                        <a href="/article/${art.id}">${art.title}</a>
                       </h3>
-                      <p class="card-excerpt" style="font-size: 0.85rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${art.excerpt}</p>
+                      <p class="card-excerpt">${art.excerpt}</p>
                     </div>
                   </article>
                 `).join('')}
@@ -1539,19 +1544,19 @@
         <!-- About Header Banner -->
         <header class="about-header">
           <span class="badge ai">Our Mission</span>
-          <h1 style="font-family: var(--font-serif); font-size: 2.75rem; font-weight: 700; margin: var(--space-xs) 0 var(--space-sm);">Where Trends Meet Perspective</h1>
-          <p style="color: var(--color-text-muted); max-width: 700px; margin: 0 auto; font-size: 1.1rem; line-height: 1.6;">AriSphere is a digital publication dedicated to examining the structural forces underlying emerging technology trends, creative AI paradigms, global trade nearshoring, and evolving digital paradigms.</p>
+          <h1>About AriSphere: Where Trends Meet Perspective</h1>
+          <p>AriSphere is a digital publication dedicated to examining the structural forces underlying emerging technology trends, creative AI paradigms, global trade nearshoring, and evolving digital paradigms.</p>
         </header>
 
         <!-- Mission Grid -->
         <section class="about-grid">
           <div class="about-visual">
-            <img src="/assets/images/business-cover.png" alt="AriSphere Editorial Room" style="width: 100%; height: auto; aspect-ratio: 600 / 400; display: block; border-radius: var(--radius-lg);" loading="eager" width="600" height="400">
+            <img src="/assets/images/business-cover.png" alt="AriSphere Editorial Room" loading="eager" width="600" height="400">
           </div>
           <div class="about-mission-box">
-            <h2 style="font-family: var(--font-serif); font-size: 1.75rem; font-weight: 700; margin-bottom: var(--space-md);">Core Coverage & Editorial Pillars</h2>
-            <p style="margin-bottom: var(--space-md); font-size: 0.975rem; color: var(--color-text-muted); line-height: 1.7;">We reject superficial headlines in favor of deep-dive analyses. By looking past short-term speculative waves, we focus on the fundamental shifts transforming societal dynamics.</p>
-            <ul style="padding-left: var(--space-lg); margin-bottom: var(--space-md); font-size: 0.925rem; color: var(--color-text-muted); line-height: 1.8;">
+            <h2>Core Coverage & Editorial Pillars</h2>
+            <p>We reject superficial headlines in favor of deep-dive analyses. By looking past short-term speculative waves, we focus on the fundamental shifts transforming societal dynamics.</p>
+            <ul>
               <li><strong>Cognitive Horizons</strong>: Tracking AI vector structures, cognitive systems, and ethics.</li>
               <li><strong>Infrastructure Geopolitics</strong>: Mapping semiconductor supply bottlenecks and hardware fabrication hubs.</li>
               <li><strong>Economics & Business Shifts</strong>: Analyzing supply-chain resiliencies, nearshoring, and subscription market designs.</li>
@@ -1590,7 +1595,7 @@
         </section>
 
         <!-- Accordion FAQs Section -->
-        <section style="margin-bottom: var(--space-xxl);">
+        <section class="faq-section">
           <div class="section-header">
             <h2 class="section-title">Frequently Asked Questions</h2>
           </div>
@@ -1615,7 +1620,7 @@
                 <p>Our content is created by an elite editorial board led by founder Arisudan, along with contributions from specialists in AI, economics, and infrastructure.</p>
               </div>
             </div>
-
+ 
             <div class="accordion-item">
               <button class="accordion-header">
                 <span>Can I pitch an article or join the editorial board?</span>
@@ -1625,7 +1630,7 @@
                 <p>Yes, we welcome pitches from analysts and correspondents. Visit our Contact page to get in touch with our editorial desk.</p>
               </div>
             </div>
-
+ 
             <div class="accordion-item">
               <button class="accordion-header">
                 <span>Is AriSphere ready for syndication and indexation?</span>
@@ -1744,8 +1749,8 @@
     const breadcrumbsSchema = buildBreadcrumbSchema(pathArray);
 
     const editorialSEO = {
-      title: 'Editorial Policy',
-      description: 'AriSphere editorial policy. Our commitments to independence, source attribution, truth validation, and correction guidelines.',
+      title: 'Editorial Policy & Standards',
+      description: 'AriSphere editorial policy. Our commitments to independence, source attribution, human review verification, reflections authenticity, and AdSense quality standards.',
       url: getBaseURL() + '/editorial-policy',
       schema: {
         '@context': 'https://schema.org',
@@ -1764,19 +1769,128 @@
         <!-- Breadcrumbs Navigation -->
         ${breadcrumbsHTML}
 
-        <h1 class="privacy-title">Editorial Policy</h1>
+        <h1 class="privacy-title">Editorial Policy & Standards</h1>
+        <p class="legal-last-updated">Last updated: June 11, 2026</p>
+        
         <div class="legal-card">
-          <p><em>Last updated: June 9, 2026</em></p>
-          <p>AriSphere aims to deliver professional, objective, and analytically rich digital journalism. Our writers and analysts adhere to the following principles to maintain editorial integrity and trust.</p>
           
-          <h2>1. Editorial Independence</h2>
-          <p>Our coverage and analysis are determined solely by our editorial board. Sponsors, commercial partners, or advertisers hold no influence over our critical reporting, evaluations, or opinion conclusions.</p>
+          <section>
+            <h2>1. Editorial Philosophy</h2>
+            <p>AriSphere prioritizes absolute accuracy, comprehensive human oversight, source transparency, and genuine reader value. We believe in delivery of analytical, high-quality digital journalism. We choose depth over volume, and authority over publication frequency. Our target is to build a trusted publication containing deep-dive insights rather than thousands of low-value pages.</p>
+          </section>
 
-          <h2>2. Source Verification & Attribution</h2>
-          <p>We believe in source transparent reporting. All data points, external scientific claims, and policy quote excerpts are explicitly attributed to their primary sources in our article footnotes and databases.</p>
+          <section>
+            <h2>2. AI Usage & Human Review Policy</h2>
+            <p>We believe in the responsible integration of technology. AriSphere may use AI-assisted tools for research synthesis, initial topic ideation, structural outlining, and initial drafting. However, <strong>every published article is manually reviewed, edited, and approved by a human editor</strong> before publication. Raw, unchecked AI-generated drafts are never published. This ensures all content is verified for factual accuracy and readability.</p>
+          </section>
 
-          <h2>3. Ethics and Fact-Checking</h2>
-          <p>Articles go through rigorous evaluation before publishing. When errors occur, we commit to correcting them promptly. Readers can submit correction requests to our editorial desk at pitch@arisphere.com.</p>
+          <section class="editorial-reflections-callout">
+            <h2>3. Reflections Category Authenticity Rule</h2>
+            <p>Articles published in the <strong>Reflections</strong> category represent the personal, authentic voice of our publication and are <strong>never AI-generated</strong>. Reflections must be:</p>
+            <ul>
+              <li>Personally and manually written by founder <strong>Arisudan</strong>.</li>
+              <li>Based on genuine personal experiences, internships, or engineering projects.</li>
+              <li>Focused on career journeys, software/hardware developments, and lessons learned from failures.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>4. Google AdSense & SEO Quality Standards</h2>
+            <p>Before any draft is recommended for publication, it must pass a strict quality check. We explicitly reject content that looks mass-produced, represents a simple rewrite of another website, exists solely to target search keywords, or contains inaccuracies. Our minimum structural requirements include:</p>
+            <ul>
+              <li><strong>Recommended Depth</strong>: Minimum of 1200 words (1500+ preferred for long-form analysis).</li>
+              <li><strong>Semantic HTML</strong>: Proper use of Heading tags (H2/H3) for logical content hierarchy.</li>
+              <li><strong>Sources & Citations</strong>: At least one external citation mapping to respected primary sources.</li>
+              <li><strong>FAQ Sections</strong>: An FAQ block using details accordions or custom lists to enhance user utility.</li>
+              <li><strong>Accessibility Alt Text</strong>: Missing alt descriptions on images are not permitted.</li>
+              <li><strong>Internal Linking</strong>: Context-aware recommendations connecting related topics.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>5. Editorial Review Process</h2>
+            <p>Our editing pipeline utilizes a 5-step publishing workflow:</p>
+            <ol>
+              <li><strong>Drafting</strong>: Analysis outline is constructed.</li>
+              <li><strong>QA Compliance Rating</strong>: An automated internal dashboard scores the article draft out of 100 points based on structure, length, assets, and source counts.</li>
+              <li><strong>Human Review Verification</strong>: A human editor reviews the copy and ticks off the manual review confirmation check.</li>
+              <li><strong>Editorial Approval</strong>: Only drafts scoring 75+ (preferably 90+ "Ready to Publish") are recommended for release. Lower-quality drafts are routed back to the edit queue.</li>
+              <li><strong>Compilation</strong>: Recompiled into pre-rendered static HTML to guarantee fast load times.</li>
+            </ol>
+          </section>
+
+          <section>
+            <h2>6. Weekly Content Target Schedule</h2>
+            <p>To ensure consistent editorial coverage across our pillars, we aim for the following publication schedule:</p>
+            
+            <div class="editorial-table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Day</th>
+                    <th>Pillar Article 1</th>
+                    <th>Pillar Article 2</th>
+                    <th>Pillar Article 3 (Authentic Core)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Monday</td>
+                    <td>Technology</td>
+                    <td>AI</td>
+                    <td>Insights</td>
+                  </tr>
+                  <tr>
+                    <td>Tuesday</td>
+                    <td>Business</td>
+                    <td>World</td>
+                    <td style="color: var(--cat-reflections); font-weight: 600;">Reflections (Manual)</td>
+                  </tr>
+                  <tr>
+                    <td>Wednesday</td>
+                    <td>Technology</td>
+                    <td>Social Media</td>
+                    <td>Insights</td>
+                  </tr>
+                  <tr>
+                    <td>Thursday</td>
+                    <td>AI</td>
+                    <td>Business</td>
+                    <td style="color: var(--cat-reflections); font-weight: 600;">Reflections (Manual)</td>
+                  </tr>
+                  <tr>
+                    <td>Friday</td>
+                    <td>Technology</td>
+                    <td>World</td>
+                    <td>Insights</td>
+                  </tr>
+                  <tr>
+                    <td>Saturday</td>
+                    <td>Social Media</td>
+                    <td>AI</td>
+                    <td style="color: var(--cat-reflections); font-weight: 600;">Reflections (Manual)</td>
+                  </tr>
+                  <tr>
+                    <td>Sunday</td>
+                    <td>Long-form Feature</td>
+                    <td>Editorial Analysis</td>
+                    <td style="color: var(--cat-reflections); font-weight: 600;">Reflections (Manual)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section>
+            <h2>7. Trust Badges & Readers Correction</h2>
+            <p>Our commitment to transparency means articles that undergo fact-checking and editorial verification carry dynamic badges:
+            <ul>
+              <li><strong>✓ Fact Checked</strong>: Verifies that statistics, data points, and technical reports have been checked against independent sources.</li>
+              <li><strong>✓ Editorially Reviewed</strong>: Indicates that the piece was audited for structure, flow, clarity, and policy alignment.</li>
+            </ul>
+            If you identify a factual error, typo, or citation issue, please email our editorial board at <a href="mailto:pitch@arisphere.com" style="color: var(--color-text); text-decoration: underline;">pitch@arisphere.com</a> for immediate review and correction.</p>
+          </section>
+          
         </div>
       </div>
     `;
@@ -2146,6 +2260,16 @@
                   <label class="admin-checkbox-label">
                     <input type="checkbox" id="art-review" ${!isEdit || article.editoriallyReviewed ? 'checked' : ''}> ✓ Editorially Reviewed Badge
                   </label>
+                  <label class="admin-checkbox-label" style="color: var(--cat-reflections); font-weight: 700;">
+                    <input type="checkbox" id="human-reviewed" ${isEdit && article.humanReviewed ? 'checked' : ''}> Human Review Completed
+                  </label>
+                </div>
+              </div>
+
+              <!-- Dynamic Editorial Q/A & Compliance Panel -->
+              <div class="admin-form-group admin-form-full">
+                <div id="editorial-guidelines-panel" class="editorial-qa-panel">
+                  <!-- Rendered dynamically -->
                 </div>
               </div>
 
@@ -2239,8 +2363,332 @@
       altInp.addEventListener('input', validateCoverImage);
       altInp.addEventListener('change', validateCoverImage);
 
+      // Editorial Quality Scoring Engine
+      function validateEditorialQuality() {
+        const titleEl = document.getElementById('art-title');
+        const subtitleEl = document.getElementById('art-subtitle');
+        const excerptEl = document.getElementById('art-excerpt');
+        const contentEl = document.getElementById('art-content');
+        const categoryEl = document.getElementById('art-category');
+        const authorEl = document.getElementById('art-author');
+        const imageEl = document.getElementById('art-image');
+        const altEl = document.getElementById('art-image-alt');
+        const tagsEl = document.getElementById('art-tags');
+        const sourcesEl = document.getElementById('art-sources');
+        const humanReviewedEl = document.getElementById('human-reviewed');
+
+        if (!titleEl || !contentEl || !categoryEl || !authorEl) return;
+
+        const titleVal = titleEl.value.trim();
+        const subtitleVal = subtitleEl ? subtitleEl.value.trim() : '';
+        const excerptVal = excerptEl ? excerptEl.value.trim() : '';
+        const contentVal = contentEl.value;
+        const categoryVal = categoryEl.value;
+        const authorVal = authorEl.value;
+        const imageVal = imageEl ? imageEl.value.trim() : '';
+        const altVal = altEl ? altEl.value.trim() : '';
+        const tagsVal = tagsEl ? tagsEl.value.trim() : '';
+        const sourcesVal = sourcesEl ? sourcesEl.value.trim() : '';
+        const humanReviewed = humanReviewedEl ? humanReviewedEl.checked : false;
+
+        let score = 0;
+        const checks = [];
+        let reflectionsNoticeHTML = '';
+
+        // 1. Word Count Check (20 pts)
+        // Strip HTML tags for clean word count
+        const textOnly = contentVal.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+        const words = textOnly ? textOnly.split(/\s+/).length : 0;
+        let wordCountScore = 0;
+        let wordCountMsg = '';
+        let wordCountPass = false;
+
+        if (words >= 1500) {
+          wordCountScore = 20;
+          wordCountMsg = `Excellent long-form article (${words} words).`;
+          wordCountPass = true;
+        } else if (words >= 1200) {
+          wordCountScore = 15;
+          wordCountMsg = `Acceptable length but additional depth is recommended (${words} words).`;
+          wordCountPass = true;
+        } else {
+          wordCountScore = 0;
+          wordCountMsg = `Article may be too short for strong SEO performance (${words} words). Minimum target is 1200 words.`;
+          wordCountPass = false;
+        }
+        score += wordCountScore;
+        checks.push({
+          name: "Word Count",
+          detail: wordCountMsg,
+          pass: wordCountPass
+        });
+
+        // 2. Human Review Confirmation Check (10 pts)
+        if (humanReviewed) {
+          score += 10;
+          checks.push({
+            name: "Human Review",
+            detail: "Confirmed that manual human review was completed.",
+            pass: true
+          });
+        } else {
+          checks.push({
+            name: "Human Review",
+            detail: "Warning: Human review pending. Please complete manual review.",
+            pass: false
+          });
+        }
+
+        // 3. FAQ Section Present Check (10 pts)
+        const faqRegex = /faq|details|<summary>|class="faq"|frequently asked questions/i;
+        const hasFaq = faqRegex.test(contentVal);
+        if (hasFaq) {
+          score += 10;
+          checks.push({
+            name: "FAQ Section",
+            detail: "Collapsible FAQ section or 'Frequently Asked Questions' content detected.",
+            pass: true
+          });
+        } else {
+          checks.push({
+            name: "FAQ Section",
+            detail: "FAQ is missing. Under AdSense policy, include an FAQ using a <details> block or faq class.",
+            pass: false
+          });
+        }
+
+        // 4. Sources / Citations Present Check (15 pts)
+        let hasSources = false;
+        try {
+          const parsedSources = sourcesVal ? JSON.parse(sourcesVal) : [];
+          hasSources = Array.isArray(parsedSources) && parsedSources.length > 0;
+        } catch(e) {}
+
+        if (hasSources) {
+          score += 15;
+          checks.push({
+            name: "Sources & Citations",
+            detail: "Valid sources list exists in database schema.",
+            pass: true
+          });
+        } else {
+          checks.push({
+            name: "Sources & Citations",
+            detail: "No references defined. Google AdSense policy requires verified external links.",
+            pass: false
+          });
+        }
+
+        // 5. Featured Image Present Check (10 pts)
+        const hasImage = !!imageVal;
+        if (hasImage) {
+          score += 10;
+          checks.push({
+            name: "Featured Image",
+            detail: "Cover image assigned.",
+            pass: true
+          });
+        } else {
+          checks.push({
+            name: "Featured Image",
+            detail: "Missing cover image assignment.",
+            pass: false
+          });
+        }
+
+        // 6. Image Alt Text Present Check (15 pts)
+        const hasAlt = !!altVal;
+        if (hasAlt) {
+          score += 15;
+          checks.push({
+            name: "Alt Text",
+            detail: "Alt description provided for accessibility.",
+            pass: true
+          });
+        } else {
+          checks.push({
+            name: "Alt Text",
+            detail: "Alt text is empty. Search engines require alt descriptions for crawling.",
+            pass: false
+          });
+        }
+
+        // 7. Internal Links Present Check (5 pts)
+        const hasInternalLink = /\/article\/|\/category\/|href="\//i.test(contentVal);
+        if (hasInternalLink) {
+          score += 5;
+          checks.push({
+            name: "Internal Links",
+            detail: "Internal article or category links detected.",
+            pass: true
+          });
+        } else {
+          checks.push({
+            name: "Internal Links",
+            detail: "No internal links detected. Link to other AriSphere articles to boost authority.",
+            pass: false
+          });
+        }
+
+        // 8. Tags Present Check (5 pts)
+        const tagsArray = tagsVal ? tagsVal.split(',').map(t => t.trim()).filter(t => t !== '') : [];
+        const hasTags = tagsArray.length > 0;
+        if (hasTags) {
+          score += 5;
+          checks.push({
+            name: "Tags Assigned",
+            detail: `${tagsArray.length} tag(s) listed.`,
+            pass: true
+          });
+        } else {
+          checks.push({
+            name: "Tags Assigned",
+            detail: "No keywords or tags assigned to help reader search.",
+            pass: false
+          });
+        }
+
+        // 9. Reflections Compliance Check (10 pts)
+        if (categoryVal === 'reflections') {
+          const isArisudanAuthor = authorVal === 'arisudan';
+          if (isArisudanAuthor) {
+            score += 10;
+            checks.push({
+              name: "Reflections Rules",
+              detail: "Authored manually by founder Arisudan.",
+              pass: true
+            });
+          } else {
+            checks.push({
+              name: "Reflections Rules",
+              detail: "Deduction: Reflections must be written by Arisudan.",
+              pass: false
+            });
+          }
+          reflectionsNoticeHTML = `
+            <div class="reflections-qa-alert">
+              <strong>⚠ Reflections Protections Warning:</strong> Reflections category rules dictate that these articles must be personally written by <strong>Arisudan</strong>, based on real engineering, internships, or startup failures. AI-generated copy or ghostwriting is strictly prohibited.
+            </div>
+          `;
+        } else {
+          score += 10;
+        }
+
+        // Additional non-scored validations (Pass/Fail)
+        const hasHeading = /<h[23]/i.test(contentVal);
+        checks.push({
+          name: "Heading Hierarchy",
+          detail: hasHeading ? "Found H2 or H3 content headers." : "Structure Alert: Missing H2 or H3 subheadings for SEO hierarchy.",
+          pass: hasHeading
+        });
+
+        const hasTitle = !!titleVal;
+        checks.push({
+          name: "Descriptive Title",
+          detail: hasTitle ? "Title defined." : "Headline is empty.",
+          pass: hasTitle
+        });
+
+        const hasExcerpt = !!excerptVal;
+        checks.push({
+          name: "Meta Description",
+          detail: hasExcerpt ? "Excerpt / Meta description provided." : "Meta description details missing.",
+          pass: hasExcerpt
+        });
+
+        // Determine badge and color classes
+        let badgeText = '';
+        let badgeClass = '';
+        let fillClass = '';
+        let summaryText = '';
+
+        if (score >= 90) {
+          badgeText = "Ready to Publish";
+          badgeClass = "ready";
+          fillClass = "ready";
+          summaryText = "Strong article suitable for publication.";
+        } else if (score >= 75) {
+          badgeText = "Publish After Review";
+          badgeClass = "review";
+          fillClass = "review";
+          summaryText = "Content requires editorial review before publication.";
+        } else if (score >= 60) {
+          badgeText = "Needs Improvement";
+          badgeClass = "improve";
+          fillClass = "improve";
+          summaryText = "Needs additional citations and FAQ section.";
+        } else {
+          badgeText = "Do Not Publish";
+          badgeClass = "do-not";
+          fillClass = "do-not";
+          summaryText = "Quality score too low. Draft is missing critical trust and structure components.";
+        }
+
+        const qaPanel = document.getElementById('editorial-guidelines-panel');
+        if (qaPanel) {
+          qaPanel.innerHTML = `
+            <div class="editorial-qa-header">
+              <h3 class="editorial-qa-title">Editorial Compliance Rating</h3>
+              <span class="readiness-badge ${badgeClass}" id="pub-readiness-badge">${badgeText}</span>
+            </div>
+            
+            <div style="font-size:0.825rem; margin-bottom:8px; display:flex; justify-content:space-between; font-weight:600; color:var(--color-text);">
+              <span>Trust & Quality Score</span>
+              <span><strong>${score}/100</strong></span>
+            </div>
+            
+            <div class="score-bar-container">
+              <div class="score-bar-fill ${fillClass}" style="width: ${score}%;"></div>
+            </div>
+
+            ${reflectionsNoticeHTML}
+
+            <div class="editorial-checks-list">
+              ${checks.map(c => `
+                <div class="checklist-item">
+                  <div style="max-width:80%; text-align:left;">
+                    <strong style="color:var(--color-text); font-size:0.8rem;">${c.name}</strong>
+                    <div style="font-size:0.75rem; color:var(--color-text-muted); margin-top:2px;">${c.detail}</div>
+                  </div>
+                  <span class="checklist-indicator ${c.pass ? 'pass' : 'fail'}">${c.pass ? '✔ PASS' : '⚠ WARN'}</span>
+                </div>
+              `).join('')}
+            </div>
+
+            <div class="qa-summary-box">
+              <strong>Editorial Guidance:</strong> ${summaryText}
+            </div>
+          `;
+        }
+      }
+
+      // Wire QA Compliance real-time input listeners
+      const qaInputs = [
+        'art-title',
+        'art-subtitle',
+        'art-excerpt',
+        'art-content',
+        'art-category',
+        'art-author',
+        'art-image',
+        'art-image-alt',
+        'art-tags',
+        'art-sources',
+        'human-reviewed'
+      ];
+      qaInputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('input', validateEditorialQuality);
+          el.addEventListener('change', validateEditorialQuality);
+        }
+      });
+
       // Run initial validation check
-      setTimeout(validateCoverImage, 400);
+      setTimeout(() => {
+        validateCoverImage();
+        validateEditorialQuality();
+      }, 400);
 
       // Submit Form Handler
       document.getElementById('admin-article-form').addEventListener('submit', async (e) => {
@@ -2285,7 +2733,8 @@
           editorsPick: document.getElementById('art-editor').checked,
           sources: sourcesArray,
           factChecked: document.getElementById('art-fact').checked,
-          editoriallyReviewed: document.getElementById('art-review').checked
+          editoriallyReviewed: document.getElementById('art-review').checked,
+          humanReviewed: document.getElementById('human-reviewed').checked
         };
 
         try {

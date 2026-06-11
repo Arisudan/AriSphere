@@ -89,13 +89,19 @@ async function runBuild() {
   console.log('Fetching active articles from database/CMS...');
   let activeArticles = [];
   try {
-    activeArticles = await db.getLatestArticles(1000);
+    activeArticles = await db.getLatestArticles(1000, false);
   } catch (err) {
     console.warn('Failed to retrieve articles via DB query wrapper, using local ARTICLES fallback.', err);
     activeArticles = db.ARTICLES;
   }
+
+  // Strict Published Content Filters (Task 10)
+  activeArticles = activeArticles.filter(art => (art.status || 'published') === 'published');
+
+  const publishedCategories = new Set(activeArticles.map(art => art.category));
+  const publishedAuthors = new Set(activeArticles.map(art => art.author));
   
-  console.log(`Database loaded: ${activeArticles.length} active articles, ${Object.keys(db.CATEGORIES).length} categories found.`);
+  console.log(`Database loaded: ${activeArticles.length} published articles, ${publishedCategories.size} active categories, ${publishedAuthors.size} active authors found.`);
   
   // 4. Compile dynamic URL lists
   const pathsToRender = [
@@ -109,13 +115,13 @@ async function runBuild() {
     '/admin' // Pre-render admin workspace static skeleton
   ];
   
-  // Add category paths
-  Object.keys(db.CATEGORIES).forEach(catId => {
+  // Add category paths (only categories with published articles)
+  Object.keys(db.CATEGORIES).filter(catId => publishedCategories.has(catId)).forEach(catId => {
     pathsToRender.push(`/category/${catId}`);
   });
   
-  // Add author paths
-  Object.keys(db.AUTHORS).forEach(username => {
+  // Add author paths (only authors with published articles)
+  Object.keys(db.AUTHORS).filter(username => publishedAuthors.has(username)).forEach(username => {
     pathsToRender.push(`/author/${username}`);
   });
   
@@ -140,9 +146,6 @@ async function runBuild() {
   // Evaluate the router script inside JSDOM to bind routes and event listeners
   dom.window.eval(routerCode);
   
-  // Trigger DOMContentLoaded inside JSDOM to initial state the routing dispatch
-  dom.window.dispatchEvent(new dom.window.Event('DOMContentLoaded'));
-  
   // 6. Iterate and render each path
   for (let routePath of pathsToRender) {
     console.log(`Pre-rendering: ${routePath}`);
@@ -151,8 +154,28 @@ async function runBuild() {
     dom.window.history.pushState(null, '', routePath);
     dom.window.dispatchEvent(new dom.window.Event('popstate'));
     
-    // Wait for the transition delay and rendering tasks to complete
-    await sleep(350);
+    // Wait for the transition delay and rendering tasks to complete (poll until fade-out is removed)
+    let rendered = false;
+    for (let attempt = 0; attempt < 50; attempt++) {
+      await sleep(100);
+      const viewport = dom.window.document.getElementById('main-viewport');
+      const classes = viewport ? Array.from(viewport.classList).join(' ') : 'NULL';
+      const hasH1 = viewport && !!viewport.querySelector('h1');
+      const h1Text = hasH1 ? viewport.querySelector('h1').textContent.trim().substring(0, 40) : 'NONE';
+      console.log(`  [POLL DEBUG] Attempt ${attempt} | Classes: [${classes}] | Has H1: ${hasH1} | H1 Text: "${h1Text}"`);
+      
+      if (viewport && !viewport.classList.contains('fade-out') && (viewport.querySelector('h1') || viewport.querySelector('h2') || viewport.querySelector('main') || routePath === '/admin' || viewport.querySelector('form'))) {
+        rendered = true;
+        break;
+      }
+    }
+    
+    const vp = dom.window.document.getElementById('main-viewport');
+    console.log(`[BUILD DEBUG] Path: ${routePath} | Rendered: ${rendered} | Viewport Length: ${vp ? vp.innerHTML.length : 'NULL'} | H1: ${vp && vp.querySelector('h1') ? vp.querySelector('h1').textContent : 'NONE'}`);
+
+    if (!rendered) {
+      console.warn(`Pre-rendering warning: path ${routePath} did not complete rendering within timeout.`);
+    }
     
     // Retrieve JSDOM serialized output
     const serializedHTML = dom.serialize();
@@ -268,7 +291,7 @@ async function runBuild() {
   console.log('Generating dynamic sitemap-categories.xml...');
   const categoryXML = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  ${Object.keys(db.CATEGORIES).map(catId => `  <url>
+  ${Object.keys(db.CATEGORIES).filter(catId => publishedCategories.has(catId)).map(catId => `  <url>
     <loc>${SITE_URL}/category/${catId}</loc>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
@@ -282,7 +305,7 @@ async function runBuild() {
   console.log('Generating dynamic sitemap-authors.xml...');
   const authorXML = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  ${Object.keys(db.AUTHORS).map(username => `  <url>
+  ${Object.keys(db.AUTHORS).filter(username => publishedAuthors.has(username)).map(username => `  <url>
     <loc>${SITE_URL}/author/${username}</loc>
     <changefreq>weekly</changefreq>
     <priority>0.70</priority>

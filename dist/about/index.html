@@ -14,8 +14,8 @@
   </script>
   
   <!-- Default SEO Meta Tags (Overridden dynamically by router.js) -->
-  <title>Home | AriSphere - Where Trends Meet Perspective</title>
-  <meta name="description" content="AriSphere: Where Trends Meet Perspective. Read the latest analysis on Technology, AI, Global Economics, Business, Social Media networks, and cultural insights.">
+  <title>About Us | AriSphere - Where Trends Meet Perspective</title>
+  <meta name="description" content="About AriSphere: Our mission, our team, and our core coverage in technology shifts, AI horizons, global business, and digital cultures.">
   <meta name="robots" content="index, follow">
   
   <!-- Canonical Link -->
@@ -23,17 +23,17 @@
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Home | AriSphere - Where Trends Meet Perspective">
-  <meta property="og:description" content="AriSphere: Where Trends Meet Perspective. Read the latest analysis on Technology, AI, Global Economics, Business, Social Media networks, and cultural insights.">
+  <meta property="og:title" content="About Us | AriSphere - Where Trends Meet Perspective">
+  <meta property="og:description" content="About AriSphere: Our mission, our team, and our core coverage in technology shifts, AI horizons, global business, and digital cultures.">
   <meta property="og:url" content="https://arisphere.vercel.app/about">
-  <meta property="og:image" content="/assets/images/ai-cover.png">
+  <meta property="og:image" content="/assets/images/business-cover.png">
   <meta property="og:site_name" content="AriSphere">
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Home | AriSphere - Where Trends Meet Perspective">
-  <meta name="twitter:description" content="AriSphere: Where Trends Meet Perspective. Read the latest analysis on Technology, AI, Global Economics, Business, Social Media networks, and cultural insights.">
-  <meta name="twitter:image" content="/assets/images/ai-cover.png">
+  <meta name="twitter:title" content="About Us | AriSphere - Where Trends Meet Perspective">
+  <meta name="twitter:description" content="About AriSphere: Our mission, our team, and our core coverage in technology shifts, AI horizons, global business, and digital cultures.">
+  <meta name="twitter:image" content="/assets/images/business-cover.png">
 
   <!-- Favicon / Brand Styling -->
   <meta name="theme-color" content="#0f172a">
@@ -56,7 +56,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <!-- Dynamic JSON-LD Script Tag for SEO Structured Data (Updated by router) -->
-  <script type="application/ld+json" id="jsonld-schema">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://arisphere.vercel.app/#website","url":"https://arisphere.vercel.app/","name":"AriSphere","description":"Where Trends Meet Perspective","publisher":{"@id":"https://arisphere.vercel.app/#organization"}},{"@type":"Organization","@id":"https://arisphere.vercel.app/#organization","name":"AriSphere","url":"https://arisphere.vercel.app/","logo":{"@type":"ImageObject","url":"https://arisphere.vercel.app/assets/images/business-cover.png"}}]}]}</script>
+  <script type="application/ld+json" id="jsonld-schema">{"@context":"https://schema.org","@graph":[{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is AriSphere?","acceptedAnswer":{"@type":"Answer","text":"AriSphere is a premium digital publication and media magazine tracking technology shifts, cognitive AI innovations, global business policies, and cultural insights."}},{"@type":"Question","name":"Who writes the articles on AriSphere?","acceptedAnswer":{"@type":"Answer","text":"Our content is created by an elite editorial board led by founder Arisudan, along with contributions from specialists in AI, economics, and infrastructure."}},{"@type":"Question","name":"Can I pitch an article or join the editorial board?","acceptedAnswer":{"@type":"Answer","text":"Yes, we welcome pitches from analysts and correspondents. Visit our Contact page to get in touch with our editorial desk."}},{"@type":"Question","name":"Is AriSphere ready for syndication and indexation?","acceptedAnswer":{"@type":"Answer","text":"Absolutely. AriSphere is optimized for Core Web Vitals, fully search engine accessible, and structured with schema.org JSON-LD microdata."}}]},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://arisphere.vercel.app/"},{"@type":"ListItem","position":2,"name":"About Us","item":"https://arisphere.vercel.app/about"}]}]}</script>
 </head>
 <body>
 
@@ -81,7 +81,7 @@
       <!-- Desktop Nav Menu -->
       <nav id="nav-menu" aria-label="Primary Navigation">
         <ul class="nav-menu">
-          <li><a href="/" class="nav-link active">Home</a></li>
+          <li><a href="/" class="nav-link">Home</a></li>
           <li><a href="/category/trending" class="nav-link">Trending</a></li>
           <li><a href="/category/technology" class="nav-link">Technology</a></li>
           <li><a href="/category/ai" class="nav-link">AI</a></li>
@@ -132,419 +132,110 @@
   <!-- Router Mount Element (Dynamic views will load here) -->
   <main id="main-viewport" class="main-content" aria-live="polite">
       <div class="container">
-        <!-- Top Leaderboard Advertisement Placement -->
-        <div class="adsense-placement ad-leaderboard" id="adsense-home-top">
-          <div class="adsense-label">AriSphere Core Banner</div>
-          <div class="adsense-slot-info">Display responsive 728x90</div>
-        </div>
+        <!-- Breadcrumbs Navigation -->
+        <nav aria-label="Breadcrumbs"><ol class="breadcrumbs"><li class="breadcrumb-item"><a href="/">Home</a></li><li class="breadcrumb-item" aria-current="page">About Us</li></ol></nav>
 
-        <!-- Hero Editorial Section (Magazine Cover Layout) -->
-        <section class="hero-section" style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-xl); margin-bottom: var(--space-xxl); border-bottom: 1px solid var(--color-border); padding-bottom: var(--space-xl);">
+        <!-- About Header Banner -->
+        <header class="about-header">
+          <span class="badge ai">Our Mission</span>
+          <h1 tabindex="-1">About AriSphere: Where Trends Meet Perspective</h1>
+          <p>AriSphere is a digital publication dedicated to examining the structural forces underlying emerging technology trends, creative AI paradigms, global trade nearshoring, and evolving digital paradigms.</p>
+        </header>
+
+        <!-- Mission Grid -->
+        <section class="about-grid">
+          <div class="about-visual">
+            <img src="/assets/images/business-cover.png" alt="AriSphere Editorial Room" loading="eager" width="600" height="400">
+          </div>
+          <div class="about-mission-box">
+            <h2>Core Coverage &amp; Editorial Pillars</h2>
+            <p>We reject superficial headlines in favor of deep-dive analyses. By looking past short-term speculative waves, we focus on the fundamental shifts transforming societal dynamics.</p>
+            <ul>
+              <li><strong>Cognitive Horizons</strong>: Tracking AI vector structures, cognitive systems, and ethics.</li>
+              <li><strong>Infrastructure Geopolitics</strong>: Mapping semiconductor supply bottlenecks and hardware fabrication hubs.</li>
+              <li><strong>Economics &amp; Business Shifts</strong>: Analyzing supply-chain resiliencies, nearshoring, and subscription market designs.</li>
+            </ul>
+          </div>
+        </section>
+
+        <!-- Editor & Team Section -->
+        <section class="team-section">
+          <div class="section-header">
+            <h2 class="section-title">Editorial Board &amp; Authors</h2>
+          </div>
+          <div class="team-grid">
+            <!-- Founder -->
+            <div class="team-card">
+              <img class="team-avatar" src="/assets/images/author.png" alt="Arisudan" loading="lazy" width="90" height="90">
+              <h3 class="team-name">Arisudan</h3>
+              <div class="team-role">Founder &amp; Editor-in-Chief</div>
+              <p class="team-bio">Architect of AriSphere. Leads coverage on cognitive systems, infrastructure geopolitics, and digital attention loops.</p>
+            </div>
+            <!-- Correspondent -->
+            <div class="team-card">
+              <img class="team-avatar" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&amp;fit=crop&amp;q=80&amp;w=200" alt="Elena Vance" loading="lazy" width="90" height="90">
+              <h3 class="team-name">Elena Vance</h3>
+              <div class="team-role">Senior Tech Correspondent</div>
+              <p class="team-bio">Covers hardware ecosystems, quantum computing breakthroughs, and Silicon Valley regulatory alignments.</p>
+            </div>
+            <!-- Analyst -->
+            <div class="team-card">
+              <img class="team-avatar" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&amp;fit=crop&amp;q=80&amp;w=200" alt="Marcus Aurelius" loading="lazy" width="90" height="90">
+              <h3 class="team-name">Marcus Aurelius</h3>
+              <div class="team-role">Global Analyst</div>
+              <p class="team-bio">Examines historical economic waves, logistics networks, shipping corridors, and nearshoring trends.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Accordion FAQs Section -->
+        <section class="faq-section">
+          <div class="section-header">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+          </div>
           
-          <!-- Left Column: Large Featured Cover Story -->
-          <div class="hero-featured-card" style="height: 580px; position: relative; border-radius: var(--radius-md); overflow: hidden; display: flex; align-items: flex-end; border: 1px solid var(--color-border); box-shadow: none;">
-            <img class="hero-featured-img" src="/assets/images/ai-cover.png" alt="The Silicon Mind: Navigating the Intersection of Cognitive AI and Creative Writing" loading="eager" width="800" height="580" style="position: absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:1;">
-            <div class="hero-featured-overlay" style="position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(to top, rgba(9, 13, 22, 0.95) 0%, rgba(9, 13, 22, 0.5) 60%, rgba(9, 13, 22, 0.1) 100%); z-index:2;"></div>
-            <div class="hero-featured-content" style="position: relative; z-index: 3; padding: var(--space-xl); color: #ffffff;">
-              <span class="badge ai">AI</span>
-              <h1 class="hero-featured-title" style="font-family: var(--font-serif); font-size: 2.5rem; line-height: 1.2; font-weight: 700; margin: var(--space-sm) 0 var(--space-sm);" tabindex="-1">
-                <a href="/article/1" style="color: #ffffff; text-decoration: none;">The Silicon Mind: Navigating the Intersection of Cognitive AI and Creative Writing</a>
-              </h1>
-              <p class="hero-featured-desc" style="font-size: 1.05rem; color: #cbd5e1; margin-bottom: var(--space-md); max-width: 650px;">As artificial intelligence systems enter creative sectors, authors and technologists debate where engineering stops and creative soul begins.</p>
-              <div class="card-meta" style="color: #94a3b8; font-size: 0.85rem;">
-                <span>By Arisudan</span>
-                <span class="card-meta-dot"></span>
-                <span>June 8, 2026</span>
-                <span class="card-meta-dot"></span>
-                <span>6 min read</span>
+          <div class="accordion" id="about-faqs">
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>What is AriSphere?</span>
+                <span class="accordion-icon">+</span>
+              </button>
+              <div class="accordion-content">
+                <p>AriSphere is a premium digital publication and media magazine tracking technology shifts, cognitive AI innovations, global business policies, and cultural insights.</p>
               </div>
             </div>
-          </div>
-
-          <!-- Right Column: Reflections & Narratives with Pull Quotes -->
-          <div class="hero-sidebar reflections-column" style="display: flex; flex-direction: column; gap: var(--space-md); height: 580px; overflow-y: auto; padding-right: var(--space-xs); box-shadow: none;">
-            <h2 style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 700; border-bottom: 2px solid var(--cat-reflections); padding-bottom: var(--space-xs); margin: 0 0 var(--space-sm) 0; color: var(--color-text);">Reflections &amp; Stories</h2>
             
-              <div class="reflection-story-item" style="padding: var(--space-sm) 0 var(--space-md) 0; border-bottom: 1px solid var(--color-border); display: flex; flex-direction: column; justify-content: space-between;">
-                <div>
-                  <h3 style="font-family: var(--font-serif); font-size: 1.1rem; line-height: 1.35; font-weight: 700; margin: 0 0 6px 0;">
-                    <a href="/article/8" style="color: var(--color-text); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--cat-reflections)'" onmouseout="this.style.color='var(--color-text)'">The Reality of Pursuing Embedded Systems in India</a>
-                  </h3>
-                  <!-- pull quote style -->
-                  <blockquote style="font-family: var(--font-serif); font-size: 0.875rem; font-style: italic; border-left: 2px solid var(--cat-reflections); padding-left: var(--space-sm); margin: var(--space-xs) 0 var(--space-sm) 0; color: var(--color-text-muted); line-height: 1.4;">
-                    "Finding hardware roles in India is challenging. I analyze the market realities and how students can navigate them."
-                  </blockquote>
-                </div>
-                <div style="display: flex; align-items: center; gap: var(--space-xs); margin-top: 4px;">
-                  <img src="/assets/images/author.png" alt="Arisudan" style="width: 24px; height: 24px; border-radius: var(--radius-full); object-fit: cover;" loading="lazy">
-                  <div style="font-size: 0.75rem; color: var(--color-text-muted);">
-                    <strong>By Arisudan</strong> · 8 min read
-                  </div>
-                </div>
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>Who writes the articles on AriSphere?</span>
+                <span class="accordion-icon">+</span>
+              </button>
+              <div class="accordion-content">
+                <p>Our content is created by an elite editorial board led by founder Arisudan, along with contributions from specialists in AI, economics, and infrastructure.</p>
               </div>
-            
-              <div class="reflection-story-item" style="padding: var(--space-sm) 0 var(--space-md) 0; border-bottom: 1px solid var(--color-border); display: flex; flex-direction: column; justify-content: space-between;">
-                <div>
-                  <h3 style="font-family: var(--font-serif); font-size: 1.1rem; line-height: 1.35; font-weight: 700; margin: 0 0 6px 0;">
-                    <a href="/article/7" style="color: var(--color-text); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--cat-reflections)'" onmouseout="this.style.color='var(--color-text)'">What Jayem Automotive Taught Me About Real Engineering</a>
-                  </h3>
-                  <!-- pull quote style -->
-                  <blockquote style="font-family: var(--font-serif); font-size: 0.875rem; font-style: italic; border-left: 2px solid var(--cat-reflections); padding-left: var(--space-sm); margin: var(--space-xs) 0 var(--space-sm) 0; color: var(--color-text-muted); line-height: 1.4;">
-                    "My time at Jayem Automotive redefined what engineering means to me. Here are the core lessons from the shop floor and building real hardware."
-                  </blockquote>
-                </div>
-                <div style="display: flex; align-items: center; gap: var(--space-xs); margin-top: 4px;">
-                  <img src="/assets/images/author.png" alt="Arisudan" style="width: 24px; height: 24px; border-radius: var(--radius-full); object-fit: cover;" loading="lazy">
-                  <div style="font-size: 0.75rem; color: var(--color-text-muted);">
-                    <strong>By Arisudan</strong> · 7 min read
-                  </div>
-                </div>
+            </div>
+ 
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>Can I pitch an article or join the editorial board?</span>
+                <span class="accordion-icon">+</span>
+              </button>
+              <div class="accordion-content">
+                <p>Yes, we welcome pitches from analysts and correspondents. Visit our Contact page to get in touch with our editorial desk.</p>
               </div>
-            
-              <div class="reflection-story-item" style="padding: var(--space-sm) 0 var(--space-md) 0; border-bottom: 1px solid var(--color-border); display: flex; flex-direction: column; justify-content: space-between;">
-                <div>
-                  <h3 style="font-family: var(--font-serif); font-size: 1.1rem; line-height: 1.35; font-weight: 700; margin: 0 0 6px 0;">
-                    <a href="/article/6" style="color: var(--color-text); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--cat-reflections)'" onmouseout="this.style.color='var(--color-text)'">Building AriSphere From Zero to Production</a>
-                  </h3>
-                  <!-- pull quote style -->
-                  <blockquote style="font-family: var(--font-serif); font-size: 0.875rem; font-style: italic; border-left: 2px solid var(--cat-reflections); padding-left: var(--space-sm); margin: var(--space-xs) 0 var(--space-sm) 0; color: var(--color-text-muted); line-height: 1.4;">
-                    "Building a modern web application requires balancing architecture decisions. Here is how I structured AriSphere's static compiler and database fallback layer."
-                  </blockquote>
-                </div>
-                <div style="display: flex; align-items: center; gap: var(--space-xs); margin-top: 4px;">
-                  <img src="/assets/images/author.png" alt="Arisudan" style="width: 24px; height: 24px; border-radius: var(--radius-full); object-fit: cover;" loading="lazy">
-                  <div style="font-size: 0.75rem; color: var(--color-text-muted);">
-                    <strong>By Arisudan</strong> · 6 min read
-                  </div>
-                </div>
+            </div>
+ 
+            <div class="accordion-item">
+              <button class="accordion-header">
+                <span>Is AriSphere ready for syndication and indexation?</span>
+                <span class="accordion-icon">+</span>
+              </button>
+              <div class="accordion-content">
+                <p>Absolutely. AriSphere is optimized for Core Web Vitals, fully search engine accessible, and structured with schema.org JSON-LD microdata.</p>
               </div>
-            
-            
+            </div>
           </div>
         </section>
-
-        <!-- Inline Feed Advertisement Placement -->
-        <div class="adsense-placement ad-infeed" id="adsense-home-infeed-1">
-          <div class="adsense-label">In-Feed Responsive Placements</div>
-          <div class="adsense-slot-info">Display fluid feed banner</div>
-        </div>
-
-        <!-- Editor's Picks Section -->
-        <section class="editors-picks-section" style="margin-top: var(--space-xl); border-bottom: 1px solid var(--color-border); padding-bottom: var(--space-xl); margin-bottom: var(--space-xl);">
-          <div class="section-header" style="border-bottom: 2px solid var(--color-border); padding-bottom: var(--space-xs); margin-bottom: var(--space-lg); box-shadow: none;">
-            <h2 class="section-title" style="font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; margin:0;">Editor's Picks</h2>
-          </div>
-          <div class="grid-three-col" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-md);">
-            
-              <article class="card" style="margin-bottom: 0; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-sm); box-shadow: none; overflow: hidden; transition: border-color 0.2s;" onmouseover="this.style.borderColor='var(--color-accent)'" onmouseout="this.style.borderColor='var(--color-border)'">
-                <div class="card-img-wrapper" style="aspect-ratio: 16/9; overflow: hidden; position: relative;">
-                  <img class="card-img" src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Quantum Leap: Silicon Valley Races Towards Commercial Qubit Computers" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform var(--transition-slow);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-                </div>
-                <div class="card-body" style="padding: var(--space-sm);">
-                  <div class="card-meta" style="margin-bottom: 4px;">
-                    <span class="badge technology" style="font-size: 0.6rem; padding: 2px 4px;">Technology</span>
-                  </div>
-                  <h3 class="card-title" style="font-family: var(--font-serif); font-size: 0.95rem; line-height: 1.35; margin: 0; font-weight: 700; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-                    <a href="/article/3" style="text-decoration: none; color: inherit;">Quantum Leap: Silicon Valley Races Towards Commercial Qubit Computers</a>
-                  </h3>
-                </div>
-              </article>
-            
-              <article class="card" style="margin-bottom: 0; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-sm); box-shadow: none; overflow: hidden; transition: border-color 0.2s;" onmouseover="this.style.borderColor='var(--color-accent)'" onmouseout="this.style.borderColor='var(--color-border)'">
-                <div class="card-img-wrapper" style="aspect-ratio: 16/9; overflow: hidden; position: relative;">
-                  <img class="card-img" src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="What Jayem Automotive Taught Me About Real Engineering" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform var(--transition-slow);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-                </div>
-                <div class="card-body" style="padding: var(--space-sm);">
-                  <div class="card-meta" style="margin-bottom: 4px;">
-                    <span class="badge reflections" style="font-size: 0.6rem; padding: 2px 4px;">Reflections</span>
-                  </div>
-                  <h3 class="card-title" style="font-family: var(--font-serif); font-size: 0.95rem; line-height: 1.35; margin: 0; font-weight: 700; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-                    <a href="/article/7" style="text-decoration: none; color: inherit;">What Jayem Automotive Taught Me About Real Engineering</a>
-                  </h3>
-                </div>
-              </article>
-            
-              <article class="card" style="margin-bottom: 0; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-sm); box-shadow: none; overflow: hidden; transition: border-color 0.2s;" onmouseover="this.style.borderColor='var(--color-accent)'" onmouseout="this.style.borderColor='var(--color-border)'">
-                <div class="card-img-wrapper" style="aspect-ratio: 16/9; overflow: hidden; position: relative;">
-                  <img class="card-img" src="/assets/images/ai-cover.png" alt="The Silicon Mind: Navigating the Intersection of Cognitive AI and Creative Writing" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform var(--transition-slow);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-                </div>
-                <div class="card-body" style="padding: var(--space-sm);">
-                  <div class="card-meta" style="margin-bottom: 4px;">
-                    <span class="badge ai" style="font-size: 0.6rem; padding: 2px 4px;">AI</span>
-                  </div>
-                  <h3 class="card-title" style="font-family: var(--font-serif); font-size: 0.95rem; line-height: 1.35; margin: 0; font-weight: 700; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-                    <a href="/article/1" style="text-decoration: none; color: inherit;">The Silicon Mind: Navigating the Intersection of Cognitive AI and Creative Writing</a>
-                  </h3>
-                </div>
-              </article>
-            
-              <article class="card" style="margin-bottom: 0; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-sm); box-shadow: none; overflow: hidden; transition: border-color 0.2s;" onmouseover="this.style.borderColor='var(--color-accent)'" onmouseout="this.style.borderColor='var(--color-border)'">
-                <div class="card-img-wrapper" style="aspect-ratio: 16/9; overflow: hidden; position: relative;">
-                  <img class="card-img" src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Building AriSphere From Zero to Production" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform var(--transition-slow);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-                </div>
-                <div class="card-body" style="padding: var(--space-sm);">
-                  <div class="card-meta" style="margin-bottom: 4px;">
-                    <span class="badge reflections" style="font-size: 0.6rem; padding: 2px 4px;">Reflections</span>
-                  </div>
-                  <h3 class="card-title" style="font-family: var(--font-serif); font-size: 0.95rem; line-height: 1.35; margin: 0; font-weight: 700; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
-                    <a href="/article/6" style="text-decoration: none; color: inherit;">Building AriSphere From Zero to Production</a>
-                  </h3>
-                </div>
-              </article>
-            
-          </div>
-        </section>
-
-        <!-- Latest Perspective & Sidebar -->
-        <div class="grid-two-col" style="display: grid; grid-template-columns: 2fr 1fr; gap: var(--space-xl); margin-bottom: var(--space-xl);">
-          <section class="latest-section">
-            <div class="section-header" style="border-bottom: 2px solid var(--color-border); padding-bottom: var(--space-xs); margin-bottom: var(--space-lg); box-shadow: none;">
-              <h2 class="section-title" style="font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; margin:0;">Latest Perspective</h2>
-            </div>
-            <div class="grid-three-col" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-md);">
-              
-                <article class="card" style="margin-bottom: 0; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-sm); box-shadow: none; overflow: hidden; transition: border-color 0.2s;" onmouseover="this.style.borderColor='var(--color-accent)'" onmouseout="this.style.borderColor='var(--color-border)'">
-                  <div class="card-img-wrapper" style="aspect-ratio: 16/10; overflow: hidden; position: relative;">
-                    <img class="card-img" src="https://images.unsplash.com/photo-1517059224940-d4af9eec41b7?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="The Reality of Pursuing Embedded Systems in India" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform var(--transition-slow);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-                  </div>
-                  <div class="card-body" style="padding: var(--space-sm);">
-                    <div class="card-meta" style="margin-bottom: 6px;">
-                      <span class="badge reflections" style="font-size: 0.6rem; padding: 2px 4px;">Reflections</span>
-                      <span class="card-meta-dot"></span>
-                      <span>June 8, 2026</span>
-                    </div>
-                    <h3 class="card-title" style="font-family: var(--font-serif); font-size: 1.05rem; line-height: 1.35; margin-bottom: 6px; font-weight: 700; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                      <a href="/article/8" style="text-decoration: none; color: inherit;">The Reality of Pursuing Embedded Systems in India</a>
-                    </h3>
-                    <p class="card-excerpt" style="font-size: 0.85rem; line-height: 1.45; color: var(--color-text-muted); margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">Finding hardware roles in India is challenging. I analyze the market realities and how students can navigate them.</p>
-                    <div class="card-author-footer" style="display: flex; align-items: center; gap: 8px;">
-                      <img class="author-avatar" src="/assets/images/author.png" alt="Arisudan" loading="lazy" style="width: 24px; height: 24px; border-radius: var(--radius-full); object-fit: cover;">
-                      <a href="/author/arisudan" class="author-name" style="font-size: 0.8rem; color: var(--color-text); font-weight: 600; text-decoration: none;">By Arisudan</a>
-                    </div>
-                  </div>
-                </article>
-              
-                <article class="card" style="margin-bottom: 0; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-sm); box-shadow: none; overflow: hidden; transition: border-color 0.2s;" onmouseover="this.style.borderColor='var(--color-accent)'" onmouseout="this.style.borderColor='var(--color-border)'">
-                  <div class="card-img-wrapper" style="aspect-ratio: 16/10; overflow: hidden; position: relative;">
-                    <img class="card-img" src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="What Jayem Automotive Taught Me About Real Engineering" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform var(--transition-slow);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-                  </div>
-                  <div class="card-body" style="padding: var(--space-sm);">
-                    <div class="card-meta" style="margin-bottom: 6px;">
-                      <span class="badge reflections" style="font-size: 0.6rem; padding: 2px 4px;">Reflections</span>
-                      <span class="card-meta-dot"></span>
-                      <span>June 9, 2026</span>
-                    </div>
-                    <h3 class="card-title" style="font-family: var(--font-serif); font-size: 1.05rem; line-height: 1.35; margin-bottom: 6px; font-weight: 700; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                      <a href="/article/7" style="text-decoration: none; color: inherit;">What Jayem Automotive Taught Me About Real Engineering</a>
-                    </h3>
-                    <p class="card-excerpt" style="font-size: 0.85rem; line-height: 1.45; color: var(--color-text-muted); margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">My time at Jayem Automotive redefined what engineering means to me. Here are the core lessons from the shop floor and building real hardware.</p>
-                    <div class="card-author-footer" style="display: flex; align-items: center; gap: 8px;">
-                      <img class="author-avatar" src="/assets/images/author.png" alt="Arisudan" loading="lazy" style="width: 24px; height: 24px; border-radius: var(--radius-full); object-fit: cover;">
-                      <a href="/author/arisudan" class="author-name" style="font-size: 0.8rem; color: var(--color-text); font-weight: 600; text-decoration: none;">By Arisudan</a>
-                    </div>
-                  </div>
-                </article>
-              
-                <article class="card" style="margin-bottom: 0; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-sm); box-shadow: none; overflow: hidden; transition: border-color 0.2s;" onmouseover="this.style.borderColor='var(--color-accent)'" onmouseout="this.style.borderColor='var(--color-border)'">
-                  <div class="card-img-wrapper" style="aspect-ratio: 16/10; overflow: hidden; position: relative;">
-                    <img class="card-img" src="https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Building AriSphere From Zero to Production" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform var(--transition-slow);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-                  </div>
-                  <div class="card-body" style="padding: var(--space-sm);">
-                    <div class="card-meta" style="margin-bottom: 6px;">
-                      <span class="badge reflections" style="font-size: 0.6rem; padding: 2px 4px;">Reflections</span>
-                      <span class="card-meta-dot"></span>
-                      <span>June 10, 2026</span>
-                    </div>
-                    <h3 class="card-title" style="font-family: var(--font-serif); font-size: 1.05rem; line-height: 1.35; margin-bottom: 6px; font-weight: 700; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                      <a href="/article/6" style="text-decoration: none; color: inherit;">Building AriSphere From Zero to Production</a>
-                    </h3>
-                    <p class="card-excerpt" style="font-size: 0.85rem; line-height: 1.45; color: var(--color-text-muted); margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">Building a modern web application requires balancing architecture decisions. Here is how I structured AriSphere's static compiler and database fallback layer.</p>
-                    <div class="card-author-footer" style="display: flex; align-items: center; gap: 8px;">
-                      <img class="author-avatar" src="/assets/images/author.png" alt="Arisudan" loading="lazy" style="width: 24px; height: 24px; border-radius: var(--radius-full); object-fit: cover;">
-                      <a href="/author/arisudan" class="author-name" style="font-size: 0.8rem; color: var(--color-text); font-weight: 600; text-decoration: none;">By Arisudan</a>
-                    </div>
-                  </div>
-                </article>
-              
-                <article class="card" style="margin-bottom: 0; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-sm); box-shadow: none; overflow: hidden; transition: border-color 0.2s;" onmouseover="this.style.borderColor='var(--color-accent)'" onmouseout="this.style.borderColor='var(--color-border)'">
-                  <div class="card-img-wrapper" style="aspect-ratio: 16/10; overflow: hidden; position: relative;">
-                    <img class="card-img" src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="The Geopolitics of Semiconductors: The Island Supply Chain Paradox" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform var(--transition-slow);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-                  </div>
-                  <div class="card-body" style="padding: var(--space-sm);">
-                    <div class="card-meta" style="margin-bottom: 6px;">
-                      <span class="badge world" style="font-size: 0.6rem; padding: 2px 4px;">World</span>
-                      <span class="card-meta-dot"></span>
-                      <span>June 2, 2026</span>
-                    </div>
-                    <h3 class="card-title" style="font-family: var(--font-serif); font-size: 1.05rem; line-height: 1.35; margin-bottom: 6px; font-weight: 700; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                      <a href="/article/5" style="text-decoration: none; color: inherit;">The Geopolitics of Semiconductors: The Island Supply Chain Paradox</a>
-                    </h3>
-                    <p class="card-excerpt" style="font-size: 0.85rem; line-height: 1.45; color: var(--color-text-muted); margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">Semiconductor value chain is highly centralized. We map global dependencies and the race to fund local fabrication plants.</p>
-                    <div class="card-author-footer" style="display: flex; align-items: center; gap: 8px;">
-                      <img class="author-avatar" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&amp;fit=crop&amp;q=80&amp;w=200" alt="Marcus Aurelius" loading="lazy" style="width: 24px; height: 24px; border-radius: var(--radius-full); object-fit: cover;">
-                      <a href="/author/marcusaurelius" class="author-name" style="font-size: 0.8rem; color: var(--color-text); font-weight: 600; text-decoration: none;">By Marcus Aurelius</a>
-                    </div>
-                  </div>
-                </article>
-              
-                <article class="card" style="margin-bottom: 0; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-sm); box-shadow: none; overflow: hidden; transition: border-color 0.2s;" onmouseover="this.style.borderColor='var(--color-accent)'" onmouseout="this.style.borderColor='var(--color-border)'">
-                  <div class="card-img-wrapper" style="aspect-ratio: 16/10; overflow: hidden; position: relative;">
-                    <img class="card-img" src="https://images.unsplash.com/photo-1552581234-2612b75de6d6?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Echoes of the Agora: How Micro-Communities are Reshaping Public Discourse" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform var(--transition-slow);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-                  </div>
-                  <div class="card-body" style="padding: var(--space-sm);">
-                    <div class="card-meta" style="margin-bottom: 6px;">
-                      <span class="badge social-media" style="font-size: 0.6rem; padding: 2px 4px;">Social Media</span>
-                      <span class="card-meta-dot"></span>
-                      <span>June 4, 2026</span>
-                    </div>
-                    <h3 class="card-title" style="font-family: var(--font-serif); font-size: 1.05rem; line-height: 1.35; margin-bottom: 6px; font-weight: 700; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                      <a href="/article/4" style="text-decoration: none; color: inherit;">Echoes of the Agora: How Micro-Communities are Reshaping Public Discourse</a>
-                    </h3>
-                    <p class="card-excerpt" style="font-size: 0.85rem; line-height: 1.45; color: var(--color-text-muted); margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">Public social media feeds are giving way to gated Discord rooms and private telegram hubs. We look at what this means for political debate.</p>
-                    <div class="card-author-footer" style="display: flex; align-items: center; gap: 8px;">
-                      <img class="author-avatar" src="/assets/images/author.png" alt="Arisudan" loading="lazy" style="width: 24px; height: 24px; border-radius: var(--radius-full); object-fit: cover;">
-                      <a href="/author/arisudan" class="author-name" style="font-size: 0.8rem; color: var(--color-text); font-weight: 600; text-decoration: none;">By Arisudan</a>
-                    </div>
-                  </div>
-                </article>
-              
-                <article class="card" style="margin-bottom: 0; background: var(--color-bg); border: 1px solid var(--color-border); border-radius: var(--radius-sm); box-shadow: none; overflow: hidden; transition: border-color 0.2s;" onmouseover="this.style.borderColor='var(--color-accent)'" onmouseout="this.style.borderColor='var(--color-border)'">
-                  <div class="card-img-wrapper" style="aspect-ratio: 16/10; overflow: hidden; position: relative;">
-                    <img class="card-img" src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="Quantum Leap: Silicon Valley Races Towards Commercial Qubit Computers" loading="lazy" style="width: 100%; height: 100%; object-fit: cover; transition: transform var(--transition-slow);" onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
-                  </div>
-                  <div class="card-body" style="padding: var(--space-sm);">
-                    <div class="card-meta" style="margin-bottom: 6px;">
-                      <span class="badge technology" style="font-size: 0.6rem; padding: 2px 4px;">Technology</span>
-                      <span class="card-meta-dot"></span>
-                      <span>June 5, 2026</span>
-                    </div>
-                    <h3 class="card-title" style="font-family: var(--font-serif); font-size: 1.05rem; line-height: 1.35; margin-bottom: 6px; font-weight: 700; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
-                      <a href="/article/3" style="text-decoration: none; color: inherit;">Quantum Leap: Silicon Valley Races Towards Commercial Qubit Computers</a>
-                    </h3>
-                    <p class="card-excerpt" style="font-size: 0.85rem; line-height: 1.45; color: var(--color-text-muted); margin-bottom: 8px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">Quantum computing is shifting from theoretical physics papers to engineering blueprints. We explore the latest breakthroughs from top hardware labs.</p>
-                    <div class="card-author-footer" style="display: flex; align-items: center; gap: 8px;">
-                      <img class="author-avatar" src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&amp;fit=crop&amp;q=80&amp;w=200" alt="Elena Vance" loading="lazy" style="width: 24px; height: 24px; border-radius: var(--radius-full); object-fit: cover;">
-                      <a href="/author/elenavance" class="author-name" style="font-size: 0.8rem; color: var(--color-text); font-weight: 600; text-decoration: none;">By Elena Vance</a>
-                    </div>
-                  </div>
-                </article>
-              
-            </div>
-          </section>
-
-          <!-- Sidebar sticky column -->
-          <aside class="sidebar-column">
-            <div class="sidebar-sticky">
-              <!-- Most Read List -->
-              <div class="widget" style="background: var(--color-bg-offset); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: var(--space-md); box-shadow: none;">
-                <h3 class="widget-title" style="font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700; margin-bottom: var(--space-md); border-bottom: 2px solid var(--color-border); padding-bottom: 4px;">Most Read</h3>
-                <div class="trending-widget-list" style="display: flex; flex-direction: column; gap: var(--space-md);">
-                  
-                    <div class="trending-widget-item" style="display: flex; gap: var(--space-sm);">
-                      <span class="trending-widget-number" style="font-family: var(--font-serif); font-size: 1.4rem; font-weight: 700; color: var(--color-accent); line-height: 1;">01</span>
-                      <div class="trending-widget-info">
-                        <a href="/article/1" class="trending-widget-title" style="font-size: 0.85rem; font-weight: 700; line-height: 1.3; color: var(--color-text); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--color-accent)'" onmouseout="this.style.color='var(--color-text)'">The Silicon Mind: Navigating the Intersection of Cognitive AI and Creative Writing</a>
-                        <div class="card-meta" style="margin-top: 4px; font-size: 0.75rem;">
-                          <span class="badge ai" style="font-size: 0.55rem; padding: 1px 3px;">AI</span>
-                          <span>6 min read</span>
-                        </div>
-                      </div>
-                    </div>
-                  
-                    <div class="trending-widget-item" style="display: flex; gap: var(--space-sm);">
-                      <span class="trending-widget-number" style="font-family: var(--font-serif); font-size: 1.4rem; font-weight: 700; color: var(--color-accent); line-height: 1;">02</span>
-                      <div class="trending-widget-info">
-                        <a href="/article/3" class="trending-widget-title" style="font-size: 0.85rem; font-weight: 700; line-height: 1.3; color: var(--color-text); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--color-accent)'" onmouseout="this.style.color='var(--color-text)'">Quantum Leap: Silicon Valley Races Towards Commercial Qubit Computers</a>
-                        <div class="card-meta" style="margin-top: 4px; font-size: 0.75rem;">
-                          <span class="badge technology" style="font-size: 0.55rem; padding: 1px 3px;">Technology</span>
-                          <span>5 min read</span>
-                        </div>
-                      </div>
-                    </div>
-                  
-                    <div class="trending-widget-item" style="display: flex; gap: var(--space-sm);">
-                      <span class="trending-widget-number" style="font-family: var(--font-serif); font-size: 1.4rem; font-weight: 700; color: var(--color-accent); line-height: 1;">03</span>
-                      <div class="trending-widget-info">
-                        <a href="/article/5" class="trending-widget-title" style="font-size: 0.85rem; font-weight: 700; line-height: 1.3; color: var(--color-text); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--color-accent)'" onmouseout="this.style.color='var(--color-text)'">The Geopolitics of Semiconductors: The Island Supply Chain Paradox</a>
-                        <div class="card-meta" style="margin-top: 4px; font-size: 0.75rem;">
-                          <span class="badge world" style="font-size: 0.55rem; padding: 1px 3px;">World</span>
-                          <span>9 min read</span>
-                        </div>
-                      </div>
-                    </div>
-                  
-                    <div class="trending-widget-item" style="display: flex; gap: var(--space-sm);">
-                      <span class="trending-widget-number" style="font-family: var(--font-serif); font-size: 1.4rem; font-weight: 700; color: var(--color-accent); line-height: 1;">04</span>
-                      <div class="trending-widget-info">
-                        <a href="/article/2" class="trending-widget-title" style="font-size: 0.85rem; font-weight: 700; line-height: 1.3; color: var(--color-text); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--color-accent)'" onmouseout="this.style.color='var(--color-text)'">The Great Shift: Global Supply Chains and the Return of Nearshoring</a>
-                        <div class="card-meta" style="margin-top: 4px; font-size: 0.75rem;">
-                          <span class="badge business" style="font-size: 0.55rem; padding: 1px 3px;">Business</span>
-                          <span>8 min read</span>
-                        </div>
-                      </div>
-                    </div>
-                  
-                    <div class="trending-widget-item" style="display: flex; gap: var(--space-sm);">
-                      <span class="trending-widget-number" style="font-family: var(--font-serif); font-size: 1.4rem; font-weight: 700; color: var(--color-accent); line-height: 1;">05</span>
-                      <div class="trending-widget-info">
-                        <a href="/article/4" class="trending-widget-title" style="font-size: 0.85rem; font-weight: 700; line-height: 1.3; color: var(--color-text); text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--color-accent)'" onmouseout="this.style.color='var(--color-text)'">Echoes of the Agora: How Micro-Communities are Reshaping Public Discourse</a>
-                        <div class="card-meta" style="margin-top: 4px; font-size: 0.75rem;">
-                          <span class="badge social-media" style="font-size: 0.55rem; padding: 1px 3px;">Social Media</span>
-                          <span>7 min read</span>
-                        </div>
-                      </div>
-                    </div>
-                  
-                </div>
-              </div>
-
-              <!-- Sidebar Ad Block -->
-              <div class="adsense-placement ad-sidebar" id="adsense-home-sidebar" style="box-shadow: none;">
-                <div class="adsense-label">Sticky Rectangular Sidebar Ad</div>
-                <div class="adsense-slot-info">Display size 300x250 / 300x600</div>
-              </div>
-            </div>
-          </aside>
-        </div>
-
-        <!-- Dynamic Category Matrix Links -->
-        <section class="category-cards-section" style="margin-top: var(--space-xl); margin-bottom: var(--space-xl); border-top: 1px solid var(--color-border); padding-top: var(--space-xl);">
-          <div class="section-header" style="border-bottom: 2px solid var(--color-border); padding-bottom: var(--space-xs); margin-bottom: var(--space-lg); box-shadow: none;">
-            <h2 class="section-title" style="font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; margin:0;">Explore Topics</h2>
-          </div>
-          <div class="category-pills-list" style="display: flex; gap: var(--space-sm); flex-wrap: wrap; justify-content: center;">
-            
-                <a href="/category/technology" class="badge technology" style="text-align: center; padding: 10px 20px; font-size: 0.85rem; border-radius: var(--radius-full); font-weight: 600; text-decoration: none;">
-                  Technology
-                </a>
-              
-                <a href="/category/ai" class="badge ai" style="text-align: center; padding: 10px 20px; font-size: 0.85rem; border-radius: var(--radius-full); font-weight: 600; text-decoration: none;">
-                  AI
-                </a>
-              
-                <a href="/category/world" class="badge world" style="text-align: center; padding: 10px 20px; font-size: 0.85rem; border-radius: var(--radius-full); font-weight: 600; text-decoration: none;">
-                  World
-                </a>
-              
-                <a href="/category/business" class="badge business" style="text-align: center; padding: 10px 20px; font-size: 0.85rem; border-radius: var(--radius-full); font-weight: 600; text-decoration: none;">
-                  Business
-                </a>
-              
-                <a href="/category/social-media" class="badge social-media" style="text-align: center; padding: 10px 20px; font-size: 0.85rem; border-radius: var(--radius-full); font-weight: 600; text-decoration: none;">
-                  Social Media
-                </a>
-              
-                <a href="/category/insights" class="badge insights" style="text-align: center; padding: 10px 20px; font-size: 0.85rem; border-radius: var(--radius-full); font-weight: 600; text-decoration: none;">
-                  Insights
-                </a>
-              
-                <a href="/category/reflections" class="badge reflections" style="text-align: center; padding: 10px 20px; font-size: 0.85rem; border-radius: var(--radius-full); font-weight: 600; text-decoration: none;">
-                  Reflections
-                </a>
-              
-          </div>
-        </section>
-
       </div>
     </main>
 
