@@ -345,7 +345,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   function initializeGA4() {
     if (typeof gtag === 'function') {
-      gtag('config', 'G-GA_MEASUREMENT_ID', {
+      gtag('config', 'G-Q6NZ4JZX2J', {
         'page_title': document.title,
         'page_path': window.location.pathname
       });

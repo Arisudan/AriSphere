@@ -267,7 +267,7 @@
     } catch (e) {}
     
     if (typeof gtag === 'function' && hasConsent) {
-      gtag('config', 'G-GA_MEASUREMENT_ID', {
+      gtag('config', 'G-Q6NZ4JZX2J', {
         'page_title': finalTitle,
         'page_path': pathname
       });
