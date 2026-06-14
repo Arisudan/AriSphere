@@ -1399,7 +1399,7 @@
             
             <!-- Left Column: Recent Publications -->
             <div>
-              <h2>Recent Publications</h2>
+              <h2>Recent Articles</h2>
               <div class="author-cards-column">
                 ${recentArticles.map(art => `
                   <article class="card">
@@ -1422,7 +1422,7 @@
 
             <!-- Right Column: Popular Publications -->
             <div>
-              <h2>Popular Publications</h2>
+              <h2>Most Popular</h2>
               <div class="author-cards-column">
                 ${popularArticles.map(art => `
                   <article class="card">
