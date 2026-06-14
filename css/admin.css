@@ -111,6 +111,15 @@
   background-color: #dc2626;
 }
 
+.admin-btn-success {
+  background-color: #22c55e;
+  color: white;
+}
+
+.admin-btn-success:hover {
+  background-color: #16a34a;
+}
+
 /* Dashboard Header & Container Layout */
 .admin-dashboard-container {
   background-color: var(--color-bg-offset);
@@ -200,6 +209,12 @@
   background-color: rgba(249, 115, 22, 0.1);
   color: #ea580c;
   border: 1px solid rgba(249, 115, 22, 0.2);
+}
+
+.status-badge.pending {
+  background-color: rgba(59, 130, 246, 0.1);
+  color: #2563eb;
+  border: 1px solid rgba(59, 130, 246, 0.2);
 }
 
 .admin-indicator {

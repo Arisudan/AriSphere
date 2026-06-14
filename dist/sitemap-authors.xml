@@ -5,14 +5,4 @@
     <changefreq>weekly</changefreq>
     <priority>0.70</priority>
   </url>
-  <url>
-    <loc>https://arisphere.vercel.app/author/elenavance</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.70</priority>
-  </url>
-  <url>
-    <loc>https://arisphere.vercel.app/author/marcusaurelius</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.70</priority>
-  </url>
 </urlset>

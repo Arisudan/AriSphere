@@ -3,7 +3,6 @@
 const CATEGORIES = {
   trending: { id: 'trending', name: 'Trending', desc: 'Stories currently capturing the global conversation' },
   technology: { id: 'technology', name: 'Technology', desc: 'Innovations shaping the landscape of tomorrow' },
-  ai: { id: 'ai', name: 'AI', desc: 'Artificial Intelligence, machine learning, and cognitive horizons' },
   world: { id: 'world', name: 'World', desc: 'Global events, perspectives, and cultural movements' },
   business: { id: 'business', name: 'Business', desc: 'Markets, economic strategies, and future industries' },
   'social-media': { id: 'social-media', name: 'Social Media', desc: 'Connectivity, online behavior, and digital cultures' },
@@ -29,35 +28,65 @@ const AUTHORS = {
     skills: ['Systems Architecture', 'Technical Journalism', 'Database Design', 'AI Research'],
     expertise: ['Cognitive AI', 'Hardware Geopolitics', 'Digital Attention Philosophy', 'Full-Stack Engineering']
   },
-  elenavance: {
-    username: 'elenavance',
-    name: 'Elena Vance',
-    title: 'Senior Technology Correspondent',
-    bio: 'Elena Vance covers tech policy, digital infrastructure, and consumer electronics. Previously a developer, she writes with technical depth and narrative ease.',
-    experience: 'Embedded Systems Engineer with experience in Automotive Electronics, Real-Time Systems, Embedded Linux, RTOS Design, Hardware Validation, Sensor Calibration, and Intelligent Transportation Technologies.',
-    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200',
-    articlesCount: 89,
-    social: {
-      twitter: '#',
-      linkedin: '#'
-    },
-    skills: ['Embedded Firmware', 'Low-Level C', 'PCB Routing', 'Technical Reporting'],
-    expertise: ['Embedded Systems', 'Consumer Electronics', 'Technology Policy', 'Mobile Hardware']
+  sub1: {
+    username: 'sub1',
+    name: 'Jamuna U',
+    title: 'Senior Sub-Editor',
+    bio: 'Senior sub-editor and content planner at AriSphere.',
+    experience: 'Editorial strategist specializing in content quality, SEO workflows, and publication standards.',
+    avatar: '/assets/images/author.png',
+    articlesCount: 0,
+    contact: 'sub1@arisphere.com',
+    skills: ["Editorial Verification", "Fact Checking", "SEO Optimization", "Copywriting"],
+    expertise: ["Digital Media", "Editorial Workflows", "Content Operations"]
   },
-  marcusaurelius: {
-    username: 'marcusaurelius',
-    name: 'Marcus Aurelius',
-    title: 'Global Analyst & Columnist',
-    bio: 'Marcus writes on global economics, trade pathways, and international relations. His writing highlights historic cycles in current modern trends.',
-    experience: 'Macroeconomic analyst with 12+ years analyzing global logistics corridors, industrial manufacturing supply chains, and nearshoring trends across Western and Asian markets.',
-    avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=200',
-    articlesCount: 64,
-    social: {
-      linkedin: '#',
-      twitter: '#'
-    },
-    skills: ['Macroeconomic Modeling', 'Supply Chain Analysis', 'Geopolitical Strategy', 'Financial Journalism'],
-    expertise: ['Global Economy', 'Trade Policies', 'Semiconductor Supply Chains', 'Infrastructure Investments']
+  sub2: {
+    username: 'sub2',
+    name: 'Sub Editor 2',
+    title: 'Sub-Editor',
+    bio: 'Editorial contributor and content reviewer at AriSphere.',
+    experience: 'Digital publishing specialist focusing on educational and economic report coverage.',
+    avatar: '/assets/images/author.png',
+    articlesCount: 0,
+    contact: 'sub2@arisphere.com',
+    skills: ['Content Writing', 'Copyediting', 'SEO Optimization'],
+    expertise: ['General News', 'Editorial Workflows']
+  },
+  sub3: {
+    username: 'sub3',
+    name: 'Sub Editor 3',
+    title: 'Sub-Editor',
+    bio: 'Editorial contributor and tech reviewer at AriSphere.',
+    experience: 'Digital publishing specialist focusing on tech developments and trend tracking.',
+    avatar: '/assets/images/author.png',
+    articlesCount: 0,
+    contact: 'sub3@arisphere.com',
+    skills: ['Content Writing', 'Technical Review', 'SEO Optimization'],
+    expertise: ['Technology News', 'Editorial Workflows']
+  },
+  sub4: {
+    username: 'sub4',
+    name: 'Sub Editor 4',
+    title: 'Sub-Editor',
+    bio: 'Editorial contributor and business writer at AriSphere.',
+    experience: 'Digital publishing specialist focusing on market insights and business news.',
+    avatar: '/assets/images/author.png',
+    articlesCount: 0,
+    contact: 'sub4@arisphere.com',
+    skills: ['Content Writing', 'Market Research', 'SEO Optimization'],
+    expertise: ['Business Reporting', 'Editorial Workflows']
+  },
+  sub5: {
+    username: 'sub5',
+    name: 'Sub Editor 5',
+    title: 'Sub-Editor',
+    bio: 'Editorial contributor and world reporter at AriSphere.',
+    experience: 'Digital publishing specialist focusing on international news and global trends.',
+    avatar: '/assets/images/author.png',
+    articlesCount: 0,
+    contact: 'sub5@arisphere.com',
+    skills: ['Content Writing', 'Fact Checking', 'SEO Optimization'],
+    expertise: ['World News', 'Editorial Workflows']
   }
 };
 
@@ -82,7 +111,7 @@ const ARTICLES = [
       <h2>Ethics, Copyright, and the Future Landscape</h2>
       <p>As we advance, structural questions remain: Who owns the copyright of a paragraph co-authored by a transformer model trained on millions of copyrighted novels? Intellectual property law faces its most dramatic test in a century. AriSphere will continue tracking these legislative adjustments as developers and artists seek a fair compromise.</p>
     `,
-    category: 'ai',
+    category: 'technology',
     author: 'arisudan',
     publishDate: 'June 8, 2026',
     readTime: '6 min read',
@@ -113,7 +142,7 @@ const ARTICLES = [
       <p>While regional redundancy prevents production shutdowns, it carries a premium. Manufacturing domestically or in nearshore regions involves higher wages and strict environmental regulations. Consumers will likely face a permanent transition to higher prices, but with the benefit of consistent product availability and lower transport emissions.</p>
     `,
     category: 'business',
-    author: 'marcusaurelius',
+    author: 'arisudan',
     publishDate: 'June 6, 2026',
     readTime: '8 min read',
     image: '/assets/images/business-cover.png',
@@ -139,7 +168,7 @@ const ARTICLES = [
       <p>The power of quantum computing is double-edged. While it will accelerate drug discovery, optimization, and molecular modeling, it also poses an existential threat to modern cryptography. Algorithms like RSA rely on the difficulty of factoring giant integers. A sufficiently advanced quantum computer using Shor's algorithm can crack this easily. Organizations are rushing to implement post-quantum cryptographic standards.</p>
     `,
     category: 'technology',
-    author: 'elenavance',
+    author: 'arisudan',
     publishDate: 'June 5, 2026',
     readTime: '5 min read',
     image: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&q=80&w=800',
@@ -195,7 +224,7 @@ const ARTICLES = [
       <p>To reduce dependency, the US and European Union have passed dedicated CHIPS Acts, investing billions in domestic manufacturing. New fabs are breaking ground in Arizona, Ohio, and Germany. However, building the factories is only the first step. Creating the supply chains, chemical supplies, and training the technical workforce will take a generation.</p>
     `,
     category: 'world',
-    author: 'marcusaurelius',
+    author: 'arisudan',
     publishDate: 'June 2, 2026',
     readTime: '9 min read',
     image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800',
@@ -250,8 +279,8 @@ const ARTICLES = [
       <h2>The Cryptographic Answer</h2>
       <p>Journalistic institutions are building authentication protocols to counter this. Initiatives like the Coalition for Content Provenance and Authenticity (C2PA) write metadata directly into image and video files at the camera level. This creates a secure chain of custody from capture to screen, verifying the asset has not been altered.</p>
     `,
-    category: 'ai',
-    author: 'elenavance',
+    category: 'technology',
+    author: 'arisudan',
     publishDate: 'May 28, 2026',
     readTime: '6 min read',
     image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=800',
@@ -277,7 +306,7 @@ const ARTICLES = [
       <p>Despite the costs, capital markets are applying pressure. Institutional investors are shifting funds away from companies without viable decarbonization plans. Additionally, the European Union's Carbon Border Adjustment Mechanism (CBAM) imposes taxes on high-carbon imports. This makes carbon reduction a core financial metric rather than an environmental option.</p>
     `,
     category: 'business',
-    author: 'marcusaurelius',
+    author: 'arisudan',
     publishDate: 'May 25, 2026',
     readTime: '7 min read',
     image: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&q=80&w=800',
@@ -329,7 +358,7 @@ const ARTICLES = [
       <p>The primary benefit of local models is data privacy. Because your prompts are processed directly on your device, sensitive personal or corporate data never reaches a third-party server. Additionally, local processing enables offline capability, making AI tools accessible in remote areas or high-security facilities.</p>
     `,
     category: 'technology',
-    author: 'elenavance',
+    author: 'arisudan',
     publishDate: 'May 15, 2026',
     readTime: '5 min read',
     image: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&q=80&w=800',
@@ -385,7 +414,7 @@ const ARTICLES = [
       <p>The shift away from cars is supported by diverse transit options. Shared electric bikes, scooters, and improved light rail systems bridge the gap for short trips. While integrating these options requires new rules, they offer a scalable alternative to single-occupant cars.</p>
     `,
     category: 'world',
-    author: 'marcusaurelius',
+    author: 'arisudan',
     publishDate: 'May 05, 2026',
     readTime: '8 min read',
     image: 'https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&q=80&w=800',
@@ -440,8 +469,8 @@ const ARTICLES = [
       <h2>Security Solutions</h2>
       <p>To defend against voice spoofing, organizations are introducing multi-factor authentication (MFA) that avoids voice verification. Financial firms are adopting out-of-band approvals, and users are using code phrases with family members to verify calls.</p>
     `,
-    category: 'ai',
-    author: 'elenavance',
+    category: 'technology',
+    author: 'arisudan',
     publishDate: 'April 28, 2026',
     readTime: '5 min read',
     image: 'https://images.unsplash.com/photo-1478737270239-2f02b77fc618?auto=format&fit=crop&q=80&w=800',
@@ -471,7 +500,7 @@ const ARTICLES = [
       <p>For high-performance applications, solid-state batteries are the leading candidate. By replacing the liquid electrolyte with a solid ceramic or polymer, they can double energy density and charge in minutes. Startups are building pilot production lines, hoping to commercialize them within the decade.</p>
     `,
     category: 'technology',
-    author: 'elenavance',
+    author: 'arisudan',
     publishDate: 'April 25, 2026',
     readTime: '7 min read',
     image: 'https://images.unsplash.com/photo-1548613053-220ef358109a?auto=format&fit=crop&q=80&w=800',
@@ -497,7 +526,7 @@ const ARTICLES = [
       <p>Server racks generate significant heat. To prevent hardware failures, data centers use evaporative cooling towers. This water consumption is raising concerns in local communities, pushing operators to adopt closed-loop cooling and direct-to-chip liquid cooling systems.</p>
     `,
     category: 'business',
-    author: 'marcusaurelius',
+    author: 'arisudan',
     publishDate: 'April 20, 2026',
     readTime: '6 min read',
     image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=800',
@@ -523,7 +552,7 @@ const ARTICLES = [
       <p>Modern ports rely on digital platforms that coordinate customs approvals, cargo sorting, and train scheduling. These systems reduce port delays, helping shipping networks adapt to global disruptions.</p>
     `,
     category: 'world',
-    author: 'marcusaurelius',
+    author: 'arisudan',
     publishDate: 'April 15, 2026',
     readTime: '8 min read',
     image: 'https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&q=80&w=800',
@@ -578,7 +607,7 @@ const ARTICLES = [
       <h2>Support Policies</h2>
       <p>To help workers adapt, governments and employers are expanding retraining initiatives. Programs that offer micro-credentials, flexible education, and career guidance can ease transitions for employees in changing fields.</p>
     `,
-    category: 'ai',
+    category: 'technology',
     author: 'arisudan',
     publishDate: 'April 05, 2026',
     readTime: '7 min read',
@@ -605,7 +634,7 @@ const ARTICLES = [
       <p>Beyond economics, virtual platforms faced technical hurdles. Wearing heavy headsets, navigating clumsy interfaces, and dealing with low-resolution graphics limited user interest. Until VR hardware becomes lightweight and intuitive, virtual spaces will struggle to achieve mainstream adoption.</p>
     `,
     category: 'social-media',
-    author: 'elenavance',
+    author: 'arisudan',
     publishDate: 'March 28, 2026',
     readTime: '6 min read',
     image: 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&q=80&w=800',
@@ -631,7 +660,7 @@ const ARTICLES = [
       <p>Gathering continuous video feeds from millions of security cameras strains network infrastructure. Edge computing units process video locally, sending only relevant alerts to the cloud. This reduces bandwidth demands and hosting costs for operators.</p>
     `,
     category: 'technology',
-    author: 'elenavance',
+    author: 'arisudan',
     publishDate: 'March 25, 2026',
     readTime: '6 min read',
     image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800',
@@ -657,7 +686,7 @@ const ARTICLES = [
       <p>When debt negotiations stall, countries can face limited access to capital, currency volatility, and inflation. Resolving these restructuring challenges is key to supporting economic stability in emerging markets.</p>
     `,
     category: 'business',
-    author: 'marcusaurelius',
+    author: 'arisudan',
     publishDate: 'March 20, 2026',
     readTime: '8 min read',
     image: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&q=80&w=800',
@@ -683,7 +712,7 @@ const ARTICLES = [
       <p>To adapt to dry conditions, regions are investing in desalination plants, wastewater recycling systems, and efficient drip irrigation. These technologies help cities and farms secure water supplies amid changing weather patterns.</p>
     `,
     category: 'world',
-    author: 'marcusaurelius',
+    author: 'arisudan',
     publishDate: 'March 15, 2026',
     readTime: '7 min read',
     image: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&q=80&w=800',
@@ -735,7 +764,7 @@ const ARTICLES = [
       <p>Cities are testing autonomous buses and shuttles to connect remote neighborhoods with existing subway networks. These programs help transit agencies expand services while managing operational costs.</p>
     `,
     category: 'technology',
-    author: 'elenavance',
+    author: 'arisudan',
     publishDate: 'March 05, 2026',
     readTime: '6 min read',
     image: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80&w=800',
@@ -786,8 +815,8 @@ const ARTICLES = [
       <h2>Clinical Trial Support</h2>
       <p>In addition to drug design, AI systems help identify suitable trial participants by analyzing health registries. This coordination helps researchers run trials more efficiently, speeding up the approval process for new therapies.</p>
     `,
-    category: 'ai',
-    author: 'elenavance',
+    category: 'technology',
+    author: 'arisudan',
     publishDate: 'February 28, 2026',
     readTime: '6 min read',
     image: 'https://images.unsplash.com/photo-1530026405186-ed1ea0ac7a63?auto=format&fit=crop&q=80&w=800',
@@ -813,7 +842,7 @@ const ARTICLES = [
       <p>Many decentralized networks distribute governance tokens to active members, allowing freelancers to vote on platform fees and policy changes, creating a cooperative management structure.</p>
     `,
     category: 'business',
-    author: 'marcusaurelius',
+    author: 'arisudan',
     publishDate: 'February 25, 2026',
     readTime: '7 min read',
     image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800',
@@ -839,7 +868,7 @@ const ARTICLES = [
       <p>Increased shipping in the Arctic raises environmental concerns, including the risk of fuel spills in remote ecosystems. Additionally, regional transit regulation is becoming a focus of international policy.</p>
     `,
     category: 'world',
-    author: 'marcusaurelius',
+    author: 'arisudan',
     publishDate: 'February 20, 2026',
     readTime: '8 min read',
     image: 'https://images.unsplash.com/photo-1517783999520-f068d7431a60?auto=format&fit=crop&q=80&w=800',
@@ -895,7 +924,7 @@ const ARTICLES = [
       <p>By processing data locally and in spikes, neuromorphic chips can run simple AI models with very low power, making them suitable for IoT devices and remote installations.</p>
     `,
     category: 'technology',
-    author: 'elenavance',
+    author: 'arisudan',
     publishDate: 'February 10, 2026',
     readTime: '6 min read',
     image: 'https://images.unsplash.com/photo-1555664424-778a1e5e1b48?auto=format&fit=crop&q=80&w=800',
@@ -921,7 +950,7 @@ const ARTICLES = [
       <p>Modern ad networks use contextual algorithms to match ads with article topics, helping publishers display relevant ads to users while respecting data privacy boundaries.</p>
     `,
     category: 'business',
-    author: 'marcusaurelius',
+    author: 'arisudan',
     publishDate: 'February 05, 2026',
     readTime: '6 min read',
     image: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=80&w=800',
@@ -1124,7 +1153,10 @@ function mapDatabaseArticle(row) {
     sources: Array.isArray(row.sources) ? row.sources : (typeof row.sources === 'string' ? JSON.parse(row.sources) : []),
     factChecked: row.fact_checked !== undefined ? !!row.fact_checked : true,
     editoriallyReviewed: row.editorially_reviewed !== undefined ? !!row.editorially_reviewed : true,
-    humanReviewed: row.human_reviewed !== undefined ? !!row.human_reviewed : false
+    humanReviewed: row.human_reviewed !== undefined ? !!row.human_reviewed : false,
+    submittedAt: row.submitted_at,
+    approvedBy: row.approved_by,
+    publishedAt: row.published_at
   };
   
   const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -1353,14 +1385,65 @@ async function getFeaturedArticle(includeDrafts = false) {
 }
 
 // Admin CRUD Operations
-async function getAllArticlesAdmin() {
+async function getUserProfile(userId) {
   if (isSupabaseConfigured()) {
     try {
-      const data = await fetchFromSupabase('articles?order=id.desc&select=*');
+      const data = await fetchFromSupabase(`profiles?id=eq.${userId}&select=*`);
+      if (data && data.length > 0) {
+        return data[0];
+      }
+    } catch (err) {
+      console.warn('Failed to fetch user profile from Supabase', err);
+    }
+  }
+  
+  // Local fallback profile mapping based on username/id
+  if (userId === 'admin' || userId === 'e6c84f31-fe1a-4f12-94c3-b0157b4990df') {
+    return {
+      id: userId,
+      username: 'arisudan',
+      email: 'editor@arisphere.com',
+      full_name: 'Arisudan',
+      role: 'admin',
+      avatar: '/assets/images/author.png'
+    };
+  } else if (typeof userId === 'string' && userId.startsWith('sub')) {
+    const author = AUTHORS[userId];
+    return {
+      id: userId,
+      username: userId,
+      email: `${userId}@arisphere.com`,
+      full_name: author ? author.name : `Sub Editor`,
+      role: 'sub_editor',
+      avatar: '/assets/images/author.png'
+    };
+  }
+  
+  return {
+    id: userId,
+    username: 'arisudan',
+    email: 'editor@arisphere.com',
+    full_name: 'Arisudan',
+    role: 'admin',
+    avatar: '/assets/images/author.png'
+  };
+}
+
+async function getAllArticlesAdmin(usernameFilter) {
+  if (isSupabaseConfigured()) {
+    try {
+      let endpoint = 'articles?order=id.desc&select=*';
+      if (usernameFilter) {
+        endpoint = `articles?author=eq.${usernameFilter}&order=id.desc&select=*`;
+      }
+      const data = await fetchFromSupabase(endpoint);
       return data.map(mapDatabaseArticle);
     } catch (err) {
       console.warn('Supabase fetch failed in admin, using local DB fallback.', err);
     }
+  }
+  if (usernameFilter) {
+    return [...ARTICLES].filter(a => a.author === usernameFilter).sort((a, b) => b.id - a.id);
   }
   return [...ARTICLES].sort((a, b) => b.id - a.id);
 }
@@ -1388,7 +1471,10 @@ async function createArticleAdmin(articleData) {
       sources: articleData.sources || [],
       fact_checked: articleData.factChecked !== undefined ? !!articleData.factChecked : true,
       editorially_reviewed: articleData.editoriallyReviewed !== undefined ? !!articleData.editoriallyReviewed : true,
-      human_reviewed: articleData.humanReviewed !== undefined ? !!articleData.humanReviewed : false
+      human_reviewed: articleData.humanReviewed !== undefined ? !!articleData.humanReviewed : false,
+      submitted_at: articleData.submittedAt || null,
+      approved_by: articleData.approvedBy || null,
+      published_at: articleData.publishedAt || null
     };
     const { data, error } = await supabaseClient
       .from('articles')
@@ -1412,6 +1498,9 @@ async function createArticleAdmin(articleData) {
       factChecked: articleData.factChecked !== undefined ? !!articleData.factChecked : true,
       editoriallyReviewed: articleData.editoriallyReviewed !== undefined ? !!articleData.editoriallyReviewed : true,
       humanReviewed: articleData.humanReviewed !== undefined ? !!articleData.humanReviewed : false,
+      submittedAt: articleData.submittedAt || null,
+      approvedBy: articleData.approvedBy || null,
+      publishedAt: articleData.publishedAt || null,
       updatedAt: new Date().toISOString()
     };
     ARTICLES.push(newArt);
@@ -1442,6 +1531,9 @@ async function updateArticleAdmin(id, articleData) {
       fact_checked: articleData.factChecked !== undefined ? !!articleData.factChecked : true,
       editorially_reviewed: articleData.editoriallyReviewed !== undefined ? !!articleData.editoriallyReviewed : true,
       human_reviewed: articleData.humanReviewed !== undefined ? !!articleData.humanReviewed : false,
+      submitted_at: articleData.submittedAt !== undefined ? articleData.submittedAt : undefined,
+      approved_by: articleData.approvedBy !== undefined ? articleData.approvedBy : undefined,
+      published_at: articleData.publishedAt !== undefined ? articleData.publishedAt : undefined,
       updated_at: new Date().toISOString()
     };
     const { data, error } = await supabaseClient
@@ -1463,6 +1555,9 @@ async function updateArticleAdmin(id, articleData) {
         factChecked: articleData.factChecked !== undefined ? !!articleData.factChecked : (ARTICLES[idx].factChecked !== undefined ? ARTICLES[idx].factChecked : true),
         editoriallyReviewed: articleData.editoriallyReviewed !== undefined ? !!articleData.editoriallyReviewed : (ARTICLES[idx].editoriallyReviewed !== undefined ? ARTICLES[idx].editoriallyReviewed : true),
         humanReviewed: articleData.humanReviewed !== undefined ? !!articleData.humanReviewed : (ARTICLES[idx].humanReviewed !== undefined ? ARTICLES[idx].humanReviewed : false),
+        submittedAt: articleData.submittedAt !== undefined ? articleData.submittedAt : ARTICLES[idx].submittedAt,
+        approvedBy: articleData.approvedBy !== undefined ? articleData.approvedBy : ARTICLES[idx].approvedBy,
+        publishedAt: articleData.publishedAt !== undefined ? articleData.publishedAt : ARTICLES[idx].publishedAt,
         updatedAt: new Date().toISOString()
       };
       return ARTICLES[idx];
@@ -1569,10 +1664,13 @@ window.AriSphereDB = {
   getLatestArticles,
   getFeaturedArticle,
   getAllArticlesAdmin,
+  getUserProfile,
   createArticleAdmin,
   updateArticleAdmin,
   deleteArticleAdmin,
   isSupabaseConfigured,
   getSubscribersCount,
+  fetchFromSupabase,
+  mapDatabaseArticle,
   supabase: supabaseClient
 };

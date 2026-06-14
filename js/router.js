@@ -1691,19 +1691,19 @@
               <div class="team-role">Founder & Editor-in-Chief</div>
               <p class="team-bio">Architect of AriSphere. Leads coverage on cognitive systems, infrastructure geopolitics, and digital attention loops.</p>
             </div>
-            <!-- Correspondent -->
+            <!-- Correspondent / Jamuna U -->
             <div class="team-card">
-              <img class="team-avatar" src="${db?.AUTHORS.elenavance.avatar || ''}" alt="Elena Vance" loading="lazy" width="90" height="90">
-              <h3 class="team-name">${db?.AUTHORS.elenavance.name || 'Elena Vance'}</h3>
-              <div class="team-role">Senior Tech Correspondent</div>
-              <p class="team-bio">Covers hardware ecosystems, quantum computing breakthroughs, and Silicon Valley regulatory alignments.</p>
+              <img class="team-avatar" src="${db?.AUTHORS.sub1?.avatar || '/assets/images/author.png'}" alt="Jamuna U" loading="lazy" width="90" height="90">
+              <h3 class="team-name">${db?.AUTHORS.sub1?.name || 'Jamuna U'}</h3>
+              <div class="team-role">Senior Sub-Editor</div>
+              <p class="team-bio">Editorial strategist at AriSphere. Specializes in content verification, fact checking, SEO workflows, and publication standards.</p>
             </div>
-            <!-- Analyst -->
+            <!-- Editorial Desk -->
             <div class="team-card">
-              <img class="team-avatar" src="${db?.AUTHORS.marcusaurelius.avatar || ''}" alt="Marcus Aurelius" loading="lazy" width="90" height="90">
-              <h3 class="team-name">${db?.AUTHORS.marcusaurelius.name || 'Marcus Aurelius'}</h3>
-              <div class="team-role">Global Analyst</div>
-              <p class="team-bio">Examines historical economic waves, logistics networks, shipping corridors, and nearshoring trends.</p>
+              <img class="team-avatar" src="/assets/images/author.png" alt="Editorial Desk" loading="lazy" width="90" height="90">
+              <h3 class="team-name">Editorial Desk</h3>
+              <div class="team-role">Sub-Editors</div>
+              <p class="team-bio">Our dedicated team of sub-editors coordinating digital publishing, copyediting, and international trend tracking.</p>
             </div>
           </div>
         </section>
@@ -2050,12 +2050,27 @@
       return;
     }
 
+    let currentUserProfile = null;
+
     // Refresh state handler
     async function checkAuthAndRender() {
       const { data: { session } } = await db.supabase.auth.getSession();
       if (!session) {
+        currentUserProfile = null;
         renderLoginForm();
       } else {
+        try {
+          currentUserProfile = await db.getUserProfile(session.user.id);
+        } catch (e) {
+          console.warn("Could not load user profile, defaulting to admin.", e);
+          currentUserProfile = {
+            id: session.user.id,
+            username: 'arisudan',
+            role: 'admin',
+            email: session.user.email,
+            full_name: 'Arisudan'
+          };
+        }
         renderDashboard(session.user);
       }
     }
@@ -2117,6 +2132,7 @@
     }
 
     async function renderDashboard(user) {
+      const displayName = currentUserProfile ? `${currentUserProfile.full_name} (${currentUserProfile.role})` : user.email;
       container.innerHTML = `
         <div class="container admin-portal-wrapper">
           <div class="admin-dashboard-container">
@@ -2126,7 +2142,7 @@
                 <p style="margin:0; color:var(--color-text-muted); font-size:0.875rem;">Digital Publication Workspace</p>
               </div>
               <div class="admin-user-info">
-                <span>Active: <strong>${user.email}</strong></span>
+                <span>Active: <strong>${displayName}</strong></span>
                 <button class="admin-btn admin-btn-secondary" style="padding:6px 12px; font-size:0.75rem;" id="admin-logout-btn">Sign Out</button>
               </div>
             </header>
@@ -2167,13 +2183,16 @@
       `;
 
       try {
-        const articles = await db.getAllArticlesAdmin();
-        const subscribersCount = await db.getSubscribersCount();
+        const isSubEditor = currentUserProfile?.role === 'sub_editor';
+        const filterUsername = isSubEditor ? currentUserProfile.username : null;
+        
+        // Fetch articles filtered by author if sub-editor
+        const articles = await db.getAllArticlesAdmin(filterUsername);
 
         // Compute Editorial KPIs (Task 11)
         const publishedCount = articles.filter(a => a.status === 'published').length;
         const draftCount = articles.filter(a => a.status === 'draft').length;
-        const reflectionsCount = articles.filter(a => a.category === 'reflections').length;
+        const pendingCount = articles.filter(a => a.status === 'pending').length;
         const totalViews = articles.reduce((acc, a) => acc + (a.views || 0), 0);
         const avgViews = articles.length > 0 ? Math.round(totalViews / articles.length) : 0;
 
@@ -2181,73 +2200,170 @@
         const mostViewedArticle = sortedByViews[0] ? sortedByViews[0].title : 'None';
         const mostViewedCount = sortedByViews[0] ? sortedByViews[0].views : 0;
 
-        // Calculate Articles Published This Week (last 7 days)
-        let publishedThisWeek = 0;
-        const sevenDaysAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
-        articles.forEach(a => {
-          if (a.status === 'published' && a.publishDate) {
-            const pDate = new Date(a.publishDate);
-            if (!isNaN(pDate.getTime()) && pDate.getTime() >= sevenDaysAgo) {
-              publishedThisWeek++;
-            }
-          }
-        });
+        // KPI rendering based on role
+        let kpiHTML = '';
+        if (!isSubEditor) {
+          const subscribersCount = await db.getSubscribersCount();
+          kpiHTML = `
+            <section class="admin-kpi-grid">
+              <div class="kpi-card">
+                <div>
+                  <div class="kpi-label">Published Articles</div>
+                  <div class="kpi-value">${publishedCount}</div>
+                </div>
+                <div class="kpi-desc">Live on site</div>
+              </div>
+              <div class="kpi-card">
+                <div>
+                  <div class="kpi-label">Draft Articles</div>
+                  <div class="kpi-value">${draftCount}</div>
+                </div>
+                <div class="kpi-desc">In progress queue</div>
+              </div>
+              <div class="kpi-card">
+                <div>
+                  <div class="kpi-label">Pending Approval</div>
+                  <div class="kpi-value" style="color:var(--color-accent);">${pendingCount}</div>
+                </div>
+                <div class="kpi-desc">Requires admin review</div>
+              </div>
+              <div class="kpi-card">
+                <div>
+                  <div class="kpi-label">Active Subscribers</div>
+                  <div class="kpi-value">${subscribersCount}</div>
+                </div>
+                <div class="kpi-desc">Newsletter audience</div>
+              </div>
+              <div class="kpi-card">
+                <div>
+                  <div class="kpi-label">Total Content Views</div>
+                  <div class="kpi-value">${totalViews.toLocaleString()}</div>
+                </div>
+                <div class="kpi-desc">Cumulative views</div>
+              </div>
+              <div class="kpi-card">
+                <div>
+                  <div class="kpi-label">Avg Views / Article</div>
+                  <div class="kpi-value">${avgViews}</div>
+                </div>
+                <div class="kpi-desc">Average reading spread</div>
+              </div>
+              <div class="kpi-card" style="grid-column: span 2;">
+                <div>
+                  <div class="kpi-label">Top Performer</div>
+                  <div class="kpi-value" style="font-size: 1.15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px;" title="${mostViewedArticle}">
+                    ${mostViewedArticle}
+                  </div>
+                </div>
+                <div class="kpi-desc">👁 ${mostViewedCount.toLocaleString()} views</div>
+              </div>
+            </section>
+          `;
+        } else {
+          kpiHTML = `
+            <section class="admin-kpi-grid">
+              <div class="kpi-card">
+                <div>
+                  <div class="kpi-label">My Published Articles</div>
+                  <div class="kpi-value">${publishedCount}</div>
+                </div>
+                <div class="kpi-desc">Live on site</div>
+              </div>
+              <div class="kpi-card">
+                <div>
+                  <div class="kpi-label">My Drafts</div>
+                  <div class="kpi-value">${draftCount}</div>
+                </div>
+                <div class="kpi-desc">Saved locally / not submitted</div>
+              </div>
+              <div class="kpi-card">
+                <div>
+                  <div class="kpi-label">My Pending Submissions</div>
+                  <div class="kpi-value" style="color:var(--color-accent);">${pendingCount}</div>
+                </div>
+                <div class="kpi-desc">Awaiting admin review</div>
+              </div>
+              <div class="kpi-card">
+                <div>
+                  <div class="kpi-label">My Total Views</div>
+                  <div class="kpi-value">${totalViews.toLocaleString()}</div>
+                </div>
+                <div class="kpi-desc">For your articles</div>
+              </div>
+              <div class="kpi-card">
+                <div>
+                  <div class="kpi-label">My Avg Views</div>
+                  <div class="kpi-value">${avgViews}</div>
+                </div>
+                <div class="kpi-desc">Per-article average</div>
+              </div>
+              <div class="kpi-card" style="grid-column: span 1;">
+                <div>
+                  <div class="kpi-label">My Top Article</div>
+                  <div class="kpi-value" style="font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;" title="${mostViewedArticle}">
+                    ${mostViewedArticle}
+                  </div>
+                </div>
+                <div class="kpi-desc">👁 ${mostViewedCount.toLocaleString()} views</div>
+              </div>
+            </section>
+          `;
+        }
 
-        workspace.innerHTML = `
-          <!-- Content Operations Dashboard KPI Grid (Task 11) -->
-          <section class="admin-kpi-grid">
-            <div class="kpi-card">
-              <div>
-                <div class="kpi-label">Published Articles</div>
-                <div class="kpi-value">${publishedCount}</div>
-              </div>
-              <div class="kpi-desc">Live on site</div>
-            </div>
-            <div class="kpi-card">
-              <div>
-                <div class="kpi-label">Draft Articles</div>
-                <div class="kpi-value">${draftCount}</div>
-              </div>
-              <div class="kpi-desc">In progress queue</div>
-            </div>
-            <div class="kpi-card">
-              <div>
-                <div class="kpi-label">Reflections Stories</div>
-                <div class="kpi-value">${reflectionsCount}</div>
-              </div>
-              <div class="kpi-desc">Authentic narratives</div>
-            </div>
-            <div class="kpi-card">
-              <div>
-                <div class="kpi-label">Active Subscribers</div>
-                <div class="kpi-value">${subscribersCount}</div>
-              </div>
-              <div class="kpi-desc">Newsletter audience</div>
-            </div>
-            <div class="kpi-card">
-              <div>
-                <div class="kpi-label">Total Content Views</div>
-                <div class="kpi-value">${totalViews.toLocaleString()}</div>
-              </div>
-              <div class="kpi-desc">Cumulative views</div>
-            </div>
-            <div class="kpi-card">
-              <div>
-                <div class="kpi-label">Avg Views / Article</div>
-                <div class="kpi-value">${avgViews}</div>
-              </div>
-              <div class="kpi-desc">Average reading spread</div>
-            </div>
-            <div class="kpi-card" style="grid-column: span 2;">
-              <div>
-                <div class="kpi-label">Top Performer</div>
-                <div class="kpi-value" style="font-size: 1.15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px;" title="${mostViewedArticle}">
-                  ${mostViewedArticle}
+        // Render Pending Queue for Admins
+        let pendingQueueHTML = '';
+        if (!isSubEditor) {
+          // Fetch all pending articles to show in the approval queue
+          const pendingArticles = articles.filter(a => a.status === 'pending');
+          if (pendingArticles.length > 0) {
+            pendingQueueHTML = `
+              <div class="pending-queue-section" style="margin-bottom: var(--space-xl); background: var(--color-bg-offset); padding: var(--space-md); border-radius: var(--radius-md); border: 1px solid var(--color-accent);">
+                <h2 style="font-family:var(--font-serif); font-size:1.2rem; color:var(--color-accent); margin-top:0; margin-bottom:var(--space-md); display:flex; align-items:center; gap:8px;">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  Pending Approval Queue (${pendingArticles.length})
+                </h2>
+                <div class="admin-table-wrapper">
+                  <table class="admin-table">
+                    <thead>
+                      <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Submitted At</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${pendingArticles.map(art => {
+                        const dateOptions = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+                        const submittedDateStr = art.submittedAt ? new Date(art.submittedAt).toLocaleDateString('en-US', dateOptions) : 'Just now';
+                        return `
+                          <tr>
+                            <td>
+                              <div style="font-weight:600; color:var(--color-text); line-height:1.2;">${art.title}</div>
+                              <div style="font-size:0.75rem; color:var(--color-text-muted); margin-top:2px;">Category: ${db.CATEGORIES[art.category]?.name || art.category}</div>
+                            </td>
+                            <td><strong>${art.author}</strong></td>
+                            <td>${submittedDateStr}</td>
+                            <td>
+                              <div style="display:flex; gap:6px;">
+                                <button class="admin-btn admin-btn-success btn-approve-publish" style="padding:4px 8px; font-size:0.75rem;" data-id="${art.id}">Approve & Publish</button>
+                                <button class="admin-btn admin-btn-danger btn-decline-return" style="padding:4px 8px; font-size:0.75rem;" data-id="${art.id}">Decline</button>
+                              </div>
+                            </td>
+                          </tr>
+                        `;
+                      }).join('')}
+                    </tbody>
+                  </table>
                 </div>
               </div>
-              <div class="kpi-desc">👁 ${mostViewedCount.toLocaleString()} views</div>
-            </div>
-          </section>
+            `;
+          }
+        }
+
+        workspace.innerHTML = `
+          ${kpiHTML}
+          ${pendingQueueHTML}
 
           <!-- Editorial Publishing Workflow Guidance Panel (Task 12) -->
           <section class="workflow-panel">
@@ -2303,7 +2419,7 @@
           </section>
 
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-md); flex-wrap:wrap; gap:var(--space-sm);">
-            <h2 style="font-family:var(--font-serif); font-size:1.35rem; margin:0;">Article Catalog (${articles.length})</h2>
+            <h2 style="font-family:var(--font-serif); font-size:1.35rem; margin:0;">${isSubEditor ? 'My Articles' : 'Article Catalog'} (${articles.length})</h2>
             <button class="admin-btn admin-btn-primary" id="btn-create-article">+ Create Article</button>
           </div>
 
@@ -2324,7 +2440,7 @@
                   <tr>
                     <td>
                       <div style="font-weight:600; color:var(--color-text); line-height:1.2; margin-bottom:4px;">${art.title}</div>
-                      <div style="font-size:0.75rem; color:var(--color-text-muted);">Published: ${art.publishDate} &middot; By ${art.author}</div>
+                      <div style="font-size:0.75rem; color:var(--color-text-muted);">Published: ${art.publishDate || 'Not Published'} &middot; By ${art.author}</div>
                     </td>
                     <td>
                       <span class="badge ${art.category}">${db.CATEGORIES[art.category]?.name || art.category}</span>
@@ -2341,7 +2457,9 @@
                     <td>
                       <div style="display:flex; gap:6px;">
                         <button class="admin-btn admin-btn-secondary btn-edit-article" style="padding:4px 8px; font-size:0.75rem;" data-id="${art.id}">Edit</button>
-                        <button class="admin-btn admin-btn-danger btn-delete-article" style="padding:4px 8px; font-size:0.75rem;" data-id="${art.id}">Delete</button>
+                        ${(!isSubEditor || art.status === 'draft' || art.status === 'pending') ? `
+                          <button class="admin-btn admin-btn-danger btn-delete-article" style="padding:4px 8px; font-size:0.75rem;" data-id="${art.id}">Delete</button>
+                        ` : ''}
                       </div>
                     </td>
                   </tr>
@@ -2356,12 +2474,12 @@
           </div>
         `;
 
-        // Add create button handler
+        // Wire Create Article button
         document.getElementById('btn-create-article').addEventListener('click', () => {
           showArticleForm();
         });
 
-        // Add edit button handlers
+        // Wire Edit button
         workspace.querySelectorAll('.btn-edit-article').forEach(btn => {
           btn.addEventListener('click', async () => {
             const id = btn.getAttribute('data-id');
@@ -2372,7 +2490,7 @@
           });
         });
 
-        // Add delete button handlers
+        // Wire Delete button
         workspace.querySelectorAll('.btn-delete-article').forEach(btn => {
           btn.addEventListener('click', async () => {
             const id = btn.getAttribute('data-id');
@@ -2384,6 +2502,65 @@
                 showArticlesList();
               } catch (err) {
                 alert('Deletion failed: ' + err.message);
+              }
+            }
+          });
+        });
+
+        // Wire Approve & Publish buttons
+        workspace.querySelectorAll('.btn-approve-publish').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            const id = btn.getAttribute('data-id');
+            const article = await db.getArticleById(id, true);
+            if (article) {
+              try {
+                btn.disabled = true;
+                btn.textContent = 'Publishing...';
+                const now = new Date().toISOString();
+                const nowPublishFormat = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                
+                await db.updateArticleAdmin(id, {
+                  ...article,
+                  status: 'published',
+                  publishDate: nowPublishFormat,
+                  publishedAt: now,
+                  approvedBy: currentUserProfile?.username || 'arisudan'
+                });
+                
+                const event = new CustomEvent('show-toast', { detail: 'Article approved and published!' });
+                window.dispatchEvent(event);
+                showArticlesList();
+              } catch (err) {
+                alert('Approval failed: ' + err.message);
+                btn.disabled = false;
+                btn.textContent = 'Approve & Publish';
+              }
+            }
+          });
+        });
+
+        // Wire Decline & Return to Draft buttons
+        workspace.querySelectorAll('.btn-decline-return').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            const id = btn.getAttribute('data-id');
+            const article = await db.getArticleById(id, true);
+            if (article) {
+              try {
+                btn.disabled = true;
+                btn.textContent = 'Declining...';
+                
+                await db.updateArticleAdmin(id, {
+                  ...article,
+                  status: 'draft'
+                });
+                
+                const event = new CustomEvent('show-toast', { detail: 'Article declined and returned to draft.' });
+                window.dispatchEvent(event);
+                showArticlesList();
+              } catch (err) {
+                alert('Decline failed: ' + err.message);
+                btn.disabled = false;
+                btn.textContent = 'Decline';
               }
             }
           });
@@ -2401,6 +2578,7 @@
       const isEdit = article !== null;
       const categories = db.CATEGORIES;
       const authors = db.AUTHORS;
+      const isSubEditor = currentUserProfile?.role === 'sub_editor';
 
       let allArticles = [];
       try {
@@ -2450,11 +2628,17 @@
 
               <div class="admin-form-group">
                 <label class="admin-label" for="art-author">Author</label>
-                <select class="admin-select" id="art-author" required>
-                  ${Object.keys(authors).map(key => `
-                    <option value="${authors[key].username}" ${isEdit && article.author === authors[key].username ? 'selected' : ''}>${authors[key].name}</option>
-                  `).join('')}
-                </select>
+                ${isSubEditor ? `
+                  <select class="admin-select" id="art-author" required disabled>
+                    <option value="${currentUserProfile.username}" selected>${currentUserProfile.full_name}</option>
+                  </select>
+                ` : `
+                  <select class="admin-select" id="art-author" required>
+                    ${Object.keys(authors).map(key => `
+                      <option value="${authors[key].username}" ${isEdit && article.author === authors[key].username ? 'selected' : ''}>${authors[key].name}</option>
+                    `).join('')}
+                  </select>
+                `}
               </div>
 
               <div class="admin-form-group">
@@ -2484,7 +2668,12 @@
                 <label class="admin-label" for="art-status">Status</label>
                 <select class="admin-select" id="art-status" required>
                   <option value="draft" ${isEdit && article.status === 'draft' ? 'selected' : ''}>Draft</option>
-                  <option value="published" ${isEdit && article.status === 'published' ? 'selected' : ''}>Published</option>
+                  ${isSubEditor ? `
+                    <option value="pending" ${isEdit && article.status === 'pending' ? 'selected' : ''}>Submit for Approval</option>
+                  ` : `
+                    <option value="pending" ${isEdit && article.status === 'pending' ? 'selected' : ''}>Pending Approval</option>
+                    <option value="published" ${isEdit && article.status === 'published' ? 'selected' : ''}>Published</option>
+                  `}
                 </select>
               </div>
 
@@ -2497,16 +2686,16 @@
                 <label class="admin-label">Publish Options & Trust Badges</label>
                 <div class="admin-checkbox-group" style="display: flex; gap: var(--space-md); flex-wrap: wrap;">
                   <label class="admin-checkbox-label">
-                    <input type="checkbox" id="art-feat" ${isEdit && article.featured ? 'checked' : ''}> Featured
+                    <input type="checkbox" id="art-feat" ${isEdit && article.featured ? 'checked' : ''} ${isSubEditor ? 'disabled' : ''}> Featured
                   </label>
                   <label class="admin-checkbox-label">
-                    <input type="checkbox" id="art-trend" ${isEdit && article.trending ? 'checked' : ''}> Trending
+                    <input type="checkbox" id="art-trend" ${isEdit && article.trending ? 'checked' : ''} ${isSubEditor ? 'disabled' : ''}> Trending
                   </label>
                   <label class="admin-checkbox-label">
-                    <input type="checkbox" id="art-trend-week" ${isEdit && article.trendingThisWeek ? 'checked' : ''}> Trending This Week
+                    <input type="checkbox" id="art-trend-week" ${isEdit && article.trendingThisWeek ? 'checked' : ''} ${isSubEditor ? 'disabled' : ''}> Trending This Week
                   </label>
                   <label class="admin-checkbox-label">
-                    <input type="checkbox" id="art-editor" ${isEdit && article.editorsPick ? 'checked' : ''}> Editor's Pick
+                    <input type="checkbox" id="art-editor" ${isEdit && article.editorsPick ? 'checked' : ''} ${isSubEditor ? 'disabled' : ''}> Editor's Pick
                   </label>
                   <label class="admin-checkbox-label">
                     <input type="checkbox" id="art-fact" ${!isEdit || article.factChecked ? 'checked' : ''}> ✓ Fact Checked Badge
@@ -3012,25 +3201,29 @@
         const tagsString = document.getElementById('art-tags').value;
         const tagsArray = tagsString ? tagsString.split(',').map(t => t.trim()).filter(t => t !== '') : [];
 
+        const statusVal = document.getElementById('art-status').value;
         const articleData = {
           title: document.getElementById('art-title').value.trim(),
           subtitle: document.getElementById('art-subtitle').value.trim(),
           excerpt: document.getElementById('art-excerpt').value.trim(),
           content: document.getElementById('art-content').value,
           category: document.getElementById('art-category').value,
-          author: document.getElementById('art-author').value,
+          author: isSubEditor ? currentUserProfile.username : document.getElementById('art-author').value,
           image: document.getElementById('art-image').value.trim(),
           imageAlt: document.getElementById('art-image-alt').value.trim(),
           tags: tagsArray,
-          status: document.getElementById('art-status').value,
-          featured: document.getElementById('art-feat').checked,
-          trending: document.getElementById('art-trend').checked,
-          trendingThisWeek: document.getElementById('art-trend-week').checked,
-          editorsPick: document.getElementById('art-editor').checked,
+          status: statusVal,
+          featured: isSubEditor ? false : document.getElementById('art-feat').checked,
+          trending: isSubEditor ? false : document.getElementById('art-trend').checked,
+          trendingThisWeek: isSubEditor ? false : document.getElementById('art-trend-week').checked,
+          editorsPick: isSubEditor ? false : document.getElementById('art-editor').checked,
           sources: sourcesArray,
           factChecked: document.getElementById('art-fact').checked,
           editoriallyReviewed: document.getElementById('art-review').checked,
-          humanReviewed: document.getElementById('human-reviewed').checked
+          humanReviewed: document.getElementById('human-reviewed').checked,
+          submittedAt: statusVal === 'pending' ? (article?.submittedAt || new Date().toISOString()) : (isEdit ? article.submittedAt : null),
+          approvedBy: statusVal === 'published' ? (isEdit ? article.approvedBy || (currentUserProfile?.role === 'admin' ? currentUserProfile.username : null) : (currentUserProfile?.role === 'admin' ? currentUserProfile.username : null)) : null,
+          publishedAt: statusVal === 'published' ? (isEdit ? article.publishedAt || new Date().toISOString() : new Date().toISOString()) : null
         };
 
         try {
@@ -3046,7 +3239,8 @@
             articleData.publishDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
             await db.createArticleAdmin(articleData);
-            const event = new CustomEvent('show-toast', { detail: 'Article published successfully!' });
+            const detailMsg = statusVal === 'pending' ? 'Article submitted for approval!' : 'Article saved successfully!';
+            const event = new CustomEvent('show-toast', { detail: detailMsg });
             window.dispatchEvent(event);
           }
           showArticlesList();

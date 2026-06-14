@@ -6,11 +6,6 @@
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://arisphere.vercel.app/category/ai</loc>
-    <changefreq>daily</changefreq>
-    <priority>0.80</priority>
-  </url>
-  <url>
     <loc>https://arisphere.vercel.app/category/world</loc>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
