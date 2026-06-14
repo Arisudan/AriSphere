@@ -2341,6 +2341,18 @@
 
         // Apply search, filters, sorting locally
         let filteredArticles = [...articles];
+        // Guard: initialize adminCatalogState if it was never set (e.g. fresh login)
+        if (!window.adminCatalogState) {
+          window.adminCatalogState = {
+            searchQuery: '',
+            filterCategory: 'all',
+            filterStatus: 'all',
+            filterAuthor: 'all',
+            sortBy: 'date-desc',
+            currentPage: 1,
+            itemsPerPage: 20
+          };
+        }
         if (window.adminCatalogState.searchQuery) {
           const q = window.adminCatalogState.searchQuery.toLowerCase();
           filteredArticles = filteredArticles.filter(art => 
