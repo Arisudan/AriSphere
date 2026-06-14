@@ -19,6 +19,43 @@
     '/admin': renderAdmin
   };
 
+  // Client-safe DOMPurify XSS Sanitizer wrapper
+  function safeSanitize(html) {
+    if (typeof window !== 'undefined' && window.DOMPurify && typeof window.DOMPurify.sanitize === 'function') {
+      return window.DOMPurify.sanitize(html);
+    }
+    return html;
+  }
+
+  function sanitizeArticle(art) {
+    if (!art) return art;
+    return {
+      ...art,
+      title: safeSanitize(art.title),
+      subtitle: safeSanitize(art.subtitle),
+      excerpt: safeSanitize(art.excerpt),
+      content: safeSanitize(art.content),
+      sourceAttribution: safeSanitize(art.sourceAttribution),
+      sources: art.sources ? art.sources.map(src => ({
+        ...src,
+        name: safeSanitize(src.name),
+        url: safeSanitize(src.url)
+      })) : art.sources
+    };
+  }
+
+  function sanitizeAuthor(auth) {
+    if (!auth) return auth;
+    return {
+      ...auth,
+      name: safeSanitize(auth.name),
+      title: safeSanitize(auth.title),
+      bio: safeSanitize(auth.bio),
+      experience: safeSanitize(auth.experience),
+      expertise: auth.expertise ? auth.expertise.map(safeSanitize) : auth.expertise
+    };
+  }
+
   // Helper: Breadcrumbs UI Builder
   function buildBreadcrumbsHTML(pathArray) {
     let html = `<nav aria-label="Breadcrumbs"><ol class="breadcrumbs">`;
@@ -266,6 +303,14 @@
       clearTimeout(window.adminRefreshTimer);
       window.adminRefreshTimer = null;
     }
+    if (window.adminTokenCheckInterval) {
+      clearInterval(window.adminTokenCheckInterval);
+      window.adminTokenCheckInterval = null;
+    }
+    if (window.articleScrollListener) {
+      window.removeEventListener('scroll', window.articleScrollListener);
+      window.articleScrollListener = null;
+    }
 
     if (typeof document === 'undefined' || !document || !document.head) return;
     
@@ -381,11 +426,11 @@
     const db = window.AriSphereDB;
     if (!db) return;
 
-    const featured = await db.getFeaturedArticle();
-    const latestList = await db.getLatestArticles(6);
-    const mostRead = await db.getMostReadArticles(5);
-    const editorsPicks = await db.getEditorsPicks(4);
-    const reflectionsList = (await db.getArticlesByCategory('reflections')).slice(0, 4);
+    const featured = sanitizeArticle(await db.getFeaturedArticle());
+    const latestList = (await db.getLatestArticles(6)).map(sanitizeArticle);
+    const mostRead = (await db.getMostReadArticles(5)).map(sanitizeArticle);
+    const editorsPicks = (await db.getEditorsPicks(4)).map(sanitizeArticle);
+    const reflectionsList = (await db.getArticlesByCategory('reflections')).slice(0, 4).map(sanitizeArticle);
 
     // Dynamic SEO for Home
     const homeSEO = {
@@ -513,29 +558,56 @@
             <div class="section-header">
               <h2 class="section-title">Latest Perspective</h2>
             </div>
-            <div class="grid-two-col-equal">
-              ${latestList.map(art => `
-                <article class="card">
-                  <div class="card-img-wrapper">
-                    <img class="card-img" src="${art.image}" alt="${art.title}" loading="lazy">
+            <div class="latest-asymmetric-grid" style="display: flex; flex-direction: column; gap: var(--space-md); margin-bottom: var(--space-xl);">
+              <!-- Large wide horizontal card for the first item -->
+              ${latestList.slice(0, 1).map(art => `
+                <article class="card card-wide" style="display: flex; flex-direction: row; gap: var(--space-md); align-items: stretch; min-height: 250px;">
+                  <div class="card-img-wrapper" style="flex: 1.2; height: auto; min-height: 250px; overflow: hidden; border-bottom: none; border-right: 1px solid var(--color-border);">
+                    <img class="card-img" src="${art.image}" alt="${art.title}" loading="lazy" style="width: 100%; height: 100%; object-fit: cover;">
                   </div>
-                  <div class="card-body">
+                  <div class="card-body" style="flex: 1; display: flex; flex-direction: column; justify-content: center;">
                     <div class="card-meta">
                       <span class="badge ${art.category}">${db.CATEGORIES[art.category].name}</span>
                       <span class="card-meta-dot"></span>
                       <span>${art.publishDate}</span>
                     </div>
-                    <h3 class="card-title">
+                    <h3 class="card-title" style="font-size: 1.5rem; line-height: 1.25; margin: var(--space-xs) 0 var(--space-sm);">
                       <a href="/article/${art.id}">${art.title}</a>
                     </h3>
-                    <p class="card-excerpt">${art.excerpt}</p>
-                    <div class="card-author-footer">
+                    <p class="card-excerpt" style="margin-bottom: var(--space-md);">${art.excerpt}</p>
+                    <div class="card-author-footer" style="margin-top: auto; padding-top: var(--space-sm);">
                       <img class="author-avatar" src="${db.AUTHORS[art.author].avatar}" alt="${db.AUTHORS[art.author].name}" loading="lazy">
                       <a href="/author/${art.author}" class="author-name">By ${db.AUTHORS[art.author].name}</a>
                     </div>
                   </div>
                 </article>
               `).join('')}
+              
+              <!-- Grid of remaining latest items -->
+              <div class="latest-grid-secondary" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--space-md);">
+                ${latestList.slice(1, 6).map(art => `
+                  <article class="card">
+                    <div class="card-img-wrapper">
+                      <img class="card-img" src="${art.image}" alt="${art.title}" loading="lazy">
+                    </div>
+                    <div class="card-body">
+                      <div class="card-meta">
+                        <span class="badge ${art.category}">${db.CATEGORIES[art.category].name}</span>
+                        <span class="card-meta-dot"></span>
+                        <span>${art.publishDate}</span>
+                      </div>
+                      <h3 class="card-title">
+                        <a href="/article/${art.id}">${art.title}</a>
+                      </h3>
+                      <p class="card-excerpt">${art.excerpt}</p>
+                      <div class="card-author-footer">
+                        <img class="author-avatar" src="${db.AUTHORS[art.author].avatar}" alt="${db.AUTHORS[art.author].name}" loading="lazy">
+                        <a href="/author/${art.author}" class="author-name">By ${db.AUTHORS[art.author].name}</a>
+                      </div>
+                    </div>
+                  </article>
+                `).join('')}
+              </div>
             </div>
           </section>
 
@@ -606,8 +678,8 @@
       return;
     }
 
-    const matchingArticles = await db.getArticlesByCategory(catId);
-    const mostRead = await db.getMostReadArticles(5);
+    const matchingArticles = (await db.getArticlesByCategory(catId)).map(sanitizeArticle);
+    const mostRead = (await db.getMostReadArticles(5)).map(sanitizeArticle);
 
     // Dynamic Breadcrumbs
     const pathArray = [{ name: categoryInfo.name, link: `/category/${catId}` }];
@@ -728,14 +800,28 @@
     const db = window.AriSphereDB;
     if (!db) return;
 
-    const article = await db.getArticleById(params.id);
-    if (!article) {
+    const rawArticle = await db.getArticleById(params.id);
+    if (!rawArticle) {
       render404(container);
       return;
     }
+    const article = sanitizeArticle(rawArticle);
 
-    const related = await db.getRelatedArticles(article.id, 3);
-    const authorInfo = db.AUTHORS[article.author];
+    const related = (await db.getRelatedArticles(article.id, 3)).map(sanitizeArticle);
+    const authorInfo = sanitizeAuthor(db.AUTHORS[article.author]);
+
+    // Reading progress bar scroll listener
+    const updateProgressBar = () => {
+      const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
+      const bar = document.getElementById('reading-progress-bar');
+      if (bar) {
+        bar.style.width = scrolled + '%';
+      }
+    };
+    window.addEventListener('scroll', updateProgressBar);
+    window.articleScrollListener = updateProgressBar;
 
     // Increment view counter locally and trigger remote DB views increment RPC
     article.views = (article.views || 0) + 1;
@@ -759,13 +845,13 @@
     if (db.isSupabaseConfigured && db.isSupabaseConfigured()) {
       try {
         const data = await db.fetchFromSupabase('articles?status=eq.published&order=id.asc&select=*');
-        allArticles = data.map(db.mapDatabaseArticle);
+        allArticles = data.map(db.mapDatabaseArticle).map(sanitizeArticle);
       } catch (err) {
         console.warn("Failed to fetch all articles for pagination, falling back to local ARTICLES.", err);
-        allArticles = db.ARTICLES.filter(a => (a.status || 'published') === 'published').sort((a, b) => a.id - b.id);
+        allArticles = db.ARTICLES.filter(a => (a.status || 'published') === 'published').sort((a, b) => a.id - b.id).map(sanitizeArticle);
       }
     } else {
-      allArticles = db.ARTICLES.filter(a => (a.status || 'published') === 'published').sort((a, b) => a.id - b.id);
+      allArticles = db.ARTICLES.filter(a => (a.status || 'published') === 'published').sort((a, b) => a.id - b.id).map(sanitizeArticle);
     }
     
     const currentIndex = allArticles.findIndex(a => String(a.id) === String(article.id));
@@ -819,7 +905,7 @@
     const paragraphs = bodyHTML.split('</p>');
     
     // Fetch up to 2 related articles for inline linking
-    const relatedLinks = await db.getRelatedArticles(article.id, 2);
+    const relatedLinks = (await db.getRelatedArticles(article.id, 2)).map(sanitizeArticle);
     const insertions = [];
 
     if (relatedLinks && relatedLinks.length > 0 && paragraphs.length >= 3) {
@@ -1260,14 +1346,14 @@
     if (!db) return;
 
     const username = params.username || 'arisudan';
-    const author = db.AUTHORS[username];
+    const author = sanitizeAuthor(db.AUTHORS[username]);
 
     if (!author) {
       render404(container);
       return;
     }
 
-    const writtenArticles = await db.getArticlesByAuthor(username);
+    const writtenArticles = (await db.getArticlesByAuthor(username)).map(sanitizeArticle);
     const recentArticles = [...writtenArticles].sort((a, b) => b.id - a.id);
     const popularArticles = [...writtenArticles].sort((a, b) => (b.views || 0) - (a.views || 0));
 
@@ -2074,6 +2160,10 @@
       const { data: { session } } = await db.supabase.auth.getSession();
       if (!session) {
         currentUserProfile = null;
+        if (window.adminTokenCheckInterval) {
+          clearInterval(window.adminTokenCheckInterval);
+          window.adminTokenCheckInterval = null;
+        }
         renderLoginForm();
       } else {
         try {
@@ -2088,6 +2178,34 @@
             full_name: 'Arisudan'
           };
         }
+
+        if (!window.adminTokenCheckInterval) {
+          window.adminTokenCheckInterval = setInterval(async () => {
+            const { data: { session: currentSession } } = await db.supabase.auth.getSession();
+            if (!currentSession && currentUserProfile) {
+              console.warn('Session expired, logging out client.');
+              clearInterval(window.adminTokenCheckInterval);
+              window.adminTokenCheckInterval = null;
+              currentUserProfile = null;
+              if (window.adminRealtimeChannel && db.supabase) {
+                try {
+                  await db.supabase.removeChannel(window.adminRealtimeChannel);
+                } catch (e) {
+                  console.warn("Failed to remove channel:", e);
+                }
+                window.adminRealtimeChannel = null;
+              }
+              if (window.adminRefreshTimer) {
+                clearTimeout(window.adminRefreshTimer);
+                window.adminRefreshTimer = null;
+              }
+              renderLoginForm();
+              const event = new CustomEvent('show-toast', { detail: 'Session expired. Please sign in again.' });
+              window.dispatchEvent(event);
+            }
+          }, 30000);
+        }
+
         renderDashboard(session.user);
       }
     }
@@ -2215,11 +2333,61 @@
         const isSubEditor = currentUserProfile?.role === 'sub_editor';
         const filterUsername = isSubEditor ? currentUserProfile.username : null;
         
-        // Fetch articles filtered by author if sub-editor
-        const articles = await db.getAllArticlesAdmin(filterUsername);
-        window.adminArticles = articles; // Store globally for realtime updates
+        let articles = window.adminArticles;
+        if (!articles) {
+          articles = (await db.getAllArticlesAdmin(filterUsername)).map(sanitizeArticle);
+          window.adminArticles = articles;
+        }
 
-        // Compute Editorial KPIs (Task 11)
+        // Apply search, filters, sorting locally
+        let filteredArticles = [...articles];
+        if (window.adminCatalogState.searchQuery) {
+          const q = window.adminCatalogState.searchQuery.toLowerCase();
+          filteredArticles = filteredArticles.filter(art => 
+            (art.title && art.title.toLowerCase().includes(q)) ||
+            (art.author && art.author.toLowerCase().includes(q)) ||
+            (art.category && art.category.toLowerCase().includes(q))
+          );
+        }
+
+        if (window.adminCatalogState.filterCategory !== 'all') {
+          filteredArticles = filteredArticles.filter(art => art.category === window.adminCatalogState.filterCategory);
+        }
+
+        if (window.adminCatalogState.filterStatus !== 'all') {
+          filteredArticles = filteredArticles.filter(art => art.status === window.adminCatalogState.filterStatus);
+        }
+
+        if (!isSubEditor && window.adminCatalogState.filterAuthor !== 'all') {
+          filteredArticles = filteredArticles.filter(art => art.author === window.adminCatalogState.filterAuthor);
+        }
+
+        filteredArticles.sort((a, b) => {
+          if (window.adminCatalogState.sortBy === 'date-desc') {
+            const da = a.publishedAt ? new Date(a.publishedAt) : (a.publishDate ? new Date(a.publishDate) : new Date(0));
+            const dbVal = b.publishedAt ? new Date(b.publishedAt) : (b.publishDate ? new Date(b.publishDate) : new Date(0));
+            return dbVal - da;
+          } else if (window.adminCatalogState.sortBy === 'date-asc') {
+            const da = a.publishedAt ? new Date(a.publishedAt) : (a.publishDate ? new Date(a.publishDate) : new Date(0));
+            const dbVal = b.publishedAt ? new Date(b.publishedAt) : (b.publishDate ? new Date(b.publishDate) : new Date(0));
+            return da - dbVal;
+          } else if (window.adminCatalogState.sortBy === 'views-desc') {
+            return (b.views || 0) - (a.views || 0);
+          } else if (window.adminCatalogState.sortBy === 'title-asc') {
+            return (a.title || '').localeCompare(b.title || '');
+          }
+          return 0;
+        });
+
+        const totalItems = filteredArticles.length;
+        const totalPages = Math.max(1, Math.ceil(totalItems / window.adminCatalogState.itemsPerPage));
+        if (window.adminCatalogState.currentPage > totalPages) {
+          window.adminCatalogState.currentPage = totalPages;
+        }
+        const startIndex = (window.adminCatalogState.currentPage - 1) * window.adminCatalogState.itemsPerPage;
+        const paginatedArticles = filteredArticles.slice(startIndex, startIndex + window.adminCatalogState.itemsPerPage);
+
+        // Compute Editorial KPIs (unfiltered total articles list)
         const publishedCount = articles.filter(a => a.status === 'published').length;
         const draftCount = articles.filter(a => a.status === 'draft').length;
         const pendingCount = articles.filter(a => a.status === 'pending').length;
@@ -2381,7 +2549,6 @@
         // Render Pending Queue for Admins
         let pendingQueueHTML = '';
         if (!isSubEditor) {
-          // Fetch all pending articles to show in the approval queue
           const pendingArticles = articles.filter(a => a.status === 'pending');
           if (pendingArticles.length > 0) {
             pendingQueueHTML = `
@@ -2487,8 +2654,53 @@
           </section>
 
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-md); flex-wrap:wrap; gap:var(--space-sm);">
-            <h2 style="font-family:var(--font-serif); font-size:1.35rem; margin:0;">${isSubEditor ? 'My Articles' : 'Article Catalog'} (${articles.length})</h2>
+            <h2 style="font-family:var(--font-serif); font-size:1.35rem; margin:0;">${isSubEditor ? 'My Articles' : 'Article Catalog'} (${totalItems})</h2>
             <button class="admin-btn admin-btn-primary" id="btn-create-article">+ Create Article</button>
+          </div>
+
+          <!-- Catalog Filters & Search Panel -->
+          <div class="catalog-filters-panel" style="display:flex; flex-wrap:wrap; gap:var(--space-sm); margin-bottom:var(--space-md); padding:var(--space-sm); background:var(--color-bg-offset); border-radius:var(--radius-sm); border:1px solid var(--color-border); align-items:center; width:100%;">
+            <div style="flex:1; min-width:200px;">
+              <input type="text" id="catalog-search" class="admin-input" placeholder="Search title, author, or category..." value="${escapeHtml(window.adminCatalogState.searchQuery)}" style="padding:6px 12px; font-size:0.875rem; width:100%;">
+            </div>
+            
+            <div>
+              <select id="filter-category" class="admin-select" style="padding:6px 12px; font-size:0.875rem;">
+                <option value="all">All Categories</option>
+                ${Object.keys(db.CATEGORIES).map(k => `
+                  <option value="${db.CATEGORIES[k].id}" ${window.adminCatalogState.filterCategory === db.CATEGORIES[k].id ? 'selected' : ''}>${db.CATEGORIES[k].name}</option>
+                `).join('')}
+              </select>
+            </div>
+            
+            <div>
+              <select id="filter-status" class="admin-select" style="padding:6px 12px; font-size:0.875rem;">
+                <option value="all">All Statuses</option>
+                <option value="published" ${window.adminCatalogState.filterStatus === 'published' ? 'selected' : ''}>Published</option>
+                <option value="pending" ${window.adminCatalogState.filterStatus === 'pending' ? 'selected' : ''}>Pending</option>
+                <option value="draft" ${window.adminCatalogState.filterStatus === 'draft' ? 'selected' : ''}>Draft</option>
+              </select>
+            </div>
+
+            ${!isSubEditor ? `
+            <div>
+              <select id="filter-author" class="admin-select" style="padding:6px 12px; font-size:0.875rem;">
+                <option value="all">All Authors</option>
+                ${Object.keys(db.AUTHORS).map(k => `
+                  <option value="${db.AUTHORS[k].username}" ${window.adminCatalogState.filterAuthor === db.AUTHORS[k].username ? 'selected' : ''}>${db.AUTHORS[k].name}</option>
+                `).join('')}
+              </select>
+            </div>
+            ` : ''}
+
+            <div>
+              <select id="sort-by" class="admin-select" style="padding:6px 12px; font-size:0.875rem;">
+                <option value="date-desc" ${window.adminCatalogState.sortBy === 'date-desc' ? 'selected' : ''}>Latest</option>
+                <option value="date-asc" ${window.adminCatalogState.sortBy === 'date-asc' ? 'selected' : ''}>Oldest</option>
+                <option value="views-desc" ${window.adminCatalogState.sortBy === 'views-desc' ? 'selected' : ''}>Views (High to Low)</option>
+                <option value="title-asc" ${window.adminCatalogState.sortBy === 'title-asc' ? 'selected' : ''}>Title (A-Z)</option>
+              </select>
+            </div>
           </div>
 
           <div class="admin-table-wrapper">
@@ -2504,11 +2716,11 @@
                 </tr>
               </thead>
               <tbody>
-                ${articles.map(art => `
+                ${paginatedArticles.map(art => `
                   <tr>
                     <td>
                       <div style="font-weight:600; color:var(--color-text); line-height:1.2; margin-bottom:4px;">${art.title}</div>
-                      <div style="font-size:0.75rem; color:var(--color-text-muted);">Published: ${art.publishDate || 'Not Published'} &middot; By ${art.author}</div>
+                      <div style="font-size:0.75rem; color:var(--color-text-muted);">Published: ${art.publishDate || 'Not Published'} &middot; By ${art.author} ${art.premium ? '&middot; <span style="color:var(--cat-reflections);font-weight:700;">PREMIUM</span>' : ''}</div>
                     </td>
                     <td>
                       <span class="badge ${art.category}">${db.CATEGORIES[art.category]?.name || art.category}</span>
@@ -2532,14 +2744,93 @@
                     </td>
                   </tr>
                 `).join('')}
-                ${articles.length === 0 ? `
+                ${paginatedArticles.length === 0 ? `
                   <tr>
-                    <td colspan="6" style="text-align:center; padding:var(--space-xl); color:var(--color-text-muted);">No articles found in Supabase. Click "+ Create Article" to begin publishing.</td>
+                    <td colspan="6" style="text-align:center; padding:var(--space-xl); color:var(--color-text-muted);">No matching articles found in catalog.</td>
                   </tr>
                 ` : ''}
               </tbody>
             </table>
           </div>
+
+          <!-- Pagination Footer -->
+          ${totalPages > 1 ? `
+          <div class="admin-pagination-controls" style="display:flex; justify-content:space-between; align-items:center; margin-top:var(--space-md); padding-top:var(--space-sm); border-top:1px solid var(--color-border); width:100%;">
+            <div style="font-size:0.875rem; color:var(--color-text-muted);">
+              Showing ${startIndex + 1} to ${Math.min(startIndex + window.adminCatalogState.itemsPerPage, totalItems)} of ${totalItems} articles (Page ${window.adminCatalogState.currentPage} of ${totalPages})
+            </div>
+            <div style="display:flex; gap:6px;">
+              <button class="admin-btn admin-btn-secondary" id="btn-catalog-prev" style="padding:6px 12px; font-size:0.75rem;" ${window.adminCatalogState.currentPage === 1 ? 'disabled' : ''}>← Previous</button>
+              <button class="admin-btn admin-btn-secondary" id="btn-catalog-next" style="padding:6px 12px; font-size:0.75rem;" ${window.adminCatalogState.currentPage === totalPages ? 'disabled' : ''}>Next →</button>
+            </div>
+          </div>
+          ` : ''}
+        `;
+
+        // Wire catalog filters event listeners
+        const elSearch = document.getElementById('catalog-search');
+        if (elSearch) {
+          elSearch.addEventListener('input', (e) => {
+            window.adminCatalogState.searchQuery = e.target.value;
+            window.adminCatalogState.currentPage = 1;
+            clearTimeout(window.catalogSearchTimer);
+            window.catalogSearchTimer = setTimeout(() => {
+              showArticlesList();
+            }, 300);
+          });
+          // keep cursor at end of input on rerender
+          elSearch.focus();
+          elSearch.setSelectionRange(elSearch.value.length, elSearch.value.length);
+        }
+        const elCat = document.getElementById('filter-category');
+        if (elCat) {
+          elCat.addEventListener('change', (e) => {
+            window.adminCatalogState.filterCategory = e.target.value;
+            window.adminCatalogState.currentPage = 1;
+            showArticlesList();
+          });
+        }
+        const elStat = document.getElementById('filter-status');
+        if (elStat) {
+          elStat.addEventListener('change', (e) => {
+            window.adminCatalogState.filterStatus = e.target.value;
+            window.adminCatalogState.currentPage = 1;
+            showArticlesList();
+          });
+        }
+        const elAuthor = document.getElementById('filter-author');
+        if (elAuthor) {
+          elAuthor.addEventListener('change', (e) => {
+            window.adminCatalogState.filterAuthor = e.target.value;
+            window.adminCatalogState.currentPage = 1;
+            showArticlesList();
+          });
+        }
+        const elSort = document.getElementById('sort-by');
+        if (elSort) {
+          elSort.addEventListener('change', (e) => {
+            window.adminCatalogState.sortBy = e.target.value;
+            showArticlesList();
+          });
+        }
+        const elPrev = document.getElementById('btn-catalog-prev');
+        if (elPrev) {
+          elPrev.addEventListener('click', () => {
+            if (window.adminCatalogState.currentPage > 1) {
+              window.adminCatalogState.currentPage--;
+              showArticlesList();
+            }
+          });
+        }
+        const elNext = document.getElementById('btn-catalog-next');
+        if (elNext) {
+          elNext.addEventListener('click', () => {
+            if (window.adminCatalogState.currentPage < totalPages) {
+              window.adminCatalogState.currentPage++;
+              showArticlesList();
+            }
+          });
+        }
         `;
 
         // Wire Create Article button
@@ -2567,6 +2858,7 @@
                 await db.deleteArticleAdmin(id);
                 const event = new CustomEvent('show-toast', { detail: 'Article deleted successfully.' });
                 window.dispatchEvent(event);
+                window.adminArticles = null;
                 showArticlesList();
               } catch (err) {
                 alert('Deletion failed: ' + err.message);
@@ -2597,6 +2889,7 @@
                 
                 const event = new CustomEvent('show-toast', { detail: 'Article approved and published!' });
                 window.dispatchEvent(event);
+                window.adminArticles = null;
                 showArticlesList();
               } catch (err) {
                 alert('Approval failed: ' + err.message);
@@ -2623,6 +2916,7 @@
                 
                 const event = new CustomEvent('show-toast', { detail: 'Article declined and returned to draft.' });
                 window.dispatchEvent(event);
+                window.adminArticles = null;
                 showArticlesList();
               } catch (err) {
                 alert('Decline failed: ' + err.message);
@@ -2800,7 +3094,7 @@
       workspace.innerHTML = `
         <div class="admin-form-container">
           <header class="admin-form-header">
-            <h2 style="font-family:var(--font-serif); font-size:1.35rem; margin:0;">${isEdit ? `Edit Article #${article.id}` : 'Create New Article'}</h2>
+            <h2 style="font-family:var(--font-serif); font-size:1.35rem; margin:0;">${isEdit ? `Edit Article #${article.id}` : 'Create New Article'} <span id="autosave-notice" style="font-size:0.75rem; color:var(--color-text-muted); opacity:0.5; margin-left:var(--space-md); transition: opacity 0.5s;"></span></h2>
             <button class="admin-btn admin-btn-secondary" id="btn-form-back" style="padding:6px 12px; font-size:0.75rem;">← Back to Catalog</button>
           </header>
 
@@ -2875,6 +3169,11 @@
               </div>
 
               <div class="admin-form-group">
+                <label class="admin-label" for="scheduled-publish-at">Scheduled Publish Time (Optional)</label>
+                <input class="admin-input" type="datetime-local" id="scheduled-publish-at" value="${isEdit && article.scheduled_publish_at ? new Date(new Date(article.scheduled_publish_at).getTime() - new Date().getTimezoneOffset()*60000).toISOString().slice(0, 16) : ''}">
+              </div>
+
+              <div class="admin-form-group">
                 <label class="admin-label" for="art-status">Status</label>
                 <select class="admin-select" id="art-status" required>
                   <option value="draft" ${isEdit && article.status === 'draft' ? 'selected' : ''}>Draft</option>
@@ -2916,6 +3215,9 @@
                   <label class="admin-checkbox-label" style="color: var(--cat-reflections); font-weight: 700;">
                     <input type="checkbox" id="human-reviewed" ${isEdit && article.humanReviewed ? 'checked' : ''}> Human Review Completed
                   </label>
+                  <label class="admin-checkbox-label" style="color: var(--cat-insights); font-weight: 700;">
+                    <input type="checkbox" id="art-premium" ${isEdit && article.premium ? 'checked' : ''}> Premium Article (Subscribers Only)
+                  </label>
                 </div>
               </div>
 
@@ -2935,9 +3237,84 @@
         </div>
       `;
 
+      function cleanupAutosave() {
+        if (window.adminAutosaveTimer) {
+          clearInterval(window.adminAutosaveTimer);
+          window.adminAutosaveTimer = null;
+        }
+        const key = isEdit ? `draft_edit_${article.id}` : `draft_create_new`;
+        localStorage.removeItem(key);
+      }
+
       // Back & Cancel Button wire
-      document.getElementById('btn-form-back').addEventListener('click', showArticlesList);
-      document.getElementById('btn-form-cancel').addEventListener('click', showArticlesList);
+      document.getElementById('btn-form-back').addEventListener('click', () => {
+        cleanupAutosave();
+        showArticlesList();
+      });
+      document.getElementById('btn-form-cancel').addEventListener('click', () => {
+        cleanupAutosave();
+        showArticlesList();
+      });
+
+      // Periodically autosave form draft to localStorage (every 10 seconds)
+      if (window.adminAutosaveTimer) {
+        clearInterval(window.adminAutosaveTimer);
+      }
+      window.adminAutosaveTimer = setInterval(() => {
+        const titleEl = document.getElementById('art-title');
+        const contentEl = document.getElementById('art-content');
+        if (!titleEl || !contentEl) return;
+        
+        const draftData = {
+          title: titleEl.value,
+          subtitle: document.getElementById('art-subtitle')?.value || '',
+          excerpt: document.getElementById('art-excerpt')?.value || '',
+          content: contentEl.value,
+          category: document.getElementById('art-category')?.value || '',
+          image: document.getElementById('art-image')?.value || '',
+          imageAlt: document.getElementById('art-image-alt')?.value || '',
+          tags: document.getElementById('art-tags')?.value || '',
+          sources: document.getElementById('art-sources')?.value || '',
+          scheduled_publish_at: document.getElementById('scheduled-publish-at')?.value || '',
+          premium: document.getElementById('art-premium')?.checked || false,
+          timestamp: Date.now()
+        };
+        const key = isEdit ? `draft_edit_${article.id}` : `draft_create_new`;
+        localStorage.setItem(key, JSON.stringify(draftData));
+        
+        const notice = document.getElementById('autosave-notice');
+        if (notice) {
+          const t = new Date().toLocaleTimeString();
+          notice.textContent = `Draft autosaved at ${t}`;
+          notice.style.opacity = 1;
+          setTimeout(() => { notice.style.opacity = 0.5; }, 2000);
+        }
+      }, 10000);
+
+      // Check if there is an autosaved draft to restore
+      const key = isEdit ? `draft_edit_${article.id}` : `draft_create_new`;
+      const saved = localStorage.getItem(key);
+      if (saved) {
+        try {
+          const draft = JSON.parse(saved);
+          if (confirm(`An unsaved draft from ${new Date(draft.timestamp).toLocaleTimeString()} was found. Do you want to restore it?`)) {
+            setTimeout(() => {
+              if (document.getElementById('art-title')) document.getElementById('art-title').value = draft.title;
+              if (document.getElementById('art-subtitle')) document.getElementById('art-subtitle').value = draft.subtitle;
+              if (document.getElementById('art-excerpt')) document.getElementById('art-excerpt').value = draft.excerpt;
+              if (document.getElementById('art-content')) document.getElementById('art-content').value = draft.content;
+              if (document.getElementById('art-category')) document.getElementById('art-category').value = draft.category;
+              if (document.getElementById('art-image')) document.getElementById('art-image').value = draft.image;
+              if (document.getElementById('art-image-alt')) document.getElementById('art-image-alt').value = draft.imageAlt;
+              if (document.getElementById('art-tags')) document.getElementById('art-tags').value = draft.tags;
+              if (document.getElementById('art-sources')) document.getElementById('art-sources').value = draft.sources;
+              if (document.getElementById('scheduled-publish-at')) document.getElementById('scheduled-publish-at').value = draft.scheduled_publish_at || '';
+              if (document.getElementById('art-premium')) document.getElementById('art-premium').checked = !!draft.premium;
+              validateEditorialQuality();
+            }, 100);
+          }
+        } catch (e) {}
+      }
 
       // Cover Image Mock Buttons wire
       document.getElementById('btn-mock-img-ai').addEventListener('click', () => {
@@ -3433,8 +3810,14 @@
           humanReviewed: document.getElementById('human-reviewed').checked,
           submittedAt: statusVal === 'pending' ? (article?.submittedAt || new Date().toISOString()) : (isEdit ? article.submittedAt : null),
           approvedBy: statusVal === 'published' ? (isEdit ? article.approvedBy || (currentUserProfile?.role === 'admin' ? currentUserProfile.username : null) : (currentUserProfile?.role === 'admin' ? currentUserProfile.username : null)) : null,
-          publishedAt: statusVal === 'published' ? (isEdit ? article.publishedAt || new Date().toISOString() : new Date().toISOString()) : null
+          publishedAt: statusVal === 'published' ? (isEdit ? article.publishedAt || new Date().toISOString() : new Date().toISOString()) : null,
+          scheduled_publish_at: document.getElementById('scheduled-publish-at')?.value ? new Date(document.getElementById('scheduled-publish-at').value).toISOString() : null,
+          premium: document.getElementById('art-premium') ? document.getElementById('art-premium').checked : false
         };
+
+        if (isEdit) {
+          articleData.editorUsername = currentUserProfile?.username || 'admin';
+        }
 
         try {
           if (isEdit) {

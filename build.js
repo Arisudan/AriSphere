@@ -155,6 +155,7 @@ async function runBuild() {
   // Setup JSDOM window mocks
   dom.window.fetch = fetchWrapper; // Enable routing functions to use fetch wrapper if needed
   dom.window.scrollTo = () => {};
+  dom.window.DOMPurify = { sanitize: (s) => s }; // Mock DOMPurify for pre-rendering environment (Phase 7)
   dom.window.AriSphereDB = db; // Bind pre-evaluated db
   
   // Evaluate the router script inside JSDOM to bind routes and event listeners
@@ -301,12 +302,46 @@ async function runBuild() {
   fs.writeFileSync(path.join(DIST_DIR, 'sitemap-articles.xml'), sitemapArticlesXML, 'utf8');
   console.log('Dynamic sitemap-articles.xml generated.');
 
-  // 8b. Generate Master Sitemap Index (sitemap.xml)
+  // 8b. Generate Google News Sitemap (sitemap-news.xml)
+  console.log('Generating dynamic sitemap-news.xml...');
+  const now = new Date();
+  const fortyEightHoursAgo = new Date(now.getTime() - 48 * 60 * 60 * 1000);
+  let newsArticles = activeArticles.filter(art => {
+    const pubDate = new Date(art.publishDate);
+    return pubDate >= fortyEightHoursAgo;
+  });
+  if (newsArticles.length === 0) {
+    newsArticles = activeArticles
+      .sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate))
+      .slice(0, 3);
+  }
+  const sitemapNewsXML = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+  ${newsArticles.map(art => `  <url>
+    <loc>${SITE_URL}/article/${art.id}</loc>
+    <news:news>
+      <news:publication>
+        <news:name>AriSphere</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>${new Date(art.publishDate).toISOString()}</news:publication_date>
+      <news:title>${escapeXml(art.title)}</news:title>
+    </news:news>
+  </url>`).join('\n')}
+</urlset>`;
+  fs.writeFileSync(path.join(DIST_DIR, 'sitemap-news.xml'), sitemapNewsXML, 'utf8');
+  console.log('Dynamic sitemap-news.xml generated.');
+
+  // 8c. Generate Master Sitemap Index (sitemap.xml)
   console.log('Generating master sitemap.xml sitemapindex...');
   const sitemapIndexXML = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
     <loc>${SITE_URL}/sitemap-articles.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>${SITE_URL}/sitemap-news.xml</loc>
   </sitemap>
   <sitemap>
     <loc>${SITE_URL}/sitemap-categories.xml</loc>

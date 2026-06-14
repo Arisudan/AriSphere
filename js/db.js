@@ -1156,7 +1156,9 @@ function mapDatabaseArticle(row) {
     humanReviewed: row.human_reviewed !== undefined ? !!row.human_reviewed : false,
     submittedAt: row.submitted_at,
     approvedBy: row.approved_by,
-    publishedAt: row.published_at
+    publishedAt: row.published_at,
+    scheduled_publish_at: row.scheduled_publish_at,
+    premium: !!row.premium
   };
   
   const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -1474,7 +1476,9 @@ async function createArticleAdmin(articleData) {
       human_reviewed: articleData.humanReviewed !== undefined ? !!articleData.humanReviewed : false,
       submitted_at: articleData.submittedAt || null,
       approved_by: articleData.approvedBy || null,
-      published_at: articleData.publishedAt || null
+      published_at: articleData.publishedAt || null,
+      scheduled_publish_at: articleData.scheduled_publish_at || null,
+      premium: !!articleData.premium
     };
     const { data, error } = await supabaseClient
       .from('articles')
@@ -1501,6 +1505,8 @@ async function createArticleAdmin(articleData) {
       submittedAt: articleData.submittedAt || null,
       approvedBy: articleData.approvedBy || null,
       publishedAt: articleData.publishedAt || null,
+      scheduled_publish_at: articleData.scheduled_publish_at || null,
+      premium: !!articleData.premium,
       updatedAt: new Date().toISOString()
     };
     ARTICLES.push(newArt);
@@ -1534,6 +1540,8 @@ async function updateArticleAdmin(id, articleData) {
       submitted_at: articleData.submittedAt !== undefined ? articleData.submittedAt : undefined,
       approved_by: articleData.approvedBy !== undefined ? articleData.approvedBy : undefined,
       published_at: articleData.publishedAt !== undefined ? articleData.publishedAt : undefined,
+      scheduled_publish_at: articleData.scheduled_publish_at !== undefined ? articleData.scheduled_publish_at : undefined,
+      premium: articleData.premium !== undefined ? !!articleData.premium : undefined,
       updated_at: new Date().toISOString()
     };
     const { data, error } = await supabaseClient
@@ -1542,6 +1550,25 @@ async function updateArticleAdmin(id, articleData) {
       .eq('id', id)
       .select();
     if (error) throw error;
+    
+    // Log version history
+    if (articleData.editorUsername) {
+      try {
+        await supabaseClient
+          .from('article_versions')
+          .insert({
+            article_id: Number(id),
+            title: articleData.title,
+            subtitle: articleData.subtitle,
+            excerpt: articleData.excerpt,
+            content: articleData.content,
+            editor_username: articleData.editorUsername
+          });
+      } catch (err) {
+        console.warn("Failed to write to article_versions revision log:", err);
+      }
+    }
+    
     return data && data[0] ? mapDatabaseArticle(data[0]) : null;
   } else {
     const idx = ARTICLES.findIndex(a => String(a.id) === String(id));
@@ -1558,6 +1585,8 @@ async function updateArticleAdmin(id, articleData) {
         submittedAt: articleData.submittedAt !== undefined ? articleData.submittedAt : ARTICLES[idx].submittedAt,
         approvedBy: articleData.approvedBy !== undefined ? articleData.approvedBy : ARTICLES[idx].approvedBy,
         publishedAt: articleData.publishedAt !== undefined ? articleData.publishedAt : ARTICLES[idx].publishedAt,
+        scheduled_publish_at: articleData.scheduled_publish_at !== undefined ? articleData.scheduled_publish_at : ARTICLES[idx].scheduled_publish_at,
+        premium: articleData.premium !== undefined ? !!articleData.premium : ARTICLES[idx].premium,
         updatedAt: new Date().toISOString()
       };
       return ARTICLES[idx];

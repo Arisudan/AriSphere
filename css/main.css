@@ -551,3 +551,9 @@ body.menu-open {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
 }
+
+/* High-contrast accessible focus ring indicators for keyboard navigation */
+*:focus-visible {
+  outline: 3px solid var(--color-accent) !important;
+  outline-offset: 3px !important;
+}
