@@ -2,7 +2,5 @@
 User-agent: *
 Allow: /
 
-# Sitemap Targets
+# Sitemap Target (Master Index)
 Sitemap: https://arisphere.vercel.app/sitemap.xml
-Sitemap: https://arisphere.vercel.app/sitemap-categories.xml
-Sitemap: https://arisphere.vercel.app/sitemap-authors.xml

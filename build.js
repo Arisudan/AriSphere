@@ -48,9 +48,10 @@ async function runBuild() {
   fs.mkdirSync(DIST_DIR);
   
   // 2. Read template HTML file and code dependencies
-  const indexHtml = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
+  let indexHtml = fs.readFileSync(path.join(__dirname, 'index.html'), 'utf8');
   let dbCode = fs.readFileSync(path.join(__dirname, 'js', 'db.js'), 'utf8');
-  const routerCode = fs.readFileSync(path.join(__dirname, 'js', 'router.js'), 'utf8');
+  let routerCode = fs.readFileSync(path.join(__dirname, 'js', 'router.js'), 'utf8');
+  let appCode = fs.readFileSync(path.join(__dirname, 'js', 'app.js'), 'utf8');
   
   // Inject Supabase environment keys in-memory for compile-time database evaluations
   const envSupabaseUrl = process.env.SUPABASE_URL || '';
@@ -58,6 +59,19 @@ async function runBuild() {
   if (envSupabaseUrl && envSupabaseKey) {
     dbCode = dbCode.replace('https://YOUR_SUPABASE_PROJECT_URL.supabase.co', envSupabaseUrl);
     dbCode = dbCode.replace('YOUR_SUPABASE_ANON_KEY_HERE', envSupabaseKey);
+  }
+
+  // Inject Google Site Verification and Google Analytics IDs from environment
+  const googleSiteVerification = process.env.GOOGLE_SITE_VERIFICATION || '';
+  const gaMeasurementId = process.env.GA_MEASUREMENT_ID || '';
+  
+  if (googleSiteVerification) {
+    indexHtml = indexHtml.replace('GSC_VERIFICATION_TOKEN_placeholder', googleSiteVerification);
+  }
+  if (gaMeasurementId) {
+    indexHtml = indexHtml.replaceAll('G-GA_MEASUREMENT_ID', gaMeasurementId);
+    routerCode = routerCode.replaceAll('G-GA_MEASUREMENT_ID', gaMeasurementId);
+    appCode = appCode.replaceAll('G-GA_MEASUREMENT_ID', gaMeasurementId);
   }
   
   // 3. Load DB in a mock Node environment to inspect paths
@@ -239,9 +253,9 @@ async function runBuild() {
   fs.writeFileSync(path.join(DIST_DIR, 'rss.xml'), rssXML, 'utf8');
   console.log('Dynamic rss.xml generated.');
 
-  // 8. Generate Dynamic sitemap.xml
-  console.log('Generating dynamic sitemap.xml...');
-  const sitemapXML = `<?xml version="1.0" encoding="UTF-8"?>
+  // 8. Generate Dynamic sitemap-articles.xml (Core Views & Articles)
+  console.log('Generating dynamic sitemap-articles.xml...');
+  const sitemapArticlesXML = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Core Views -->
   <url>
@@ -284,8 +298,26 @@ async function runBuild() {
   ${activeArticles.map(art => `  <url><loc>${SITE_URL}/article/${art.id}</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>`).join('\n')}
 </urlset>`;
 
-  fs.writeFileSync(path.join(DIST_DIR, 'sitemap.xml'), sitemapXML, 'utf8');
-  console.log('Dynamic sitemap.xml generated.');
+  fs.writeFileSync(path.join(DIST_DIR, 'sitemap-articles.xml'), sitemapArticlesXML, 'utf8');
+  console.log('Dynamic sitemap-articles.xml generated.');
+
+  // 8b. Generate Master Sitemap Index (sitemap.xml)
+  console.log('Generating master sitemap.xml sitemapindex...');
+  const sitemapIndexXML = `<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>${SITE_URL}/sitemap-articles.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>${SITE_URL}/sitemap-categories.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>${SITE_URL}/sitemap-authors.xml</loc>
+  </sitemap>
+</sitemapindex>`;
+
+  fs.writeFileSync(path.join(DIST_DIR, 'sitemap.xml'), sitemapIndexXML, 'utf8');
+  console.log('Master sitemap.xml sitemapindex generated.');
 
   // 9. Generate Dynamic sitemap-categories.xml
   console.log('Generating dynamic sitemap-categories.xml...');
@@ -321,10 +353,8 @@ async function runBuild() {
 User-agent: *
 Allow: /
 
-# Sitemap Targets
+# Sitemap Target (Master Index)
 Sitemap: ${SITE_URL}/sitemap.xml
-Sitemap: ${SITE_URL}/sitemap-categories.xml
-Sitemap: ${SITE_URL}/sitemap-authors.xml
 `;
   fs.writeFileSync(path.join(DIST_DIR, 'robots.txt'), robotsTxt, 'utf8');
   console.log('robots.txt generated.');
@@ -335,8 +365,10 @@ Sitemap: ${SITE_URL}/sitemap-authors.xml
   copyDir(path.join(__dirname, 'js'), path.join(DIST_DIR, 'js'));
   copyDir(path.join(__dirname, 'assets'), path.join(DIST_DIR, 'assets'));
   
-  // Overwrite compiled js/db.js with the injected credentials version
+  // Overwrite compiled js/db.js, js/router.js, and js/app.js with the injected versions
   fs.writeFileSync(path.join(DIST_DIR, 'js', 'db.js'), dbCode, 'utf8');
+  fs.writeFileSync(path.join(DIST_DIR, 'js', 'router.js'), routerCode, 'utf8');
+  fs.writeFileSync(path.join(DIST_DIR, 'js', 'app.js'), appCode, 'utf8');
   console.log('API credentials successfully injected into compiled assets.');
   
   // Copy vercel.json configuration

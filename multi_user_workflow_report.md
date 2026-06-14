@@ -160,3 +160,29 @@ Executed the automated verification script to test layout structures, trust sign
 4. **Reflections Authenticity Guard**: The form validation score engine penalizes any reflection drafts not written by `arisudan` and warns against auto-publishing reflections.
 
 The multi-user digital workflow is now fully active, secure, and compliant.
+
+---
+
+## 8. Post-Phase 6 Enhancements & Optimizations
+
+We completed additional refinements to the site structure, accessibility (WCAG 2.1 compliance), and SEO performance:
+
+1. **Localhost URL Replacements (Item 1)**:
+   - Resolved localhost discrepancies in `index.html` by updating default Open Graph (`og:url`) metadata and JSON-LD schema `"url"` entries to reference the production domain `https://arisphere.vercel.app/`.
+
+2. **Footer Navigation Link (Item 2)**:
+   - Added the missing **Social Media** category link (`/category/social-media`) inside the footer's Categories column list in `index.html`.
+
+3. **SEO and Analytics Placeholders (Item 3)**:
+   - Configured `build.js` to dynamically search for and replace `GSC_VERIFICATION_TOKEN_placeholder` and `G-GA_MEASUREMENT_ID` with environment variables (`GOOGLE_SITE_VERIFICATION` and `GA_MEASUREMENT_ID`) at compile time across `index.html`, `js/app.js`, and `js/router.js`.
+
+4. **Accessibility (WCAG 2.1) Gaps (Item 5)**:
+   - **Keyboard Navigation Skip-link**: Added a visually hidden `.skip-to-content` skip-link at the beginning of `index.html` pointing directly to `#main-viewport`. Added focus-aware sliding animation styles to `css/main.css`.
+   - **Hamburger Toggle state**: Programmed `js/app.js` to set `aria-expanded` and `aria-controls` on the mobile hamburger button dynamically based on drawer state.
+   - **Social link targets**: Swapped `#` targets on footer social icons to `javascript:void(0)` to prevent viewport jumping.
+
+5. **Sitemap Indexing (Item 7)**:
+   - Configured sitemap files into separate domains: `sitemap-articles.xml` (core views and publications), `sitemap-categories.xml`, and `sitemap-authors.xml`.
+   - Programmed `build.js` to generate a parent **Sitemap Index** at `sitemap.xml` referencing the sub-sitemaps.
+   - Updated `robots.txt` directives to declare only the parent `sitemap.xml` index.
+   - Registered `sitemap-articles.xml` routes in `vercel.json` rewrites.
