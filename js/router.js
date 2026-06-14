@@ -250,6 +250,23 @@
 
   // Route Dispatcher
   async function handleRoute() {
+    // Phase 6A Cleanup on Navigation
+    if (window.adminRealtimeChannel && !window.location.pathname.startsWith('/admin')) {
+      const db = window.AriSphereDB;
+      if (db && db.supabase) {
+        try {
+          db.supabase.removeChannel(window.adminRealtimeChannel);
+        } catch (err) {
+          console.warn("Failed to remove realtime channel on navigation:", err);
+        }
+      }
+      window.adminRealtimeChannel = null;
+    }
+    if (window.adminRefreshTimer) {
+      clearTimeout(window.adminRefreshTimer);
+      window.adminRefreshTimer = null;
+    }
+
     if (typeof document === 'undefined' || !document || !document.head) return;
     
     let path = '/';
@@ -2158,8 +2175,20 @@
         </div>
       `;
 
-      // Wire logout
+      // Wire logout (Phase 6A Cleanup on Sign Out)
       document.getElementById('admin-logout-btn').addEventListener('click', async () => {
+        if (window.adminRealtimeChannel && db.supabase) {
+          try {
+            await db.supabase.removeChannel(window.adminRealtimeChannel);
+          } catch (e) {
+            console.warn("Failed to remove realtime channel on logout:", e);
+          }
+          window.adminRealtimeChannel = null;
+        }
+        if (window.adminRefreshTimer) {
+          clearTimeout(window.adminRefreshTimer);
+          window.adminRefreshTimer = null;
+        }
         await db.supabase.auth.signOut();
         const event = new CustomEvent('show-toast', { detail: 'Logged out successfully.' });
         window.dispatchEvent(event);
@@ -2188,6 +2217,7 @@
         
         // Fetch articles filtered by author if sub-editor
         const articles = await db.getAllArticlesAdmin(filterUsername);
+        window.adminArticles = articles; // Store globally for realtime updates
 
         // Compute Editorial KPIs (Task 11)
         const publishedCount = articles.filter(a => a.status === 'published').length;
@@ -2200,6 +2230,16 @@
         const mostViewedArticle = sortedByViews[0] ? sortedByViews[0].title : 'None';
         const mostViewedCount = sortedByViews[0] ? sortedByViews[0].views : 0;
 
+        const oneWeekAgo = new Date();
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+        const articlesThisWeek = articles.filter(a => {
+          if (a.status !== 'published') return false;
+          const pubDateObj = a.publishedAt ? new Date(a.publishedAt) : (a.publishDate ? new Date(a.publishDate) : null);
+          return pubDateObj && pubDateObj >= oneWeekAgo;
+        }).length;
+
+        const reflectionsCount = articles.filter(a => a.category === 'reflections' && a.status === 'published').length;
+
         // KPI rendering based on role
         let kpiHTML = '';
         if (!isSubEditor) {
@@ -2209,53 +2249,67 @@
               <div class="kpi-card">
                 <div>
                   <div class="kpi-label">Published Articles</div>
-                  <div class="kpi-value">${publishedCount}</div>
+                  <div class="kpi-value" id="kpi-published-val">${publishedCount}</div>
                 </div>
                 <div class="kpi-desc">Live on site</div>
               </div>
               <div class="kpi-card">
                 <div>
                   <div class="kpi-label">Draft Articles</div>
-                  <div class="kpi-value">${draftCount}</div>
+                  <div class="kpi-value" id="kpi-draft-val">${draftCount}</div>
                 </div>
                 <div class="kpi-desc">In progress queue</div>
               </div>
               <div class="kpi-card">
                 <div>
                   <div class="kpi-label">Pending Approval</div>
-                  <div class="kpi-value" style="color:var(--color-accent);">${pendingCount}</div>
+                  <div class="kpi-value" id="kpi-pending-val" style="color:var(--color-accent);">${pendingCount}</div>
                 </div>
                 <div class="kpi-desc">Requires admin review</div>
               </div>
               <div class="kpi-card">
                 <div>
                   <div class="kpi-label">Active Subscribers</div>
-                  <div class="kpi-value">${subscribersCount}</div>
+                  <div class="kpi-value" id="kpi-sub-val">${subscribersCount}</div>
                 </div>
                 <div class="kpi-desc">Newsletter audience</div>
               </div>
               <div class="kpi-card">
                 <div>
                   <div class="kpi-label">Total Content Views</div>
-                  <div class="kpi-value">${totalViews.toLocaleString()}</div>
+                  <div class="kpi-value" id="kpi-views-val">${totalViews.toLocaleString()}</div>
                 </div>
                 <div class="kpi-desc">Cumulative views</div>
               </div>
               <div class="kpi-card">
                 <div>
                   <div class="kpi-label">Avg Views / Article</div>
-                  <div class="kpi-value">${avgViews}</div>
+                  <div class="kpi-value" id="kpi-avg-val">${avgViews}</div>
                 </div>
                 <div class="kpi-desc">Average reading spread</div>
+              </div>
+              <div class="kpi-card">
+                <div>
+                  <div class="kpi-label">Articles This Week</div>
+                  <div class="kpi-value" id="kpi-week-val">${articlesThisWeek}</div>
+                </div>
+                <div class="kpi-desc">Published last 7 days</div>
+              </div>
+              <div class="kpi-card">
+                <div>
+                  <div class="kpi-label">Reflections Count</div>
+                  <div class="kpi-value" id="kpi-reflections-val">${reflectionsCount}</div>
+                </div>
+                <div class="kpi-desc">Personal narratives</div>
               </div>
               <div class="kpi-card" style="grid-column: span 2;">
                 <div>
                   <div class="kpi-label">Top Performer</div>
-                  <div class="kpi-value" style="font-size: 1.15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px;" title="${mostViewedArticle}">
+                  <div class="kpi-value" id="kpi-performer-title" style="font-size: 1.15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px;" title="${mostViewedArticle}">
                     ${mostViewedArticle}
                   </div>
                 </div>
-                <div class="kpi-desc">👁 ${mostViewedCount.toLocaleString()} views</div>
+                <div class="kpi-desc" id="kpi-performer-views">👁 ${mostViewedCount.toLocaleString()} views</div>
               </div>
             </section>
           `;
@@ -2265,46 +2319,60 @@
               <div class="kpi-card">
                 <div>
                   <div class="kpi-label">My Published Articles</div>
-                  <div class="kpi-value">${publishedCount}</div>
+                  <div class="kpi-value" id="kpi-published-val">${publishedCount}</div>
                 </div>
                 <div class="kpi-desc">Live on site</div>
               </div>
               <div class="kpi-card">
                 <div>
                   <div class="kpi-label">My Drafts</div>
-                  <div class="kpi-value">${draftCount}</div>
+                  <div class="kpi-value" id="kpi-draft-val">${draftCount}</div>
                 </div>
                 <div class="kpi-desc">Saved locally / not submitted</div>
               </div>
               <div class="kpi-card">
                 <div>
                   <div class="kpi-label">My Pending Submissions</div>
-                  <div class="kpi-value" style="color:var(--color-accent);">${pendingCount}</div>
+                  <div class="kpi-value" id="kpi-pending-val" style="color:var(--color-accent);">${pendingCount}</div>
                 </div>
                 <div class="kpi-desc">Awaiting admin review</div>
               </div>
               <div class="kpi-card">
                 <div>
                   <div class="kpi-label">My Total Views</div>
-                  <div class="kpi-value">${totalViews.toLocaleString()}</div>
+                  <div class="kpi-value" id="kpi-views-val">${totalViews.toLocaleString()}</div>
                 </div>
                 <div class="kpi-desc">For your articles</div>
               </div>
               <div class="kpi-card">
                 <div>
                   <div class="kpi-label">My Avg Views</div>
-                  <div class="kpi-value">${avgViews}</div>
+                  <div class="kpi-value" id="kpi-avg-val">${avgViews}</div>
                 </div>
                 <div class="kpi-desc">Per-article average</div>
               </div>
-              <div class="kpi-card" style="grid-column: span 1;">
+              <div class="kpi-card">
+                <div>
+                  <div class="kpi-label">My Articles This Week</div>
+                  <div class="kpi-value" id="kpi-week-val">${articlesThisWeek}</div>
+                </div>
+                <div class="kpi-desc">Published last 7 days</div>
+              </div>
+              <div class="kpi-card">
+                <div>
+                  <div class="kpi-label">My Reflections Count</div>
+                  <div class="kpi-value" id="kpi-reflections-val">${reflectionsCount}</div>
+                </div>
+                <div class="kpi-desc">Personal narratives</div>
+              </div>
+              <div class="kpi-card" style="grid-column: span 2;">
                 <div>
                   <div class="kpi-label">My Top Article</div>
-                  <div class="kpi-value" style="font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;" title="${mostViewedArticle}">
+                  <div class="kpi-value" id="kpi-performer-title" style="font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;" title="${mostViewedArticle}">
                     ${mostViewedArticle}
                   </div>
                 </div>
-                <div class="kpi-desc">👁 ${mostViewedCount.toLocaleString()} views</div>
+                <div class="kpi-desc" id="kpi-performer-views">👁 ${mostViewedCount.toLocaleString()} views</div>
               </div>
             </section>
           `;
@@ -2453,7 +2521,7 @@
                       <span class="admin-indicator ${art.trending ? 'active' : 'inactive'}">TREN</span>
                       <span class="admin-indicator ${art.editorsPick ? 'active' : 'inactive'}">EDTR</span>
                     </td>
-                    <td>👁 ${art.views}</td>
+                    <td id="views-val-${art.id}">👁 ${art.views}</td>
                     <td>
                       <div style="display:flex; gap:6px;">
                         <button class="admin-btn admin-btn-secondary btn-edit-article" style="padding:4px 8px; font-size:0.75rem;" data-id="${art.id}">Edit</button>
@@ -2538,7 +2606,6 @@
             }
           });
         });
-
         // Wire Decline & Return to Draft buttons
         workspace.querySelectorAll('.btn-decline-return').forEach(btn => {
           btn.addEventListener('click', async () => {
@@ -2565,6 +2632,149 @@
             }
           });
         });
+
+        // Setup real-time updates (Phase 6A)
+        if (db.supabase && !window.adminRealtimeChannel) {
+          // Clean up first to be safe (Task 2)
+          if (window.adminRealtimeChannel) {
+            try {
+              db.supabase.removeChannel(window.adminRealtimeChannel);
+            } catch (e) {
+              console.warn("Error removing channel before creation:", e);
+            }
+            window.adminRealtimeChannel = null;
+          }
+
+          // Create channel (Task 2)
+          const channel = db.supabase.channel('admin-dashboard');
+
+          // Helper to trigger debounced full refresh (Task 3)
+          function triggerDebouncedRefresh() {
+            clearTimeout(window.adminRefreshTimer);
+            window.adminRefreshTimer = setTimeout(() => {
+              const isEditing = document.querySelector('.article-form') || document.querySelector('#admin-article-form');
+              if (!isEditing && window.location.pathname === '/admin') {
+                showArticlesList();
+              }
+            }, 750);
+          }
+
+          // Articles listener (Task 2 & 8)
+          channel.on(
+            'postgres_changes',
+            { event: '*', schema: 'public', table: 'articles' },
+            async (payload) => {
+              // Task 9: Sub-editor author filtering
+              if (isSubEditor) {
+                const newAuthor = payload.new ? payload.new.author : null;
+                const oldAuthor = payload.old ? payload.old.author : null;
+                if (newAuthor !== filterUsername && oldAuthor !== filterUsername) {
+                  return; // Ignore updates for other editors
+                }
+              }
+
+              // Task 4: Partial KPI Updates for UPDATE events on views
+              if (payload.eventType === 'UPDATE') {
+                const oldViews = payload.old ? payload.old.views : undefined;
+                const newViews = payload.new ? payload.new.views : undefined;
+                
+                const isViewsOnlyUpdate = payload.old && payload.new && 
+                  payload.old.status === payload.new.status &&
+                  payload.old.category === payload.new.category &&
+                  payload.old.author === payload.new.author &&
+                  payload.old.title === payload.new.title;
+                  
+                if (isViewsOnlyUpdate && newViews !== undefined) {
+                  if (window.adminArticles) {
+                    const localArt = window.adminArticles.find(a => String(a.id) === String(payload.new.id));
+                    if (localArt) {
+                      localArt.views = newViews;
+                      
+                      // Recalculate KPIs from the updated local array
+                      const freshPublishedCount = window.adminArticles.filter(a => a.status === 'published').length;
+                      const freshDraftCount = window.adminArticles.filter(a => a.status === 'draft').length;
+                      const freshPendingCount = window.adminArticles.filter(a => a.status === 'pending').length;
+                      const freshTotalViews = window.adminArticles.reduce((acc, a) => acc + (a.views || 0), 0);
+                      const freshAvgViews = window.adminArticles.length > 0 ? Math.round(freshTotalViews / window.adminArticles.length) : 0;
+                      
+                      const freshSorted = [...window.adminArticles].sort((a, b) => (b.views || 0) - (a.views || 0));
+                      const freshTopTitle = freshSorted[0] ? freshSorted[0].title : 'None';
+                      const freshTopViews = freshSorted[0] ? freshSorted[0].views : 0;
+
+                      const freshOneWeekAgo = new Date();
+                      freshOneWeekAgo.setDate(freshOneWeekAgo.getDate() - 7);
+                      const freshArticlesThisWeek = window.adminArticles.filter(a => {
+                        if (a.status !== 'published') return false;
+                        const pubDateObj = a.publishedAt ? new Date(a.publishedAt) : (a.publishDate ? new Date(a.publishDate) : null);
+                        return pubDateObj && pubDateObj >= freshOneWeekAgo;
+                      }).length;
+
+                      const freshReflectionsCount = window.adminArticles.filter(a => a.category === 'reflections' && a.status === 'published').length;
+
+                      // Update views in catalog table row cell directly
+                      const viewsCell = document.getElementById(`views-val-${payload.new.id}`);
+                      if (viewsCell) {
+                        viewsCell.innerHTML = `👁 ${newViews.toLocaleString()}`;
+                      }
+
+                      // Update KPI DOM elements directly
+                      const elPublished = document.getElementById('kpi-published-val');
+                      const elDraft = document.getElementById('kpi-draft-val');
+                      const elPending = document.getElementById('kpi-pending-val');
+                      const elViews = document.getElementById('kpi-views-val');
+                      const elAvg = document.getElementById('kpi-avg-val');
+                      const elWeek = document.getElementById('kpi-week-val');
+                      const elReflections = document.getElementById('kpi-reflections-val');
+                      const elTopTitle = document.getElementById('kpi-performer-title');
+                      const elTopViews = document.getElementById('kpi-performer-views');
+
+                      if (elPublished) elPublished.textContent = freshPublishedCount;
+                      if (elDraft) elDraft.textContent = freshDraftCount;
+                      if (elPending) elPending.textContent = freshPendingCount;
+                      if (elViews) elViews.textContent = freshTotalViews.toLocaleString();
+                      if (elAvg) elAvg.textContent = freshAvgViews;
+                      if (elWeek) elWeek.textContent = freshArticlesThisWeek;
+                      if (elReflections) elReflections.textContent = freshReflectionsCount;
+                      if (elTopTitle) {
+                        elTopTitle.textContent = freshTopTitle;
+                        elTopTitle.title = freshTopTitle;
+                      }
+                      if (elTopViews) elTopViews.textContent = `👁 ${freshTopViews.toLocaleString()} views`;
+                      
+                      return; // Success
+                    }
+                  }
+                }
+              }
+
+              // Fallback for major changes: debounced full refresh
+              triggerDebouncedRefresh();
+            }
+          );
+
+          // Subscribers listener (Admin only) (Task 2 & 8)
+          if (!isSubEditor) {
+            channel.on(
+              'postgres_changes',
+              { event: '*', schema: 'public', table: 'subscribers' },
+              async (payload) => {
+                // Fetch fresh subscribers count
+                const newCount = await db.getSubscribersCount();
+                
+                // Task 4: Partial KPI Update
+                const elSub = document.getElementById('kpi-sub-val');
+                if (elSub) {
+                  elSub.textContent = newCount;
+                } else {
+                  triggerDebouncedRefresh();
+                }
+              }
+            );
+          }
+
+          window.adminRealtimeChannel = channel;
+          channel.subscribe();
+        }
 
       } catch (err) {
         workspace.innerHTML = `<p style="color:#ef4444; padding:var(--space-md);">Failed to load articles catalog: ${err.message}</p>`;
@@ -2594,7 +2804,7 @@
             <button class="admin-btn admin-btn-secondary" id="btn-form-back" style="padding:6px 12px; font-size:0.75rem;">← Back to Catalog</button>
           </header>
 
-          <form id="admin-article-form">
+          <form id="admin-article-form" class="article-form">
             <div class="admin-form-grid">
               <div class="admin-form-group admin-form-full">
                 <label class="admin-label" for="art-title">Title</label>
