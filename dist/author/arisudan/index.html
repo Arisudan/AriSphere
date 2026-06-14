@@ -90,6 +90,7 @@
           <li><a href="/category/social-media" class="nav-link">Social Media</a></li>
           <li><a href="/category/insights" class="nav-link">Insights</a></li>
           <li><a href="/category/reflections" class="nav-link">Reflections</a></li>
+          <li><a href="/about" class="nav-link">About</a></li>
         </ul>
       </nav>
 
@@ -143,6 +144,13 @@
             <div class="author-profile-title">Founder, Publisher &amp; Editor-in-Chief</div>
             <p class="author-profile-bio">Arisudan is the founder and editor-in-chief of AriSphere. An experienced journalist, digital media architect, and former systems developer, Ari has spent over 15 years tracking cognitive AI evolution, the geopolitics of hardware chips, and digital attention philosophy. He holds a degree in Computer Science and Media Studies and directs the editorial vision at AriSphere.</p>
             
+            <!-- Experience section (Task 2 & 3) -->
+            
+              <p class="author-profile-experience">
+                <strong>Professional Background:</strong> Founder of AriSphere. Over 15 years tracking cognitive AI, hardware architectures, and digital attention metrics. Previously developed embedded control systems and managed media platforms.
+              </p>
+            
+            
             <!-- Skills & Expertise Tags -->
             <div class="author-expertise-section">
               
@@ -163,10 +171,13 @@
               
             </div>
 
+            <!-- Dynamic publication metrics (Task 3) -->
             <div class="author-profile-meta">
               <span>Editorial Board Member</span>
               <span class="card-meta-dot"></span>
-              <span>5 publications on AriSphere</span>
+              <span><strong>5</strong> publications</span>
+              <span class="card-meta-dot"></span>
+              <span><strong>👁 26915</strong> total views</span>
             </div>
 
             <!-- Social and Contact Details -->
@@ -195,13 +206,39 @@
           </div>
         </header>
 
-        <!-- Two Parallel Publication Blocks -->
+        <!-- Most Popular Article Highlighted Featured Card (Task 3) -->
+        
+          <section class="author-featured-work-section">
+            <h2 style="font-family: var(--font-serif); font-size: 1.4rem; margin-bottom: var(--space-md); color: var(--color-text);">Highlighted Publication</h2>
+            <article class="author-featured-work-card">
+              <div class="author-featured-work-img-wrapper">
+                <img src="/assets/images/ai-cover.png" alt="The Silicon Mind: Navigating the Intersection of Cognitive AI and Creative Writing" loading="lazy">
+                <span class="badge ai">AI</span>
+              </div>
+              <div class="card-body" style="padding: var(--space-lg);">
+                <h3 style="font-family: var(--font-serif); font-size: 1.6rem; line-height: 1.25; margin-bottom: var(--space-xs);">
+                  <a href="/article/1" style="color: var(--color-text); text-decoration: none; border-bottom: 2px solid transparent; transition: border-color 0.2s;" onmouseover="this.style.borderBottomColor='var(--color-text)'" onmouseout="this.style.borderBottomColor='transparent'">The Silicon Mind: Navigating the Intersection of Cognitive AI and Creative Writing</a>
+                </h3>
+                <p style="color: var(--color-text-muted); font-size: 0.95rem; margin-bottom: var(--space-md); line-height: 1.5;">As artificial intelligence systems enter creative sectors, authors and technologists debate where engineering stops and creative soul begins.</p>
+                <div class="card-meta" style="font-size: 0.8rem; color: var(--color-text-muted); display: flex; align-items: center; gap: var(--space-xs);">
+                  <span>Published: June 8, 2026</span>
+                  <span class="card-meta-dot"></span>
+                  <span>6 min read</span>
+                  <span class="card-meta-dot"></span>
+                  <span>👁 14520 views</span>
+                </div>
+              </div>
+            </article>
+          </section>
+        
+
+        <!-- Two Parallel Publication Blocks (Responsive Layouts) (Task 3) -->
         <section class="author-publications">
           <div class="grid-two-col grid-two-col-equal">
             
-            <!-- Left Column: Recent Articles -->
+            <!-- Left Column: Recent Publications -->
             <div>
-              <h2>Recent Articles</h2>
+              <h2>Recent Publications</h2>
               <div class="author-cards-column">
                 
                   <article class="card">
@@ -278,9 +315,9 @@
               </div>
             </div>
 
-            <!-- Right Column: Most Popular Articles -->
+            <!-- Right Column: Popular Publications -->
             <div>
-              <h2>Most Popular</h2>
+              <h2>Popular Publications</h2>
               <div class="author-cards-column">
                 
                   <article class="card">
@@ -407,6 +444,7 @@
       <div>
         <h3 class="footer-title">Publication</h3>
         <ul class="footer-links">
+          <li><a href="/about">About Us</a></li>
           <li><a href="/author/arisudan">Editorial Board</a></li>
           <li><a href="/contact">Pitch a Story</a></li>
           <li><a href="/contact">Connect Support</a></li>
@@ -428,6 +466,7 @@
     <div class="container footer-bottom">
       <p>© 2026 AriSphere Digital Media. All rights reserved. Where Trends Meet Perspective.</p>
       <div class="footer-bottom-links">
+        <a href="/about">About Us</a>
         <a href="/privacy">Privacy Policy</a>
         <a href="/contact">Contact Us</a>
       </div>

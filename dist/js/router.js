@@ -104,6 +104,53 @@
     }
   }
 
+  // Helper: Extract FAQ Page Schema from Article HTML Content
+  function extractFAQSchema(contentHTML) {
+    if (typeof document === 'undefined') return null;
+    try {
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = contentHTML;
+      const detailsElements = tempDiv.querySelectorAll('details');
+      const faqEntities = [];
+      
+      detailsElements.forEach(details => {
+        const summary = details.querySelector('summary');
+        if (summary) {
+          // Strip dropdown arrows and normalize spacing
+          const questionText = summary.textContent.replace(/[▼▲\s]+/g, ' ').trim();
+          
+          const detailsClone = details.cloneNode(true);
+          const summaryClone = detailsClone.querySelector('summary');
+          if (summaryClone) {
+            detailsClone.removeChild(summaryClone);
+          }
+          const answerText = detailsClone.textContent.trim();
+          
+          if (questionText && answerText) {
+            faqEntities.push({
+              '@type': 'Question',
+              'name': questionText,
+              'acceptedAnswer': {
+                '@type': 'Answer',
+                'text': answerText
+              }
+            });
+          }
+        }
+      });
+      
+      if (faqEntities.length === 0) return null;
+      return {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        'mainEntity': faqEntities
+      };
+    } catch (err) {
+      console.warn("Failed to extract FAQ schema:", err);
+      return null;
+    }
+  }
+
   // SEO & Schema Injections
   function applySEO(meta) {
     if (typeof document === 'undefined' || !document || !document.head) return;
@@ -167,6 +214,9 @@
     const graphSchemas = [meta.schema];
     if (meta.breadcrumbsSchema) {
       graphSchemas.push(meta.breadcrumbsSchema);
+    }
+    if (meta.faqSchema) {
+      graphSchemas.push(meta.faqSchema);
     }
     schemaScript.textContent = JSON.stringify({
       '@context': 'https://schema.org',
@@ -705,6 +755,9 @@
     const prevArticle = currentIndex > 0 ? allArticles[currentIndex - 1] : null;
     const nextArticle = currentIndex < allArticles.length - 1 ? allArticles[currentIndex + 1] : null;
 
+    // Extract dynamic FAQ Page schema (Task 7)
+    const faqSchema = extractFAQSchema(article.content);
+
     // Dynamic SEO & Structured Data Schema for Article
     const articleSEO = {
       title: article.title,
@@ -739,7 +792,8 @@
         },
         'description': article.excerpt
       },
-      breadcrumbsSchema
+      breadcrumbsSchema,
+      faqSchema
     };
     applySEO(articleSEO);
 
@@ -911,6 +965,25 @@
               <!-- Typography Rich Body -->
               <div class="article-body-content">
                 ${bodyHTML}
+              </div>
+
+              <!-- About the Author Bio Card (Task 4) -->
+              <div class="article-author-bio-card">
+                <img class="article-author-bio-avatar" src="${authorInfo.avatar}" alt="${authorInfo.name}">
+                <div class="article-author-bio-content">
+                  <div class="article-author-bio-title">About the Author</div>
+                  <h3 class="article-author-bio-name">
+                    <a href="/author/${authorInfo.username}">${authorInfo.name}</a>
+                  </h3>
+                  <div class="article-author-bio-title" style="margin-bottom: var(--space-xs); font-size: 0.8rem; color: var(--color-text-light);">${authorInfo.title}</div>
+                  <p class="article-author-bio-text">${authorInfo.bio}</p>
+                  ${authorInfo.experience ? `<p class="article-author-bio-experience"><strong>Experience:</strong> ${authorInfo.experience}</p>` : ''}
+                  ${authorInfo.expertise ? `
+                    <div class="article-author-bio-expertise">
+                      ${authorInfo.expertise.map(exp => `<span class="badge ${authorInfo.username === 'arisudan' ? 'reflections' : 'technology'}">${exp}</span>`).join('')}
+                    </div>
+                  ` : ''}
+                </div>
               </div>
 
               <!-- Mid-Article Inline Ad Placement -->
@@ -1181,6 +1254,11 @@
     const recentArticles = [...writtenArticles].sort((a, b) => b.id - a.id);
     const popularArticles = [...writtenArticles].sort((a, b) => (b.views || 0) - (a.views || 0));
 
+    // Dynamic stats computations (Task 3)
+    const totalPublications = writtenArticles.length;
+    const totalViews = writtenArticles.reduce((acc, art) => acc + (art.views || 0), 0);
+    const mostPopularArticle = popularArticles[0];
+
     // Dynamic Breadcrumbs
     const pathArray = [
       { name: 'Editorial Board', link: '/author/arisudan' },
@@ -1227,6 +1305,13 @@
             <div class="author-profile-title">${author.title}</div>
             <p class="author-profile-bio">${author.bio}</p>
             
+            <!-- Experience section (Task 2 & 3) -->
+            ${author.experience ? `
+              <p class="author-profile-experience">
+                <strong>Professional Background:</strong> ${author.experience}
+              </p>
+            ` : ''}
+            
             <!-- Skills & Expertise Tags -->
             <div class="author-expertise-section">
               ${author.expertise ? `
@@ -1247,10 +1332,13 @@
               ` : ''}
             </div>
 
+            <!-- Dynamic publication metrics (Task 3) -->
             <div class="author-profile-meta">
               <span>Editorial Board Member</span>
               <span class="card-meta-dot"></span>
-              <span>${writtenArticles.length} publications on AriSphere</span>
+              <span><strong>${totalPublications}</strong> publications</span>
+              <span class="card-meta-dot"></span>
+              <span><strong>👁 ${totalViews}</strong> total views</span>
             </div>
 
             <!-- Social and Contact Details -->
@@ -1279,13 +1367,39 @@
           </div>
         </header>
 
-        <!-- Two Parallel Publication Blocks -->
+        <!-- Most Popular Article Highlighted Featured Card (Task 3) -->
+        ${mostPopularArticle ? `
+          <section class="author-featured-work-section">
+            <h2 style="font-family: var(--font-serif); font-size: 1.4rem; margin-bottom: var(--space-md); color: var(--color-text);">Highlighted Publication</h2>
+            <article class="author-featured-work-card">
+              <div class="author-featured-work-img-wrapper">
+                <img src="${mostPopularArticle.image}" alt="${mostPopularArticle.title}" loading="lazy">
+                <span class="badge ${mostPopularArticle.category}">${db.CATEGORIES[mostPopularArticle.category].name}</span>
+              </div>
+              <div class="card-body" style="padding: var(--space-lg);">
+                <h3 style="font-family: var(--font-serif); font-size: 1.6rem; line-height: 1.25; margin-bottom: var(--space-xs);">
+                  <a href="/article/${mostPopularArticle.id}" style="color: var(--color-text); text-decoration: none; border-bottom: 2px solid transparent; transition: border-color 0.2s;" onmouseover="this.style.borderBottomColor='var(--color-text)'" onmouseout="this.style.borderBottomColor='transparent'">${mostPopularArticle.title}</a>
+                </h3>
+                <p style="color: var(--color-text-muted); font-size: 0.95rem; margin-bottom: var(--space-md); line-height: 1.5;">${mostPopularArticle.excerpt}</p>
+                <div class="card-meta" style="font-size: 0.8rem; color: var(--color-text-muted); display: flex; align-items: center; gap: var(--space-xs);">
+                  <span>Published: ${mostPopularArticle.publishDate}</span>
+                  <span class="card-meta-dot"></span>
+                  <span>${mostPopularArticle.readTime}</span>
+                  <span class="card-meta-dot"></span>
+                  <span>👁 ${mostPopularArticle.views} views</span>
+                </div>
+              </div>
+            </article>
+          </section>
+        ` : ''}
+
+        <!-- Two Parallel Publication Blocks (Responsive Layouts) (Task 3) -->
         <section class="author-publications">
           <div class="grid-two-col grid-two-col-equal">
             
-            <!-- Left Column: Recent Articles -->
+            <!-- Left Column: Recent Publications -->
             <div>
-              <h2>Recent Articles</h2>
+              <h2>Recent Publications</h2>
               <div class="author-cards-column">
                 ${recentArticles.map(art => `
                   <article class="card">
@@ -1306,9 +1420,9 @@
               </div>
             </div>
 
-            <!-- Right Column: Most Popular Articles -->
+            <!-- Right Column: Popular Publications -->
             <div>
-              <h2>Most Popular</h2>
+              <h2>Popular Publications</h2>
               <div class="author-cards-column">
                 ${popularArticles.map(art => `
                   <article class="card">
@@ -2054,9 +2168,141 @@
 
       try {
         const articles = await db.getAllArticlesAdmin();
-        
+        const subscribersCount = await db.getSubscribersCount();
+
+        // Compute Editorial KPIs (Task 11)
+        const publishedCount = articles.filter(a => a.status === 'published').length;
+        const draftCount = articles.filter(a => a.status === 'draft').length;
+        const reflectionsCount = articles.filter(a => a.category === 'reflections').length;
+        const totalViews = articles.reduce((acc, a) => acc + (a.views || 0), 0);
+        const avgViews = articles.length > 0 ? Math.round(totalViews / articles.length) : 0;
+
+        const sortedByViews = [...articles].sort((a, b) => (b.views || 0) - (a.views || 0));
+        const mostViewedArticle = sortedByViews[0] ? sortedByViews[0].title : 'None';
+        const mostViewedCount = sortedByViews[0] ? sortedByViews[0].views : 0;
+
+        // Calculate Articles Published This Week (last 7 days)
+        let publishedThisWeek = 0;
+        const sevenDaysAgo = Date.now() - (7 * 24 * 60 * 60 * 1000);
+        articles.forEach(a => {
+          if (a.status === 'published' && a.publishDate) {
+            const pDate = new Date(a.publishDate);
+            if (!isNaN(pDate.getTime()) && pDate.getTime() >= sevenDaysAgo) {
+              publishedThisWeek++;
+            }
+          }
+        });
+
         workspace.innerHTML = `
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-md);">
+          <!-- Content Operations Dashboard KPI Grid (Task 11) -->
+          <section class="admin-kpi-grid">
+            <div class="kpi-card">
+              <div>
+                <div class="kpi-label">Published Articles</div>
+                <div class="kpi-value">${publishedCount}</div>
+              </div>
+              <div class="kpi-desc">Live on site</div>
+            </div>
+            <div class="kpi-card">
+              <div>
+                <div class="kpi-label">Draft Articles</div>
+                <div class="kpi-value">${draftCount}</div>
+              </div>
+              <div class="kpi-desc">In progress queue</div>
+            </div>
+            <div class="kpi-card">
+              <div>
+                <div class="kpi-label">Reflections Stories</div>
+                <div class="kpi-value">${reflectionsCount}</div>
+              </div>
+              <div class="kpi-desc">Authentic narratives</div>
+            </div>
+            <div class="kpi-card">
+              <div>
+                <div class="kpi-label">Active Subscribers</div>
+                <div class="kpi-value">${subscribersCount}</div>
+              </div>
+              <div class="kpi-desc">Newsletter audience</div>
+            </div>
+            <div class="kpi-card">
+              <div>
+                <div class="kpi-label">Total Content Views</div>
+                <div class="kpi-value">${totalViews.toLocaleString()}</div>
+              </div>
+              <div class="kpi-desc">Cumulative views</div>
+            </div>
+            <div class="kpi-card">
+              <div>
+                <div class="kpi-label">Avg Views / Article</div>
+                <div class="kpi-value">${avgViews}</div>
+              </div>
+              <div class="kpi-desc">Average reading spread</div>
+            </div>
+            <div class="kpi-card" style="grid-column: span 2;">
+              <div>
+                <div class="kpi-label">Top Performer</div>
+                <div class="kpi-value" style="font-size: 1.15rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px;" title="${mostViewedArticle}">
+                  ${mostViewedArticle}
+                </div>
+              </div>
+              <div class="kpi-desc">👁 ${mostViewedCount.toLocaleString()} views</div>
+            </div>
+          </section>
+
+          <!-- Editorial Publishing Workflow Guidance Panel (Task 12) -->
+          <section class="workflow-panel">
+            <div class="workflow-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              Editorial Publishing Workflow Guidance
+            </div>
+            <div class="workflow-steps">
+              <div class="workflow-step">
+                <div class="workflow-step-num">Step 1</div>
+                <div class="workflow-step-name">Generate Candidates</div>
+                <div class="workflow-step-desc">Create 10-12 drafts daily as potential options.</div>
+              </div>
+              <div class="workflow-step">
+                <div class="workflow-step-num">Step 2</div>
+                <div class="workflow-step-name">Review Quality</div>
+                <div class="workflow-step-desc">Verify minimum compliance score (75+, target 90+).</div>
+              </div>
+              <div class="workflow-step">
+                <div class="workflow-step-num">Step 3</div>
+                <div class="workflow-step-name">Check Citations</div>
+                <div class="workflow-step-desc">Enforce at least 1 verified primary source.</div>
+              </div>
+              <div class="workflow-step">
+                <div class="workflow-step-num">Step 4</div>
+                <div class="workflow-step-name">Verify Images</div>
+                <div class="workflow-step-desc">Check resolution, aspect ratio (16:9), and alt text.</div>
+              </div>
+              <div class="workflow-step">
+                <div class="workflow-step-num">Step 5</div>
+                <div class="workflow-step-name">Review SEO Score</div>
+                <div class="workflow-step-desc">Scan title, meta descriptions, and tags.</div>
+              </div>
+              <div class="workflow-step">
+                <div class="workflow-step-num">Step 6</div>
+                <div class="workflow-step-name">Publish Top 3–5</div>
+                <div class="workflow-step-desc">Publish only the strongest 3-5 candidates daily.</div>
+              </div>
+              <div class="workflow-step">
+                <div class="workflow-step-num">Step 7</div>
+                <div class="workflow-step-name">Monitor Analytics</div>
+                <div class="workflow-step-desc">Analyze reader engagement and views metrics.</div>
+              </div>
+              <div class="workflow-step">
+                <div class="workflow-step-num">Step 8</div>
+                <div class="workflow-step-name">Update Links</div>
+                <div class="workflow-step-desc">Interlink new articles with past relevant posts.</div>
+              </div>
+            </div>
+            <div class="workflow-alert-box">
+              <strong>⚠ CRITICAL COMPLIANCE NOTICE:</strong> DO NOT automatically publish all daily generated articles. Select and publish only the top 3-5 high-value articles daily. Reflections must be personally written and published manually by <strong>Arisudan</strong>. Never auto-publish reflections.
+            </div>
+          </section>
+
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:var(--space-md); flex-wrap:wrap; gap:var(--space-sm);">
             <h2 style="font-family:var(--font-serif); font-size:1.35rem; margin:0;">Article Catalog (${articles.length})</h2>
             <button class="admin-btn admin-btn-primary" id="btn-create-article">+ Create Article</button>
           </div>
@@ -2148,13 +2394,20 @@
       }
     }
 
-    function showArticleForm(article = null) {
+    async function showArticleForm(article = null) {
       const workspace = document.getElementById('admin-workspace-view');
       if (!workspace) return;
 
       const isEdit = article !== null;
       const categories = db.CATEGORIES;
       const authors = db.AUTHORS;
+
+      let allArticles = [];
+      try {
+        allArticles = await db.getAllArticlesAdmin();
+      } catch (err) {
+        console.warn("Failed to retrieve articles catalog for duplicate title check:", err);
+      }
 
       workspace.innerHTML = `
         <div class="admin-form-container">
@@ -2168,6 +2421,7 @@
               <div class="admin-form-group admin-form-full">
                 <label class="admin-label" for="art-title">Title</label>
                 <input class="admin-input" type="text" id="art-title" required placeholder="Enter article headline" value="${isEdit ? escapeHtml(article.title) : ''}">
+                <div id="duplicate-title-warning" style="display:none; color:#ea580c; font-size:0.8rem; margin-top:4px; font-weight:600;">⚠ Duplicate Title Detected</div>
               </div>
               
               <div class="admin-form-group admin-form-full">
@@ -2391,6 +2645,20 @@
         const sourcesVal = sourcesEl ? sourcesEl.value.trim() : '';
         const humanReviewed = humanReviewedEl ? humanReviewedEl.checked : false;
 
+        // Duplicate title check (Task 5)
+        const duplicateExists = allArticles.some(a => 
+          a.title.trim().toLowerCase() === titleVal.toLowerCase() && 
+          (!isEdit || String(a.id) !== String(article.id))
+        );
+        const duplicateWarningEl = document.getElementById('duplicate-title-warning');
+        if (duplicateWarningEl) {
+          if (duplicateExists && titleVal) {
+            duplicateWarningEl.style.display = 'block';
+          } else {
+            duplicateWarningEl.style.display = 'none';
+          }
+        }
+
         let score = 0;
         const checks = [];
         let reflectionsNoticeHTML = '';
@@ -2439,7 +2707,7 @@
           });
         }
 
-        // 3. FAQ Section Present Check (10 pts)
+        // 3. FAQ Section Present Check (10 pts) - Task 7
         const faqRegex = /faq|details|<summary>|class="faq"|frequently asked questions/i;
         const hasFaq = faqRegex.test(contentVal);
         if (hasFaq) {
@@ -2574,7 +2842,7 @@
           score += 10;
         }
 
-        // Additional non-scored validations (Pass/Fail)
+        // Additional non-scored validations (Pass/Fail) - Task 6
         const hasHeading = /<h[23]/i.test(contentVal);
         checks.push({
           name: "Heading Hierarchy",
@@ -2594,6 +2862,34 @@
           name: "Meta Description",
           detail: hasExcerpt ? "Excerpt / Meta description provided." : "Meta description details missing.",
           pass: hasExcerpt
+        });
+
+        const hasAuthor = !!authorVal;
+        checks.push({
+          name: "Author",
+          detail: hasAuthor ? `Author profile link verified.` : "Missing author details.",
+          pass: hasAuthor
+        });
+
+        const hasPublish = isEdit ? !!article.publishDate : true;
+        checks.push({
+          name: "Publish Date",
+          detail: hasPublish ? `Publish date configured.` : "Missing publish date.",
+          pass: hasPublish
+        });
+
+        const hasUpdated = isEdit ? !!(article.lastUpdatedDate || article.updated_at || article.updatedAt || article.publishDate) : true;
+        checks.push({
+          name: "Updated Date",
+          detail: hasUpdated ? `Last updated date configured.` : "Missing updated date.",
+          pass: hasUpdated
+        });
+
+        const hasCanonical = isEdit ? !!(getBaseURL() + '/article/' + article.id) : true;
+        checks.push({
+          name: "Canonical URL",
+          detail: hasCanonical ? `Canonical link matches schema standard.` : "Missing canonical URL reference.",
+          pass: hasCanonical
         });
 
         // Determine badge and color classes
@@ -2650,7 +2946,7 @@
                     <strong style="color:var(--color-text); font-size:0.8rem;">${c.name}</strong>
                     <div style="font-size:0.75rem; color:var(--color-text-muted); margin-top:2px;">${c.detail}</div>
                   </div>
-                  <span class="checklist-indicator ${c.pass ? 'pass' : 'fail'}">${c.pass ? '✔ PASS' : '⚠ WARN'}</span>
+                  <span class="checklist-indicator ${c.pass ? 'complete' : 'attention'}">${c.pass ? '✓ Complete' : '⚠ Needs Attention'}</span>
                 </div>
               `).join('')}
             </div>

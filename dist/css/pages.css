@@ -1825,3 +1825,116 @@ body.resize-active * {
   }
 }
 
+/* --- AriSphere Phase 5 E-E-A-T & Author Updates --- */
+
+.author-profile-experience {
+  margin-top: var(--space-xs);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+.author-featured-work-section {
+  margin-bottom: var(--space-xl);
+}
+.author-featured-work-card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg-offset);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--space-lg);
+}
+.author-featured-work-img-wrapper {
+  width: 100%;
+  height: 260px;
+  overflow: hidden;
+  position: relative;
+}
+.author-featured-work-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.author-featured-work-img-wrapper .badge {
+  position: absolute;
+  top: var(--space-md);
+  left: var(--space-md);
+}
+
+/* About the Author Bio Card */
+.article-author-bio-card {
+  display: flex;
+  gap: var(--space-lg);
+  background-color: var(--color-bg-offset);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+  margin: var(--space-xl) auto;
+  max-width: 750px;
+  align-items: center;
+}
+.article-author-bio-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.article-author-bio-content {
+  flex-grow: 1;
+}
+.article-author-bio-name {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+}
+.article-author-bio-name a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+.article-author-bio-name a:hover {
+  color: var(--color-accent);
+}
+.article-author-bio-title {
+  font-size: 0.85rem;
+  color: var(--color-text-light);
+  margin-bottom: var(--space-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.article-author-bio-text {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-sm) 0;
+}
+.article-author-bio-experience {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-sm);
+  line-height: 1.45;
+}
+.article-author-bio-expertise {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+.article-author-bio-expertise .badge {
+  font-size: 0.7rem;
+  padding: 2px 6px;
+}
+
+@media (max-width: 576px) {
+  .article-author-bio-card {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--space-md);
+    padding: var(--space-md);
+  }
+}
+
+
