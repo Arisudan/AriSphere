@@ -54,6 +54,10 @@
   
   <!-- Supabase Client SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- DOMPurify & Turnstile (Phase 7) -->
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async="" defer=""></script>
+
 
   <!-- Dynamic JSON-LD Script Tag for SEO Structured Data (Updated by router) -->
   <script type="application/ld+json" id="jsonld-schema">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@type":"CollectionPage","@id":"https://arisphere.vercel.app/category/business#collection","url":"https://arisphere.vercel.app/category/business","name":"Business Articles | AriSphere","description":"Markets, economic strategies, and future industries","isPartOf":{"@id":"https://arisphere.vercel.app/#website"},"about":{"@type":"Thing","name":"Business","description":"Markets, economic strategies, and future industries"}},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://arisphere.vercel.app/"},{"@type":"ListItem","position":2,"name":"Business","item":"https://arisphere.vercel.app/category/business"}]}]}</script>
@@ -265,6 +269,7 @@
         <p class="newsletter-desc">Get our weekly perspectives on cognitive tech, world shifts, and digital philosophy delivered direct to your inbox.</p>
         <form class="newsletter-form">
           <input class="form-control" type="email" placeholder="Enter your email address" required="" aria-label="Email address for subscription">
+          <div class="cf-turnstile" data-sitekey="0x4AAAAAAAzhv8pM6O1E9F1V" style="margin-bottom: var(--space-xs); display: flex; justify-content: center;"></div>
           <button type="submit" class="btn btn-primary">Subscribe</button>
         </form>
       </div>

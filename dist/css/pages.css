@@ -271,6 +271,8 @@
   font-size: 1.125rem; /* Larger font size for better reading rhythm */
   line-height: 1.85; /* Purposeful vertical whitespace */
   color: var(--color-text-muted);
+  max-width: 70ch;
+  margin: 0 auto;
 }
 
 .article-body-content p {

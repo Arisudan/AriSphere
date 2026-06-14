@@ -54,6 +54,10 @@
   
   <!-- Supabase Client SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- DOMPurify & Turnstile (Phase 7) -->
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async="" defer=""></script>
+
 
   <!-- Dynamic JSON-LD Script Tag for SEO Structured Data (Updated by router) -->
   <script type="application/ld+json" id="jsonld-schema">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@type":"ProfilePage","@id":"https://arisphere.vercel.app/author/arisudan#profile","url":"https://arisphere.vercel.app/author/arisudan","name":"Arisudan Portfolio | AriSphere","description":"Arisudan is the founder and editor-in-chief of AriSphere. An experienced journalist, digital media architect, and former systems developer, Ari has spent over 15 years tracking cognitive AI evolution, the geopolitics of hardware chips, and digital attention philosophy. He holds a degree in Computer Science and Media Studies and directs the editorial vision at AriSphere.","mainEntity":{"@type":"Person","name":"Arisudan","jobTitle":"Founder, Publisher & Editor-in-Chief","image":"/assets/images/author.png","description":"Arisudan is the founder and editor-in-chief of AriSphere. An experienced journalist, digital media architect, and former systems developer, Ari has spent over 15 years tracking cognitive AI evolution, the geopolitics of hardware chips, and digital attention philosophy. He holds a degree in Computer Science and Media Studies and directs the editorial vision at AriSphere."}},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://arisphere.vercel.app/"},{"@type":"ListItem","position":2,"name":"Editorial Board","item":"https://arisphere.vercel.app/author/arisudan"},{"@type":"ListItem","position":3,"name":"Arisudan","item":"https://arisphere.vercel.app/author/arisudan"}]}]}</script>
@@ -493,6 +497,7 @@
         <p class="newsletter-desc">Get our weekly perspectives on cognitive tech, world shifts, and digital philosophy delivered direct to your inbox.</p>
         <form class="newsletter-form">
           <input class="form-control" type="email" placeholder="Enter your email address" required="" aria-label="Email address for subscription">
+          <div class="cf-turnstile" data-sitekey="0x4AAAAAAAzhv8pM6O1E9F1V" style="margin-bottom: var(--space-xs); display: flex; justify-content: center;"></div>
           <button type="submit" class="btn btn-primary">Subscribe</button>
         </form>
       </div>

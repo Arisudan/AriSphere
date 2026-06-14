@@ -7,6 +7,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
+  // Client-safe DOMPurify XSS Sanitizer wrapper
+  function safeSanitize(html) {
+    if (typeof window !== 'undefined' && window.DOMPurify && typeof window.DOMPurify.sanitize === 'function') {
+      return window.DOMPurify.sanitize(html);
+    }
+    return html;
+  }
+
   // Safe LocalStorage Wrapper to prevent crashes when storage is disabled
   const safeStorage = {
     getItem: (key) => {
@@ -93,7 +101,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     tickerContainer.innerHTML = tickerItems.map(art => `
       <a class="ticker-item" href="/article/${art.id}">
-        ⚡ ${art.title}
+        ⚡ ${safeSanitize(art.title)}
       </a>
     `).join('');
   }
@@ -198,9 +206,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         searchResultsBox.innerHTML = results.map(art => `
           <a class="search-result-item" href="/article/${art.id}">
-            <img class="search-result-img" src="${art.image}" alt="${art.title}" loading="lazy" width="80" height="60">
+            <img class="search-result-img" src="${art.image}" alt="${safeSanitize(art.title)}" loading="lazy" width="80" height="60">
             <div class="search-result-info">
-              <h4 class="search-result-title">${art.title}</h4>
+              <h4 class="search-result-title">${safeSanitize(art.title)}</h4>
               <div class="search-result-meta">
                 <span class="badge ${art.category}">${db.CATEGORIES[art.category].name}</span>
                 <span class="card-meta-dot" style="display:inline-block; margin: 0 var(--space-xs); vertical-align:middle;"></span>
@@ -222,6 +230,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (emailInput && emailInput.value.trim()) {
         const email = emailInput.value.trim();
         
+        // Extract Turnstile CAPTCHA token (Phase 7)
+        const turnstileInput = form.querySelector('[name="cf-turnstile-response"]');
+        const turnstileToken = turnstileInput ? turnstileInput.value : '';
+        
         // Show loading spinner on button
         const submitBtn = form.querySelector('button');
         const originalText = submitBtn.innerHTML;
@@ -234,7 +246,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ email })
+          body: JSON.stringify({ email, turnstileToken })
         })
         .then(response => {
           if (!response.ok) {
@@ -430,6 +442,24 @@ document.addEventListener('DOMContentLoaded', async () => {
       document.body.classList.remove('resize-active');
     }, 100);
   });
+
+  // --- 12. Progressive Web App (PWA) Service Worker Registration (Phase 7F) ---
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('ServiceWorker registered successfully:', reg.scope))
+        .catch(err => console.warn('ServiceWorker registration failed:', err));
+    });
+  }
+
+  // --- 13. Observability & Monitoring Stubs (Phase 7E) ---
+  window.Sentry = window.Sentry || {
+    captureException: (err) => console.error('[Sentry Mock Log]:', err),
+    captureMessage: (msg) => console.log('[Sentry Mock Log]:', msg)
+  };
+  window.posthog = window.posthog || {
+    capture: (event, props) => console.log('[PostHog Mock Event]:', event, props)
+  };
 
 });
 

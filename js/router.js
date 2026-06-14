@@ -2831,7 +2831,6 @@
             }
           });
         }
-        `;
 
         // Wire Create Article button
         document.getElementById('btn-create-article').addEventListener('click', () => {

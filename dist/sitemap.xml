@@ -4,6 +4,9 @@
     <loc>https://arisphere.vercel.app/sitemap-articles.xml</loc>
   </sitemap>
   <sitemap>
+    <loc>https://arisphere.vercel.app/sitemap-news.xml</loc>
+  </sitemap>
+  <sitemap>
     <loc>https://arisphere.vercel.app/sitemap-categories.xml</loc>
   </sitemap>
   <sitemap>

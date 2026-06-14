@@ -54,6 +54,10 @@
   
   <!-- Supabase Client SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- DOMPurify & Turnstile (Phase 7) -->
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async="" defer=""></script>
+
 
   <!-- Dynamic JSON-LD Script Tag for SEO Structured Data (Updated by router) -->
   <script type="application/ld+json" id="jsonld-schema">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@type":"NewsArticle","mainEntityOfPage":{"@type":"WebPage","@id":"https://arisphere.vercel.app/article/6"},"headline":"Building AriSphere From Zero to Production","image":["https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&q=80&w=800"],"datePublished":"2026-06-09","dateModified":"2026-06-09","author":{"@type":"Person","name":"Arisudan","jobTitle":"Founder, Publisher & Editor-in-Chief","url":"https://arisphere.vercel.app/author/arisudan"},"publisher":{"@type":"Organization","name":"AriSphere","logo":{"@type":"ImageObject","url":"https://arisphere.vercel.app/assets/images/business-cover.png"}},"description":"Building a modern web application requires balancing architecture decisions. Here is how I structured AriSphere's static compiler and database fallback layer."},{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://arisphere.vercel.app/"},{"@type":"ListItem","position":2,"name":"Reflections","item":"https://arisphere.vercel.app/category/reflections"},{"@type":"ListItem","position":3,"name":"Building AriSphere From Zero to Production","item":"https://arisphere.vercel.app/article/6"}]}]}</script>
@@ -222,8 +226,8 @@
                 <p>When I first envisioned AriSphere, I wanted a site that had the premium feel of an editorial print magazine but was lightning fast, SEO-optimized, and simple to manage. I didn't want a heavy, slow, cookie-cutter WordPress site. Instead, I decided to build a custom Single Page Application (SPA) with a Node.js Static Site Generator (SSG) pipeline powered by a remote Supabase Postgres database.</p>
             <div class="read-also-box animate-pulse" style="margin: var(--space-md) 0; padding: var(--space-sm) var(--space-md); border-left: 3px solid var(--color-accent); background-color: var(--color-bg-offset); font-family: var(--font-sans); font-size: 0.95rem;">
               <strong style="color: var(--color-accent); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; display: block; margin-bottom: 2px;">Read Also</strong>
-              <a href="/article/8" style="color: var(--color-text); font-weight: 700; text-decoration: none; border-bottom: 1px solid transparent; transition: border-bottom 0.2s;" onmouseover="this.style.borderBottomColor='var(--color-text)'" onmouseout="this.style.borderBottomColor='transparent'">
-                The Reality of Pursuing Embedded Systems in India
+              <a href="/article/7" style="color: var(--color-text); font-weight: 700; text-decoration: none; border-bottom: 1px solid transparent; transition: border-bottom 0.2s;" onmouseover="this.style.borderBottomColor='var(--color-text)'" onmouseout="this.style.borderBottomColor='transparent'">
+                What Jayem Automotive Taught Me About Real Engineering
               </a>
             </div>
           <p></p>
@@ -249,8 +253,8 @@
   <p>It turned out that our database fetches and initial DOMContentLoaded routing triggers were resolving slightly *after* the window had been closed. The script was trying to write to <code>document.title</code> on a document that no longer existed. To fix this, I had to introduce strict defensive checks—safeguarding every single DOM access and selector wrapper with a check to verify if the <code>document</code> and <code>document.head</code> were still active. This taught me to never assume the presence of global browser variables when executing hybrid server-client code.</p>
             <div class="read-also-box animate-pulse" style="margin: var(--space-md) 0; padding: var(--space-sm) var(--space-md); border-left: 3px solid var(--color-accent); background-color: var(--color-bg-offset); font-family: var(--font-sans); font-size: 0.95rem;">
               <strong style="color: var(--color-accent); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; display: block; margin-bottom: 2px;">Read Also</strong>
-              <a href="/article/7" style="color: var(--color-text); font-weight: 700; text-decoration: none; border-bottom: 1px solid transparent; transition: border-bottom 0.2s;" onmouseover="this.style.borderBottomColor='var(--color-text)'" onmouseout="this.style.borderBottomColor='transparent'">
-                What Jayem Automotive Taught Me About Real Engineering
+              <a href="/article/8" style="color: var(--color-text); font-weight: 700; text-decoration: none; border-bottom: 1px solid transparent; transition: border-bottom 0.2s;" onmouseover="this.style.borderBottomColor='var(--color-text)'" onmouseout="this.style.borderBottomColor='transparent'">
+                The Reality of Pursuing Embedded Systems in India
               </a>
             </div>
           <p></p>
@@ -327,24 +331,24 @@
                   
                     <article class="card">
                       <div class="card-img-wrapper">
-                        <img class="card-img" src="https://images.unsplash.com/photo-1517059224940-d4af9eec41b7?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="The Reality of Pursuing Embedded Systems in India" loading="lazy">
-                      </div>
-                      <div class="card-body">
-                        <span class="badge reflections">Reflections</span>
-                        <h4 class="card-title">
-                          <a href="/article/8">The Reality of Pursuing Embedded Systems in India</a>
-                        </h4>
-                      </div>
-                    </article>
-                  
-                    <article class="card">
-                      <div class="card-img-wrapper">
                         <img class="card-img" src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="What Jayem Automotive Taught Me About Real Engineering" loading="lazy">
                       </div>
                       <div class="card-body">
                         <span class="badge reflections">Reflections</span>
                         <h4 class="card-title">
                           <a href="/article/7">What Jayem Automotive Taught Me About Real Engineering</a>
+                        </h4>
+                      </div>
+                    </article>
+                  
+                    <article class="card">
+                      <div class="card-img-wrapper">
+                        <img class="card-img" src="https://images.unsplash.com/photo-1517059224940-d4af9eec41b7?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="The Reality of Pursuing Embedded Systems in India" loading="lazy">
+                      </div>
+                      <div class="card-body">
+                        <span class="badge reflections">Reflections</span>
+                        <h4 class="card-title">
+                          <a href="/article/8">The Reality of Pursuing Embedded Systems in India</a>
                         </h4>
                       </div>
                     </article>
@@ -439,6 +443,7 @@
         <p class="newsletter-desc">Get our weekly perspectives on cognitive tech, world shifts, and digital philosophy delivered direct to your inbox.</p>
         <form class="newsletter-form">
           <input class="form-control" type="email" placeholder="Enter your email address" required="" aria-label="Email address for subscription">
+          <div class="cf-turnstile" data-sitekey="0x4AAAAAAAzhv8pM6O1E9F1V" style="margin-bottom: var(--space-xs); display: flex; justify-content: center;"></div>
           <button type="submit" class="btn btn-primary">Subscribe</button>
         </form>
       </div>

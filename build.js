@@ -409,6 +409,14 @@ Sitemap: ${SITE_URL}/sitemap.xml
   // Copy vercel.json configuration
   fs.copyFileSync(path.join(__dirname, 'vercel.json'), path.join(DIST_DIR, 'vercel.json'));
   
+  // Copy manifest.json and sw.js configuration (PWA support)
+  if (fs.existsSync(path.join(__dirname, 'manifest.json'))) {
+    fs.copyFileSync(path.join(__dirname, 'manifest.json'), path.join(DIST_DIR, 'manifest.json'));
+  }
+  if (fs.existsSync(path.join(__dirname, 'sw.js'))) {
+    fs.copyFileSync(path.join(__dirname, 'sw.js'), path.join(DIST_DIR, 'sw.js'));
+  }
+  
   console.log('--- ARISPHERE STATIC BUILD SUCCESSFUL ---');
 }
 
