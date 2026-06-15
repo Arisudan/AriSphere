@@ -3983,15 +3983,25 @@
     }
   }
 
+  // Expose renderAdmin globally for inline onclick handlers (e.g. Retry Connection button)
+  window.renderAdmin = renderAdmin;
+
   // Hook popstate and pushstate routing event listeners
   window.addEventListener('popstate', handleRoute);
   window.addEventListener('pushstate-route', handleRoute);
-  window.addEventListener('DOMContentLoaded', () => {
+
+  const initRouter = () => {
     // Safety check for DB
     if (!window.AriSphereDB) {
       console.error('AriSphere Database could not be loaded.');
     }
     handleRoute();
-  });
+  };
+
+  if (document.readyState === 'interactive' || document.readyState === 'complete') {
+    initRouter();
+  } else {
+    window.addEventListener('DOMContentLoaded', initRouter);
+  }
 
 })();

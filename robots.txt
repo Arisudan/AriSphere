@@ -4,4 +4,4 @@ User-agent: *
 Allow: /
 
 # Sitemap Target
-Sitemap: http://localhost:3000/sitemap.xml
+Sitemap: https://ari-sphere.vercel.app/sitemap.xml

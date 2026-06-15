@@ -48,14 +48,24 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: 'Suspicious email registration blocked.' });
     }
 
-    // Extract Client IP address
-    const ip = req.headers['x-real-ip'] || req.headers['x-forwarded-for'] || req.connection.remoteAddress || '127.0.0.1';
+    // Extract Client IP address safely to prevent TypeError on connection deprecation
+    const ip = req.headers['x-real-ip'] || 
+               (req.headers['x-forwarded-for'] ? req.headers['x-forwarded-for'].split(',')[0].trim() : null) || 
+               req.socket?.remoteAddress || 
+               req.connection?.remoteAddress || 
+               '127.0.0.1';
     const ipHash = crypto.createHash('sha256').update(ip).digest('hex');
 
     const targetKey = SUPABASE_SERVICE_ROLE_KEY || SUPABASE_KEY;
 
     // 4. Cloudflare Turnstile CAPTCHA verification
     const turnstileSecret = process.env.CF_TURNSTILE_SECRET_KEY || '1x0000000000000000000000000000000AA'; // Dev fallback secret
+    const isProduction = !!process.env.CF_TURNSTILE_SECRET_KEY && process.env.CF_TURNSTILE_SECRET_KEY !== '1x0000000000000000000000000000000AA';
+
+    if (isProduction && !turnstileToken) {
+      return res.status(400).json({ error: 'CAPTCHA verification is required.' });
+    }
+
     if (turnstileToken) {
       try {
         const verifyUrl = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';

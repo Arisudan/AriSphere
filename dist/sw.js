@@ -2,7 +2,7 @@
 // Service Worker for AriSphere PWA - Phase 7F
 // Version bump forces old caches to be replaced cleanly on update
 
-const CACHE_VERSION = 'v3';
+const CACHE_VERSION = 'v4';
 const CACHE_NAME = `arisphere-cache-${CACHE_VERSION}`;
 const PRECACHE_ASSETS = [
   '/',
