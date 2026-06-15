@@ -3,4 +3,4 @@ User-agent: *
 Allow: /
 
 # Sitemap Target (Master Index)
-Sitemap: https://arisphere.vercel.app/sitemap.xml
+Sitemap: https://ari-sphere.vercel.app/sitemap.xml

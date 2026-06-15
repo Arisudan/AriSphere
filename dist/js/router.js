@@ -98,7 +98,7 @@
   }
 
   // Helper: Get base canonical URL origin
-  const PRODUCTION_URL = 'https://arisphere.vercel.app';
+  const PRODUCTION_URL = 'https://ari-sphere.vercel.app';
   function getBaseURL() {
     try {
       if (typeof window === 'undefined' || !window || !window.location || !window.location.origin) {
@@ -108,7 +108,7 @@
       if (origin.includes('localhost') || origin.includes('127.0.0.1') || origin.includes('//192.168.')) {
         return PRODUCTION_URL;
       }
-      if (origin.includes('.vercel.app') && !origin.includes('arisphere.vercel.app')) {
+      if (origin.includes('.vercel.app') && !origin.includes('ari-sphere.vercel.app')) {
         return PRODUCTION_URL;
       }
       return origin;
@@ -2141,17 +2141,51 @@
     };
     applySEO(adminSEO);
 
+    // Wait for Supabase to initialize (handles async script load race conditions)
     if (!db.supabase) {
+      // Show loading while we wait
       container.innerHTML = `
         <div class="container admin-portal-wrapper">
-          <div class="admin-login-card">
-            <h2 class="admin-login-title">Supabase Offline</h2>
-            <p class="admin-login-subtitle" style="color:#ef4444;">The Supabase client could not be initialized. Please check your environment variables and connection.</p>
+          <div class="admin-login-card" style="text-align:center;">
+            <svg style="width:40px;height:40px;animation:spin 1s linear infinite;color:var(--color-accent);margin:0 auto var(--space-md);" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="32" />
+            </svg>
+            <p style="color:var(--color-text-muted);font-size:0.9rem;">Connecting to database...</p>
           </div>
         </div>
       `;
-      return;
+
+      // Wait up to 3 seconds for the supabase-ready event
+      await new Promise((resolve) => {
+        if (db.supabase) { resolve(); return; }
+        const onReady = () => {
+          window.removeEventListener('supabase-ready', onReady);
+          clearTimeout(timeout);
+          resolve();
+        };
+        const timeout = setTimeout(() => {
+          window.removeEventListener('supabase-ready', onReady);
+          resolve(); // resolve anyway — will show error below
+        }, 3000);
+        window.addEventListener('supabase-ready', onReady);
+      });
+
+      // After wait, check again
+      if (!db.supabase) {
+        container.innerHTML = `
+          <div class="container admin-portal-wrapper">
+            <div class="admin-login-card">
+              <h2 class="admin-login-title">Supabase Offline</h2>
+              <p class="admin-login-subtitle" style="color:#ef4444;">The Supabase client could not be initialized. Please check your environment variables and connection.</p>
+              <button class="admin-btn admin-btn-primary" style="margin-top:var(--space-md);" onclick="renderAdmin && renderAdmin(document.getElementById('admin-workspace-view') || document.getElementById('main-viewport'))">Retry Connection</button>
+            </div>
+          </div>
+        `;
+        return;
+      }
     }
+
+
 
     let currentUserProfile = null;
 

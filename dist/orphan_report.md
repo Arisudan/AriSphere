@@ -1,0 +1,18 @@
+# AriSphere Orphan Article Audit Report
+
+Generated on: 6/15/2026
+
+This compile-time audit detects published articles that lack sufficient incoming traversal paths (internal links, recommendation widget appearances, or active category definitions). Resolving these issues improves Google crawl efficiency and AdSense compliance.
+
+## Orphan Articles Summary
+
+| Article ID | Title | Reasons for Orphan Status | Actionable Recommendations |
+|---|---|---|---|
+| 6 | Building AriSphere From Zero to Production | No internal links in other articles | - Add internal links to this article from relevant articles in the same category or related topics.<br>- Update tags to match other popular articles to trigger the recommendation engine.<br>- Ensure the article belongs to a valid, active category with category navigation links. |
+| 7 | What Jayem Automotive Taught Me About Real Engineering | No internal links in other articles | - Add internal links to this article from relevant articles in the same category or related topics.<br>- Update tags to match other popular articles to trigger the recommendation engine.<br>- Ensure the article belongs to a valid, active category with category navigation links. |
+| 8 | The Reality of Pursuing Embedded Systems in India | No internal links in other articles | - Add internal links to this article from relevant articles in the same category or related topics.<br>- Update tags to match other popular articles to trigger the recommendation engine.<br>- Ensure the article belongs to a valid, active category with category navigation links. |
+| 1 | The Silicon Mind: Navigating the Intersection of Cognitive AI and Creative Writing | No internal links in other articles | - Add internal links to this article from relevant articles in the same category or related topics.<br>- Update tags to match other popular articles to trigger the recommendation engine.<br>- Ensure the article belongs to a valid, active category with category navigation links. |
+| 2 | The Great Shift: Global Supply Chains and the Return of Nearshoring | No internal links in other articles | - Add internal links to this article from relevant articles in the same category or related topics.<br>- Update tags to match other popular articles to trigger the recommendation engine.<br>- Ensure the article belongs to a valid, active category with category navigation links. |
+| 3 | Quantum Leap: Silicon Valley Races Towards Commercial Qubit Computers | No internal links in other articles | - Add internal links to this article from relevant articles in the same category or related topics.<br>- Update tags to match other popular articles to trigger the recommendation engine.<br>- Ensure the article belongs to a valid, active category with category navigation links. |
+| 4 | Echoes of the Agora: How Micro-Communities are Reshaping Public Discourse | No incoming recommendations, No internal links in other articles | - Add internal links to this article from relevant articles in the same category or related topics.<br>- Update tags to match other popular articles to trigger the recommendation engine.<br>- Ensure the article belongs to a valid, active category with category navigation links. |
+| 5 | The Geopolitics of Semiconductors: The Island Supply Chain Paradox | No internal links in other articles | - Add internal links to this article from relevant articles in the same category or related topics.<br>- Update tags to match other popular articles to trigger the recommendation engine.<br>- Ensure the article belongs to a valid, active category with category navigation links. |

@@ -7,12 +7,42 @@
   "orientation": "portrait",
   "background_color": "#0f172a",
   "theme_color": "#0f172a",
+  "lang": "en",
+  "scope": "/",
+  "categories": ["news", "magazines", "education"],
   "icons": [
+    {
+      "src": "/assets/images/business-cover.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
       "src": "/assets/images/business-cover.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/assets/images/business-cover.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "AriSphere Homepage"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Latest Articles",
+      "url": "/",
+      "description": "Read the latest perspectives"
+    },
+    {
+      "name": "Technology",
+      "url": "/category/technology",
+      "description": "Technology articles"
     }
   ]
 }

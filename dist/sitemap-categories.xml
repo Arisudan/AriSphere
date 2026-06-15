@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-    <loc>https://arisphere.vercel.app/category/technology</loc>
+    <loc>https://ari-sphere.vercel.app/category/technology</loc>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://arisphere.vercel.app/category/world</loc>
+    <loc>https://ari-sphere.vercel.app/category/world</loc>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://arisphere.vercel.app/category/business</loc>
+    <loc>https://ari-sphere.vercel.app/category/business</loc>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://arisphere.vercel.app/category/social-media</loc>
+    <loc>https://ari-sphere.vercel.app/category/social-media</loc>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://arisphere.vercel.app/category/reflections</loc>
+    <loc>https://ari-sphere.vercel.app/category/reflections</loc>
     <changefreq>daily</changefreq>
     <priority>0.80</priority>
   </url>

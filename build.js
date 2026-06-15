@@ -9,7 +9,7 @@ const path = require('path');
 const { JSDOM } = require('jsdom');
 
 // Configuration
-const SITE_URL = process.env.SITE_URL || 'https://arisphere.vercel.app';
+const SITE_URL = process.env.SITE_URL || 'https://ari-sphere.vercel.app';
 const DIST_DIR = path.join(__dirname, 'dist');
 
 // Delay helper (allows router setTimeout transition to finish)
@@ -418,6 +418,73 @@ Sitemap: ${SITE_URL}/sitemap.xml
   }
   if (fs.existsSync(path.join(__dirname, 'sw.js'))) {
     fs.copyFileSync(path.join(__dirname, 'sw.js'), path.join(DIST_DIR, 'sw.js'));
+  }
+
+  // 12. Run Orphan Article Auditor (Task 9)
+  console.log('Running compile-time Orphan Article Auditor...');
+  try {
+    const orphanReportRows = [];
+    const recommendationMap = {};
+
+    // First compute recommendations for all active articles
+    for (const art of activeArticles) {
+      const related = await db.getRelatedArticles(art.id, 5);
+      recommendationMap[art.id] = (related || []).map(r => String(r.id));
+    }
+
+    for (const art of activeArticles) {
+      const recs = activeArticles.filter(o => String(o.id) !== String(art.id) && recommendationMap[o.id].includes(String(art.id)));
+      const linkRegex = new RegExp(`href=["']\\/article\\/${art.id}["']`, 'i');
+      const links = activeArticles.filter(o => String(o.id) !== String(art.id) && linkRegex.test(o.content || ''));
+      const catValid = !!db.CATEGORIES[art.category];
+
+      const reasons = [];
+      if (recs.length === 0) reasons.push("No incoming recommendations");
+      if (links.length === 0) reasons.push("No internal links in other articles");
+      if (!catValid) reasons.push(`Category '${art.category}' not referenced/valid`);
+
+      if (reasons.length > 0) {
+        orphanReportRows.push({
+          id: art.id,
+          title: art.title,
+          category: art.category,
+          reasons: reasons,
+          recommendations: `
+- Add internal links to this article from relevant articles in the same category or related topics.
+- Update tags to match other popular articles to trigger the recommendation engine.
+- Ensure the article belongs to a valid, active category with category navigation links.
+          `.trim()
+        });
+      }
+    }
+
+    let reportMarkdown = `# AriSphere Orphan Article Audit Report\n\n`;
+    reportMarkdown += `Generated on: ${new Date().toLocaleDateString('en-US')}\n\n`;
+    reportMarkdown += `This compile-time audit detects published articles that lack sufficient incoming traversal paths (internal links, recommendation widget appearances, or active category definitions). Resolving these issues improves Google crawl efficiency and AdSense compliance.\n\n`;
+    reportMarkdown += `## Orphan Articles Summary\n\n`;
+    
+    if (orphanReportRows.length === 0) {
+      reportMarkdown += `✓ No orphan articles detected! All published articles are well-linked.\n`;
+    } else {
+      reportMarkdown += `| Article ID | Title | Reasons for Orphan Status | Actionable Recommendations |\n`;
+      reportMarkdown += `|---|---|---|---|\n`;
+      orphanReportRows.forEach(row => {
+        reportMarkdown += `| ${row.id} | ${row.title} | ${row.reasons.join(', ')} | ${row.recommendations.replace(/\n/g, '<br>')} |\n`;
+      });
+    }
+
+    fs.writeFileSync(path.join(__dirname, 'orphan_report.md'), reportMarkdown, 'utf8');
+    fs.writeFileSync(path.join(DIST_DIR, 'orphan_report.md'), reportMarkdown, 'utf8');
+
+    // Also write to brain artifact directory if accessible
+    const brainDir = 'C:\\Users\\Thirumurugan K\\.gemini\\antigravity-ide\\brain\\393a6145-ee33-49b8-8a66-a1d769f737c8';
+    if (fs.existsSync(brainDir)) {
+      fs.writeFileSync(path.join(brainDir, 'orphan_report.md'), reportMarkdown, 'utf8');
+      console.log('Orphan report copied to brain artifact directory.');
+    }
+    console.log(`Orphan Article Auditor completed. Generated orphan_report.md with ${orphanReportRows.length} issues.`);
+  } catch (err) {
+    console.error('Failed to run Orphan Article Auditor:', err);
   }
   
   console.log('--- ARISPHERE STATIC BUILD SUCCESSFUL ---');

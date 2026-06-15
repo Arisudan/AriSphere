@@ -2,48 +2,48 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- Core Views -->
   <url>
-    <loc>https://arisphere.vercel.app/</loc>
+    <loc>https://ari-sphere.vercel.app/</loc>
     <changefreq>daily</changefreq>
     <priority>1.00</priority>
   </url>
   <url>
-    <loc>https://arisphere.vercel.app/about</loc>
+    <loc>https://ari-sphere.vercel.app/about</loc>
     <changefreq>monthly</changefreq>
     <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://arisphere.vercel.app/contact</loc>
+    <loc>https://ari-sphere.vercel.app/contact</loc>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://arisphere.vercel.app/privacy</loc>
+    <loc>https://ari-sphere.vercel.app/privacy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.50</priority>
   </url>
   <url>
-    <loc>https://arisphere.vercel.app/disclaimer</loc>
+    <loc>https://ari-sphere.vercel.app/disclaimer</loc>
     <changefreq>yearly</changefreq>
     <priority>0.50</priority>
   </url>
   <url>
-    <loc>https://arisphere.vercel.app/terms</loc>
+    <loc>https://ari-sphere.vercel.app/terms</loc>
     <changefreq>yearly</changefreq>
     <priority>0.50</priority>
   </url>
   <url>
-    <loc>https://arisphere.vercel.app/editorial-policy</loc>
+    <loc>https://ari-sphere.vercel.app/editorial-policy</loc>
     <changefreq>yearly</changefreq>
     <priority>0.50</priority>
   </url>
 
   <!-- Publications (8 Published Articles) -->
-    <url><loc>https://arisphere.vercel.app/article/8</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>
-  <url><loc>https://arisphere.vercel.app/article/7</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>
-  <url><loc>https://arisphere.vercel.app/article/6</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>
-  <url><loc>https://arisphere.vercel.app/article/5</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>
-  <url><loc>https://arisphere.vercel.app/article/4</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>
-  <url><loc>https://arisphere.vercel.app/article/3</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>
-  <url><loc>https://arisphere.vercel.app/article/2</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>
-  <url><loc>https://arisphere.vercel.app/article/1</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>
+    <url><loc>https://ari-sphere.vercel.app/article/8</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>
+  <url><loc>https://ari-sphere.vercel.app/article/7</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>
+  <url><loc>https://ari-sphere.vercel.app/article/6</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>
+  <url><loc>https://ari-sphere.vercel.app/article/5</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>
+  <url><loc>https://ari-sphere.vercel.app/article/4</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>
+  <url><loc>https://ari-sphere.vercel.app/article/3</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>
+  <url><loc>https://ari-sphere.vercel.app/article/2</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>
+  <url><loc>https://ari-sphere.vercel.app/article/1</loc><changefreq>weekly</changefreq><priority>0.90</priority></url>
 </urlset>

@@ -19,15 +19,24 @@
   <meta name="robots" content="index, follow">
   
   <!-- Canonical Link -->
-  <link rel="canonical" href="https://arisphere.vercel.app/admin">
+  <link rel="canonical" href="https://ari-sphere.vercel.app/admin">
+
+  <!-- PWA & Favicon -->
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/png" href="/assets/images/business-cover.png">
+  <link rel="apple-touch-icon" href="/assets/images/business-cover.png">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Editor Portal | AriSphere - Where Trends Meet Perspective">
   <meta property="og:description" content="Internal editor publishing portal and CMS workspace.">
-  <meta property="og:url" content="https://arisphere.vercel.app/admin">
+  <meta property="og:url" content="https://ari-sphere.vercel.app/admin">
   <meta property="og:image" content="/assets/images/business-cover.png">
   <meta property="og:site_name" content="AriSphere">
+  <meta name="application-name" content="AriSphere">
+  <meta name="apple-mobile-web-app-title" content="AriSphere">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
@@ -138,13 +147,14 @@
 
   <!-- Router Mount Element (Dynamic views will load here) -->
   <main id="main-viewport" class="main-content" aria-live="polite" tabindex="-1">
-        <div class="container admin-portal-wrapper">
-          <div class="admin-login-card">
-            <h2 class="admin-login-title">Supabase Offline</h2>
-            <p class="admin-login-subtitle" style="color:#ef4444;">The Supabase client could not be initialized. Please check your environment variables and connection.</p>
+          <div class="container admin-portal-wrapper">
+            <div class="admin-login-card">
+              <h2 class="admin-login-title">Supabase Offline</h2>
+              <p class="admin-login-subtitle" style="color:#ef4444;">The Supabase client could not be initialized. Please check your environment variables and connection.</p>
+              <button class="admin-btn admin-btn-primary" style="margin-top:var(--space-md);" onclick="renderAdmin &amp;&amp; renderAdmin(document.getElementById('admin-workspace-view') || document.getElementById('main-viewport'))">Retry Connection</button>
+            </div>
           </div>
-        </div>
-      </main>
+        </main>
 
   <!-- Newsletter Signup Block Placement -->
   <section class="container" aria-label="Newsletter Subscription">

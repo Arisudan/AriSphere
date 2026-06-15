@@ -1,4 +1,5 @@
 {
+  "outputDirectory": "dist",
   "cleanUrls": true,
   "headers": [
     {
@@ -6,7 +7,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://www.googletagmanager.com https://challenges.cloudflare.com https://pagead2.googlesyndication.com https://adservice.google.com https://googleads.g.doubleclick.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com https://excffhqcwzfnexflqzqv.supabase.co https://*.doubleclick.net; connect-src 'self' https://excffhqcwzfnexflqzqv.supabase.co wss://excffhqcwzfnexflqzqv.supabase.co https://vitals.vercel-insights.com https://adservice.google.com; frame-src 'self' https://challenges.cloudflare.com https://googleads.g.doubleclick.net https://*.doubleclick.net; child-src 'self'; object-src 'none'; base-uri 'self';"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://challenges.cloudflare.com https://pagead2.googlesyndication.com https://adservice.google.com https://googleads.g.doubleclick.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://images.unsplash.com https://excffhqcwzfnexflqzqv.supabase.co https://*.doubleclick.net https://www.google.com; connect-src 'self' https://excffhqcwzfnexflqzqv.supabase.co wss://excffhqcwzfnexflqzqv.supabase.co wss://realtime.supabase.co https://realtime.supabase.co https://vitals.vercel-insights.com https://adservice.google.com https://www.google-analytics.com https://challenges.cloudflare.com; frame-src 'self' https://challenges.cloudflare.com https://googleads.g.doubleclick.net https://*.doubleclick.net; worker-src 'self' blob:; child-src 'self' blob:; object-src 'none'; base-uri 'self'; upgrade-insecure-requests;"
         },
         {
           "key": "Strict-Transport-Security",
@@ -27,14 +28,21 @@
         {
           "key": "Permissions-Policy",
           "value": "camera=(), microphone=(), geolocation=()"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
         }
       ]
     }
   ],
   "rewrites": [
-    { "source": "/assets/(.*)", "destination": "/assets/$1" },
-    { "source": "/css/(.*)", "destination": "/css/$1" },
-    { "source": "/js/(.*)", "destination": "/js/$1" },
+    { "source": "/assets/:path*", "destination": "/assets/:path*" },
+    { "source": "/css/:path*", "destination": "/css/:path*" },
+    { "source": "/js/:path*", "destination": "/js/:path*" },
+    { "source": "/api/:path*", "destination": "/api/:path*" },
+    { "source": "/sw.js", "destination": "/sw.js" },
+    { "source": "/manifest.json", "destination": "/manifest.json" },
     { "source": "/robots.txt", "destination": "/robots.txt" },
     { "source": "/rss.xml", "destination": "/rss.xml" },
     { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
@@ -42,7 +50,6 @@
     { "source": "/sitemap-categories.xml", "destination": "/sitemap-categories.xml" },
     { "source": "/sitemap-authors.xml", "destination": "/sitemap-authors.xml" },
     { "source": "/sitemap-news.xml", "destination": "/sitemap-news.xml" },
-    { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

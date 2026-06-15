@@ -446,6 +446,32 @@ document.addEventListener('DOMContentLoaded', async () => {
   // --- 12. Progressive Web App (PWA) Service Worker Registration (Phase 7F) ---
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
+      const isLocalhost = Boolean(
+        window.location.hostname === 'localhost' ||
+        window.location.hostname === '127.0.0.1' ||
+        window.location.hostname.startsWith('192.168.') ||
+        window.location.hostname.endsWith('.local')
+      );
+
+      if (isLocalhost) {
+        console.log('[PWA] Skipping Service Worker registration on localhost for development.');
+        navigator.serviceWorker.getRegistrations().then(registrations => {
+          for (let registration of registrations) {
+            registration.unregister();
+            console.log('[PWA] Unregistered service worker:', registration.scope);
+          }
+        });
+        if (window.caches) {
+          caches.keys().then(keys => {
+            keys.forEach(key => {
+              caches.delete(key);
+              console.log('[PWA] Cleared cache database:', key);
+            });
+          });
+        }
+        return;
+      }
+
       navigator.serviceWorker.register('/sw.js')
         .then(reg => console.log('ServiceWorker registered successfully:', reg.scope))
         .catch(err => console.warn('ServiceWorker registration failed:', err));

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
-    <loc>https://arisphere.vercel.app/sitemap-articles.xml</loc>
+    <loc>https://ari-sphere.vercel.app/sitemap-articles.xml</loc>
   </sitemap>
   <sitemap>
-    <loc>https://arisphere.vercel.app/sitemap-news.xml</loc>
+    <loc>https://ari-sphere.vercel.app/sitemap-news.xml</loc>
   </sitemap>
   <sitemap>
-    <loc>https://arisphere.vercel.app/sitemap-categories.xml</loc>
+    <loc>https://ari-sphere.vercel.app/sitemap-categories.xml</loc>
   </sitemap>
   <sitemap>
-    <loc>https://arisphere.vercel.app/sitemap-authors.xml</loc>
+    <loc>https://ari-sphere.vercel.app/sitemap-authors.xml</loc>
   </sitemap>
 </sitemapindex>

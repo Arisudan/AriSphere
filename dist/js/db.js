@@ -1087,15 +1087,51 @@ function isSupabaseConfigured() {
     !SUPABASE_KEY.includes('YOUR_SUPABASE');
 }
 
-// Initialize Supabase Client if loaded (client-side in browser)
+// Initialize Supabase Client - async retry to handle script load race conditions
 let supabaseClient = null;
-if (typeof window !== 'undefined' && window.supabase && isSupabaseConfigured()) {
+
+function tryInitSupabase() {
+  if (supabaseClient) return true; // already initialized
+  if (typeof window === 'undefined') return false;
+
+  // Support both UMD bundle (window.supabase.createClient) and ESM global (window.supabase)
+  const supabaseLib = window.supabase;
+  if (!supabaseLib) return false;
+  const createClient = supabaseLib.createClient || (typeof supabaseLib === 'function' ? supabaseLib : null);
+  if (!createClient || !isSupabaseConfigured()) return false;
+
   try {
-    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
+    // Patch the already-exported window.AriSphereDB reference live
+    if (window.AriSphereDB) {
+      window.AriSphereDB.supabase = supabaseClient;
+    }
+    // Dispatch a custom event so the router/admin can react immediately
+    window.dispatchEvent(new CustomEvent('supabase-ready', { detail: supabaseClient }));
+    console.log('[AriSphere] Supabase client initialized successfully.');
+    return true;
   } catch (e) {
-    console.error("Failed to initialize Supabase client:", e);
+    console.error('[AriSphere] Failed to initialize Supabase client:', e);
+    return false;
   }
 }
+
+// 1. Try synchronously right now (works if supabase.js already ran)
+if (!tryInitSupabase()) {
+  // 2. Retry up to 50 times × 20ms = 1 second, then give up gracefully
+  let _retryCount = 0;
+  const _retryInterval = setInterval(() => {
+    _retryCount++;
+    if (tryInitSupabase() || _retryCount >= 50) {
+      clearInterval(_retryInterval);
+      if (!supabaseClient) {
+        console.warn('[AriSphere] Supabase SDK not found after 1s. Running in offline mode.');
+      }
+    }
+  }, 20);
+}
+
+
 
 async function fetchFromSupabase(endpoint) {
   const url = `${SUPABASE_URL}/rest/v1/${endpoint}`;

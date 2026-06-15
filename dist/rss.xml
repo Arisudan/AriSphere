@@ -2,69 +2,69 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>AriSphere</title>
-    <link>https://arisphere.vercel.app</link>
+    <link>https://ari-sphere.vercel.app</link>
     <description>Where Trends Meet Perspective</description>
-    <atom:link href="https://arisphere.vercel.app/rss.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://ari-sphere.vercel.app/rss.xml" rel="self" type="application/rss+xml" />
         <item>
       <title>Building AriSphere From Zero to Production</title>
-      <link>https://arisphere.vercel.app/article/6</link>
-      <guid>https://arisphere.vercel.app/article/6</guid>
+      <link>https://ari-sphere.vercel.app/article/6</link>
+      <guid>https://ari-sphere.vercel.app/article/6</guid>
       <pubDate>Tue, 09 Jun 2026 18:30:00 GMT</pubDate>
       <description>Building a modern web application requires balancing architecture decisions. Here is how I structured AriSphere&apos;s static compiler and database fallback layer.</description>
       <category>Reflections</category>
     </item>
     <item>
       <title>What Jayem Automotive Taught Me About Real Engineering</title>
-      <link>https://arisphere.vercel.app/article/7</link>
-      <guid>https://arisphere.vercel.app/article/7</guid>
+      <link>https://ari-sphere.vercel.app/article/7</link>
+      <guid>https://ari-sphere.vercel.app/article/7</guid>
       <pubDate>Mon, 08 Jun 2026 18:30:00 GMT</pubDate>
       <description>My time at Jayem Automotive redefined what engineering means to me. Here are the core lessons from the shop floor and building real hardware.</description>
       <category>Reflections</category>
     </item>
     <item>
       <title>The Reality of Pursuing Embedded Systems in India</title>
-      <link>https://arisphere.vercel.app/article/8</link>
-      <guid>https://arisphere.vercel.app/article/8</guid>
+      <link>https://ari-sphere.vercel.app/article/8</link>
+      <guid>https://ari-sphere.vercel.app/article/8</guid>
       <pubDate>Sun, 07 Jun 2026 18:30:00 GMT</pubDate>
       <description>Finding hardware roles in India is challenging. I analyze the market realities and how students can navigate them.</description>
       <category>Reflections</category>
     </item>
     <item>
       <title>The Silicon Mind: Navigating the Intersection of Cognitive AI and Creative Writing</title>
-      <link>https://arisphere.vercel.app/article/1</link>
-      <guid>https://arisphere.vercel.app/article/1</guid>
+      <link>https://ari-sphere.vercel.app/article/1</link>
+      <guid>https://ari-sphere.vercel.app/article/1</guid>
       <pubDate>Sun, 07 Jun 2026 18:30:00 GMT</pubDate>
       <description>As artificial intelligence systems enter creative sectors, authors and technologists debate where engineering stops and creative soul begins.</description>
       <category>Technology</category>
     </item>
     <item>
       <title>The Great Shift: Global Supply Chains and the Return of Nearshoring</title>
-      <link>https://arisphere.vercel.app/article/2</link>
-      <guid>https://arisphere.vercel.app/article/2</guid>
+      <link>https://ari-sphere.vercel.app/article/2</link>
+      <guid>https://ari-sphere.vercel.app/article/2</guid>
       <pubDate>Fri, 05 Jun 2026 18:30:00 GMT</pubDate>
       <description>Global economic nodes are fragmenting. We analyze the macro-trends pushing manufacturing back to domestic borders and nearshore centers.</description>
       <category>Business</category>
     </item>
     <item>
       <title>Quantum Leap: Silicon Valley Races Towards Commercial Qubit Computers</title>
-      <link>https://arisphere.vercel.app/article/3</link>
-      <guid>https://arisphere.vercel.app/article/3</guid>
+      <link>https://ari-sphere.vercel.app/article/3</link>
+      <guid>https://ari-sphere.vercel.app/article/3</guid>
       <pubDate>Thu, 04 Jun 2026 18:30:00 GMT</pubDate>
       <description>Quantum computing is shifting from theoretical physics papers to engineering blueprints. We explore the latest breakthroughs from top hardware labs.</description>
       <category>Technology</category>
     </item>
     <item>
       <title>Echoes of the Agora: How Micro-Communities are Reshaping Public Discourse</title>
-      <link>https://arisphere.vercel.app/article/4</link>
-      <guid>https://arisphere.vercel.app/article/4</guid>
+      <link>https://ari-sphere.vercel.app/article/4</link>
+      <guid>https://ari-sphere.vercel.app/article/4</guid>
       <pubDate>Wed, 03 Jun 2026 18:30:00 GMT</pubDate>
       <description>Public social media feeds are giving way to gated Discord rooms and private telegram hubs. We look at what this means for political debate.</description>
       <category>Social Media</category>
     </item>
     <item>
       <title>The Geopolitics of Semiconductors: The Island Supply Chain Paradox</title>
-      <link>https://arisphere.vercel.app/article/5</link>
-      <guid>https://arisphere.vercel.app/article/5</guid>
+      <link>https://ari-sphere.vercel.app/article/5</link>
+      <guid>https://ari-sphere.vercel.app/article/5</guid>
       <pubDate>Mon, 01 Jun 2026 18:30:00 GMT</pubDate>
       <description>Semiconductor value chain is highly centralized. We map global dependencies and the race to fund local fabrication plants.</description>
       <category>World</category>
