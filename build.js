@@ -70,11 +70,11 @@ async function runBuild() {
   }
   if (gaMeasurementId) {
     indexHtml = indexHtml.replaceAll('G-GA_MEASUREMENT_ID', gaMeasurementId);
-    indexHtml = indexHtml.replaceAll('G-Q6NZ4JZX2J', gaMeasurementId);
+    indexHtml = indexHtml.replaceAll('G-HF1HR2DWQZ', gaMeasurementId);
     routerCode = routerCode.replaceAll('G-GA_MEASUREMENT_ID', gaMeasurementId);
-    routerCode = routerCode.replaceAll('G-Q6NZ4JZX2J', gaMeasurementId);
+    routerCode = routerCode.replaceAll('G-HF1HR2DWQZ', gaMeasurementId);
     appCode = appCode.replaceAll('G-GA_MEASUREMENT_ID', gaMeasurementId);
-    appCode = appCode.replaceAll('G-Q6NZ4JZX2J', gaMeasurementId);
+    appCode = appCode.replaceAll('G-HF1HR2DWQZ', gaMeasurementId);
   }
   
   // 3. Load DB in a mock Node environment to inspect paths

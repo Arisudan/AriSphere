@@ -296,7 +296,7 @@
     } catch (e) {}
     
     if (typeof gtag === 'function' && hasConsent) {
-      gtag('config', 'G-Q6NZ4JZX2J', {
+      gtag('config', 'G-HF1HR2DWQZ', {
         'page_title': finalTitle,
         'page_path': pathname
       });
