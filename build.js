@@ -420,6 +420,15 @@ Sitemap: ${SITE_URL}/sitemap.xml
     fs.copyFileSync(path.join(__dirname, 'sw.js'), path.join(DIST_DIR, 'sw.js'));
   }
 
+  // Copy Google verification HTML files to dist
+  const rootFiles = fs.readdirSync(__dirname);
+  for (const file of rootFiles) {
+    if (file.startsWith('google') && file.endsWith('.html')) {
+      fs.copyFileSync(path.join(__dirname, file), path.join(DIST_DIR, file));
+      console.log(`Copied verification file to dist: ${file}`);
+    }
+  }
+
   // 12. Run Orphan Article Auditor (Task 9)
   console.log('Running compile-time Orphan Article Auditor...');
   try {
