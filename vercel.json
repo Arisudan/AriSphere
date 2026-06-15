@@ -44,6 +44,7 @@
     { "source": "/sw.js", "destination": "/sw.js" },
     { "source": "/manifest.json", "destination": "/manifest.json" },
     { "source": "/googleb0e22b0f48cd88ea.html", "destination": "/googleb0e22b0f48cd88ea.html" },
+    { "source": "/ads.txt", "destination": "/ads.txt" },
     { "source": "/robots.txt", "destination": "/robots.txt" },
     { "source": "/rss.xml", "destination": "/rss.xml" },
     { "source": "/sitemap.xml", "destination": "/sitemap.xml" },

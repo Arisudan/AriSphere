@@ -13,6 +13,9 @@
     gtag('config', 'G-HF1HR2DWQZ');
   </script>
   
+  <!-- Google AdSense Integration (Uncomment and replace ca-pub-XXXXXXXXXXXXXXXX with your actual Publisher ID) -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+  
   <!-- Default SEO Meta Tags (Overridden dynamically by router.js) -->
   <title>Building AriSphere From Zero to Production | AriSphere - Where Trends Meet Perspective</title>
   <meta name="description" content="Building a modern web application requires balancing architecture decisions. Here is how I structured AriSphere's static compiler and database fallback layer.">
@@ -233,16 +236,22 @@
               <!-- Typography Rich Body -->
               <div class="article-body-content">
                 <p>When I first envisioned AriSphere, I wanted a site that had the premium feel of an editorial print magazine but was lightning fast, SEO-optimized, and simple to manage. I didn't want a heavy, slow, cookie-cutter WordPress site. Instead, I decided to build a custom Single Page Application (SPA) with a Node.js Static Site Generator (SSG) pipeline powered by a remote Supabase Postgres database.</p>
+  
+  <h2>The JSDOM Lifecycle Race Condition</h2>
+  <p>One of the most frustrating failures during development happened within the static compiler. To pre-render our client-side routes into flat HTML files for deployment on Vercel, I used JSDOM to evaluate our routing scripts in-memory. However, after compiling all the paths, I called <code>dom.window.close()</code> to clean up memory. Immediately, the build crashed with a fatal exception: <code>TypeError: Cannot set properties of undefined (setting 'title')</code>.</p>
             <div class="read-also-box animate-pulse" style="margin: var(--space-md) 0; padding: var(--space-sm) var(--space-md); border-left: 3px solid var(--color-accent); background-color: var(--color-bg-offset); font-family: var(--font-sans); font-size: 0.95rem;">
               <strong style="color: var(--color-accent); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; display: block; margin-bottom: 2px;">Read Also</strong>
-              <a href="/article/7" style="color: var(--color-text); font-weight: 700; text-decoration: none; border-bottom: 1px solid transparent; transition: border-bottom 0.2s;" onmouseover="this.style.borderBottomColor='var(--color-text)'" onmouseout="this.style.borderBottomColor='transparent'">
-                What Jayem Automotive Taught Me About Real Engineering
+              <a href="/article/8" style="color: var(--color-text); font-weight: 700; text-decoration: none; border-bottom: 1px solid transparent; transition: border-bottom 0.2s;" onmouseover="this.style.borderBottomColor='var(--color-text)'" onmouseout="this.style.borderBottomColor='transparent'">
+                The Reality of Pursuing Embedded Systems in India
               </a>
             </div>
           <p></p>
   
-  <h2>The JSDOM Lifecycle Race Condition</h2>
-  <p>One of the most frustrating failures during development happened within the static compiler. To pre-render our client-side routes into flat HTML files for deployment on Vercel, I used JSDOM to evaluate our routing scripts in-memory. However, after compiling all the paths, I called <code>dom.window.close()</code> to clean up memory. Immediately, the build crashed with a fatal exception: <code>TypeError: Cannot set properties of undefined (setting 'title')</code>.</p>
+  <blockquote>
+    "An asynchronous callback resolving on a destroyed DOM document is one of the most elusive race conditions in server-rendered SPAs."
+  </blockquote>
+  
+  <p>It turned out that our database fetches and initial DOMContentLoaded routing triggers were resolving slightly *after* the window had been closed. The script was trying to write to <code>document.title</code> on a document that no longer existed. To fix this, I had to introduce strict defensive checks—safeguarding every single DOM access and selector wrapper with a check to verify if the <code>document</code> and <code>document.head</code> were still active. This taught me to never assume the presence of global browser variables when executing hybrid server-client code.</p>
           <div class="article-midpoint-cta">
             <h4>Subscribe to the AriSphere Digest</h4>
             <p>Get our weekly perspectives on cognitive tech, world shifts, and digital philosophy delivered direct to your inbox.</p>
@@ -255,21 +264,15 @@
           </div>
         <p></p>
   
-  <blockquote>
-    "An asynchronous callback resolving on a destroyed DOM document is one of the most elusive race conditions in server-rendered SPAs."
-  </blockquote>
-  
-  <p>It turned out that our database fetches and initial DOMContentLoaded routing triggers were resolving slightly *after* the window had been closed. The script was trying to write to <code>document.title</code> on a document that no longer existed. To fix this, I had to introduce strict defensive checks—safeguarding every single DOM access and selector wrapper with a check to verify if the <code>document</code> and <code>document.head</code> were still active. This taught me to never assume the presence of global browser variables when executing hybrid server-client code.</p>
+  <h2>Designing a Resilient Dual-Layer Database</h2>
+  <p>Another challenge was database availability. I wanted our content to live in a live Postgres database on Supabase so I could edit articles directly from my phone. But what if the database rate limits were exceeded or the connection timed out? I built a resilient fallback layer in our database module. If the remote fetch fails, the client instantly catches the error and serves content from a local hardcoded array. The visitor never sees a broken page or a database error screen.</p>
             <div class="read-also-box animate-pulse" style="margin: var(--space-md) 0; padding: var(--space-sm) var(--space-md); border-left: 3px solid var(--color-accent); background-color: var(--color-bg-offset); font-family: var(--font-sans); font-size: 0.95rem;">
               <strong style="color: var(--color-accent); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; display: block; margin-bottom: 2px;">Read Also</strong>
-              <a href="/article/8" style="color: var(--color-text); font-weight: 700; text-decoration: none; border-bottom: 1px solid transparent; transition: border-bottom 0.2s;" onmouseover="this.style.borderBottomColor='var(--color-text)'" onmouseout="this.style.borderBottomColor='transparent'">
-                The Reality of Pursuing Embedded Systems in India
+              <a href="/article/7" style="color: var(--color-text); font-weight: 700; text-decoration: none; border-bottom: 1px solid transparent; transition: border-bottom 0.2s;" onmouseover="this.style.borderBottomColor='var(--color-text)'" onmouseout="this.style.borderBottomColor='transparent'">
+                What Jayem Automotive Taught Me About Real Engineering
               </a>
             </div>
           <p></p>
-  
-  <h2>Designing a Resilient Dual-Layer Database</h2>
-  <p>Another challenge was database availability. I wanted our content to live in a live Postgres database on Supabase so I could edit articles directly from my phone. But what if the database rate limits were exceeded or the connection timed out? I built a resilient fallback layer in our database module. If the remote fetch fails, the client instantly catches the error and serves content from a local hardcoded array. The visitor never sees a broken page or a database error screen.</p>
   
   <h2>Key Takeaways</h2>
   <ul>
@@ -277,6 +280,7 @@
     <li><strong>Fail gracefully</strong>: Always have a local content fallback when relying on third-party APIs. Performance and resilience trump architectural purity.</li>
     <li><strong>Keep it simple</strong>: You don't need a massive framework to build a fast, SEO-friendly site. Vanilla JS and a custom pre-render pipeline can achieve a perfect Lighthouse score.</li>
   </ul>
+  <p>Translating academic theories into functional applications mirrors the challenges of hands-on physical building, a lesson examined in <a href="/article/7">What Jayem Automotive Taught Me About Real Engineering</a>.</p>
               </div>
 
               <!-- About the Author Bio Card (Task 4) -->
@@ -340,24 +344,24 @@
                   
                     <article class="card">
                       <div class="card-img-wrapper">
-                        <img class="card-img" src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="What Jayem Automotive Taught Me About Real Engineering" loading="lazy">
-                      </div>
-                      <div class="card-body">
-                        <span class="badge reflections">Reflections</span>
-                        <h4 class="card-title">
-                          <a href="/article/7">What Jayem Automotive Taught Me About Real Engineering</a>
-                        </h4>
-                      </div>
-                    </article>
-                  
-                    <article class="card">
-                      <div class="card-img-wrapper">
                         <img class="card-img" src="https://images.unsplash.com/photo-1517059224940-d4af9eec41b7?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="The Reality of Pursuing Embedded Systems in India" loading="lazy">
                       </div>
                       <div class="card-body">
                         <span class="badge reflections">Reflections</span>
                         <h4 class="card-title">
                           <a href="/article/8">The Reality of Pursuing Embedded Systems in India</a>
+                        </h4>
+                      </div>
+                    </article>
+                  
+                    <article class="card">
+                      <div class="card-img-wrapper">
+                        <img class="card-img" src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&amp;fit=crop&amp;q=80&amp;w=800" alt="What Jayem Automotive Taught Me About Real Engineering" loading="lazy">
+                      </div>
+                      <div class="card-body">
+                        <span class="badge reflections">Reflections</span>
+                        <h4 class="card-title">
+                          <a href="/article/7">What Jayem Automotive Taught Me About Real Engineering</a>
                         </h4>
                       </div>
                     </article>

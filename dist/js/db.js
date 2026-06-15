@@ -110,13 +110,15 @@ const ARTICLES = [
       
       <h2>Ethics, Copyright, and the Future Landscape</h2>
       <p>As we advance, structural questions remain: Who owns the copyright of a paragraph co-authored by a transformer model trained on millions of copyrighted novels? Intellectual property law faces its most dramatic test in a century. AriSphere will continue tracking these legislative adjustments as developers and artists seek a fair compromise.</p>
+      <p>For a detailed breakdown of the technical logic and design challenges behind launching this digital platform, read our companion piece on <a href="/article/6">Building AriSphere From Zero to Production</a>.</p>
+      <p>Furthermore, these AI processing limits will be heavily impacted by the next hardware revolution, which we cover in <a href="/article/3">Quantum Leap: Silicon Valley Races Towards Commercial Qubit Computers</a>.</p>
     `,
     category: 'technology',
     author: 'arisudan',
     publishDate: 'June 8, 2026',
     readTime: '6 min read',
     image: '/assets/images/ai-cover.png',
-    tags: ['Artificial Intelligence', 'Creative Writing', 'Ethics', 'Tech Culture'],
+    tags: ['Artificial Intelligence', 'Creative Writing', 'Ethics', 'Tech Culture', 'Digital Culture'],
     featured: true,
     trending: true,
     trendingThisWeek: true,
@@ -140,6 +142,7 @@ const ARTICLES = [
       
       <h2>Economic Impacts and Consumer Prices</h2>
       <p>While regional redundancy prevents production shutdowns, it carries a premium. Manufacturing domestically or in nearshore regions involves higher wages and strict environmental regulations. Consumers will likely face a permanent transition to higher prices, but with the benefit of consistent product availability and lower transport emissions.</p>
+      <p>A central component of this industrial reshuffling is the raw hardware production sector, which we explore in depth in <a href="/article/5">The Geopolitics of Semiconductors</a>.</p>
     `,
     category: 'business',
     author: 'arisudan',
@@ -166,6 +169,7 @@ const ARTICLES = [
       
       <h2>The Cryptographic Threat</h2>
       <p>The power of quantum computing is double-edged. While it will accelerate drug discovery, optimization, and molecular modeling, it also poses an existential threat to modern cryptography. Algorithms like RSA rely on the difficulty of factoring giant integers. A sufficiently advanced quantum computer using Shor's algorithm can crack this easily. Organizations are rushing to implement post-quantum cryptographic standards.</p>
+      <p>These computational shifts will inevitably transform generative logic models, as discussed in our analysis of <a href="/article/1">The Silicon Mind</a>.</p>
     `,
     category: 'technology',
     author: 'arisudan',
@@ -196,6 +200,7 @@ const ARTICLES = [
       
       <h2>The Echo Chamber Risk</h2>
       <p>While these gated rooms offer shelter from public toxicity, they reinforce bias. When users converse only with curated peers, opposing ideas are filtered out. The polarization of the modern internet is no longer just algorithmic; it is voluntary and structural.</p>
+      <p>Understanding these community shifts is vital when developing web applications, a process outlined in our technical log on <a href="/article/6">Building AriSphere</a>.</p>
     `,
     category: 'social-media',
     author: 'arisudan',
@@ -222,6 +227,8 @@ const ARTICLES = [
       
       <h2>Building Global Fabs</h2>
       <p>To reduce dependency, the US and European Union have passed dedicated CHIPS Acts, investing billions in domestic manufacturing. New fabs are breaking ground in Arizona, Ohio, and Germany. However, building the factories is only the first step. Creating the supply chains, chemical supplies, and training the technical workforce will take a generation.</p>
+      <p>This restructuring aligns closely with the broader macroeconomic trends outlined in <a href="/article/2">The Great Shift: Global Supply Chains and the Return of Nearshoring</a>.</p>
+      <p>These centralized hardware chains are also reshaping digital communications and the micro-communication clusters discussed in <a href="/article/4">Echoes of the Agora: How Micro-Communities are Reshaping Public Discourse</a>.</p>
     `,
     category: 'world',
     author: 'arisudan',
@@ -236,7 +243,7 @@ const ARTICLES = [
     views: 11200
   },
   {
-    id: 6,
+    id: 33,
     title: 'Decentralized Sovereignty: Can Digital Identities Solve the Online Trust Crisis?',
     subtitle: 'Exploring cryptographic credentials, decentralized identifiers, and the future of web-based verification.',
     excerpt: 'We analyze the emerging protocols seeking to give users control over their data, eliminating the need for corporate single sign-on buttons.',
@@ -262,7 +269,7 @@ const ARTICLES = [
     views: 4560
   },
   {
-    id: 7,
+    id: 34,
     title: 'The Rise of Synthetic Media: Distinguishing Reality in the Post-Truth Era',
     subtitle: 'With hyper-realistic voice clones and video generators, how do we establish trust in digital journalism?',
     excerpt: 'As tools to simulate audio and video become widely accessible, news organizations are turning to cryptography to certify original reporting.',
@@ -292,7 +299,7 @@ const ARTICLES = [
     views: 7420
   },
   {
-    id: 8,
+    id: 35,
     title: 'The Green Premium: Can Decarbonization Align with Quarterly Capitalism?',
     subtitle: 'Investors are demanding ESG compliance, but the financial mechanics of heavy industry decarbonization tell a complex story.',
     excerpt: 'We examine the economic frictions of shifting steel, cement, and chemical production to zero-carbon energy systems.',
@@ -987,6 +994,7 @@ const ARTICLES = [
         <li><strong>Fail gracefully</strong>: Always have a local content fallback when relying on third-party APIs. Performance and resilience trump architectural purity.</li>
         <li><strong>Keep it simple</strong>: You don\'t need a massive framework to build a fast, SEO-friendly site. Vanilla JS and a custom pre-render pipeline can achieve a perfect Lighthouse score.</li>
       </ul>
+      <p>Translating academic theories into functional applications mirrors the challenges of hands-on physical building, a lesson examined in <a href="/article/7">What Jayem Automotive Taught Me About Real Engineering</a>.</p>
     `,
     category: 'reflections',
     author: 'arisudan',
@@ -1026,6 +1034,7 @@ const ARTICLES = [
         <li><strong>Respect veteran experience</strong>: The technicians and mechanics on the shop floor often understand the behavior of physical materials better than junior engineers with advanced degrees.</li>
         <li><strong>Design for maintenance</strong>: Always consider how a part will be serviced. If a basic oil change or component replacement requires dismantling the entire system, go back to the drawing board.</li>
       </ul>
+      <p>This experience highlighted the critical importance of early prototypes and low-level competencies in the broader hardware landscape, which I outline in <a href="/article/8">The Reality of Pursuing Embedded Systems in India</a>.</p>
     `,
     category: 'reflections',
     author: 'arisudan',
@@ -1065,6 +1074,7 @@ const ARTICLES = [
         <li><strong>Learn PCB Design</strong>: A firmware engineer who can design and route their own custom PCBs is twice as valuable to a hardware startup.</li>
         <li><strong>Build a portfolio</strong>: Document your projects on GitHub and write post-mortem blogs explaining your design choices, failures, and debugging process. A working portfolio is your true degree.</li>
       </ul>
+      <p>Aspiring engineers can accelerate this low-level skill acquisition by pursuing industrial internships, as detailed in my reflections on <a href="/article/7">Jayem Automotive</a>.</p>
     `,
     category: 'reflections',
     author: 'arisudan',

@@ -420,12 +420,12 @@ Sitemap: ${SITE_URL}/sitemap.xml
     fs.copyFileSync(path.join(__dirname, 'sw.js'), path.join(DIST_DIR, 'sw.js'));
   }
 
-  // Copy Google verification HTML files to dist
+  // Copy Google verification HTML files and ads.txt to dist
   const rootFiles = fs.readdirSync(__dirname);
   for (const file of rootFiles) {
-    if (file.startsWith('google') && file.endsWith('.html')) {
+    if ((file.startsWith('google') && file.endsWith('.html')) || file === 'ads.txt') {
       fs.copyFileSync(path.join(__dirname, file), path.join(DIST_DIR, file));
-      console.log(`Copied verification file to dist: ${file}`);
+      console.log(`Copied verification/ads.txt file to dist: ${file}`);
     }
   }
 
