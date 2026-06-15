@@ -23,7 +23,9 @@ app.use(express.json());
 
 // API Routes
 const subscribeHandler = require('../api/subscribe');
+const analyticsHandler = require('../api/analytics');
 app.post('/api/subscribe', subscribeHandler);
+app.get('/api/analytics', analyticsHandler);
 
 // Serve static assets (js, css, images, sitemap, robots, etc.) directly if they exist
 app.use(express.static(publicDirectory, {
