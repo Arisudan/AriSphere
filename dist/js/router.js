@@ -2463,6 +2463,10 @@
             const da = a.publishedAt ? new Date(a.publishedAt) : (a.publishDate ? new Date(a.publishDate) : new Date(0));
             const dbVal = b.publishedAt ? new Date(b.publishedAt) : (b.publishDate ? new Date(b.publishDate) : new Date(0));
             return da - dbVal;
+          } else if (window.adminCatalogState.sortBy === 'last-updated') {
+            const da = a.updatedAt ? new Date(a.updatedAt) : (a.createdAt ? new Date(a.createdAt) : new Date(0));
+            const dbVal = b.updatedAt ? new Date(b.updatedAt) : (b.createdAt ? new Date(b.createdAt) : new Date(0));
+            return dbVal - da;
           } else if (window.adminCatalogState.sortBy === 'views-desc') {
             return (b.views || 0) - (a.views || 0);
           } else if (window.adminCatalogState.sortBy === 'title-asc') {
@@ -2858,6 +2862,7 @@
               <select id="sort-by" class="admin-select" style="padding:6px 12px; font-size:0.875rem;">
                 <option value="date-desc" ${window.adminCatalogState.sortBy === 'date-desc' ? 'selected' : ''}>Latest</option>
                 <option value="date-asc" ${window.adminCatalogState.sortBy === 'date-asc' ? 'selected' : ''}>Oldest</option>
+                <option value="last-updated" ${window.adminCatalogState.sortBy === 'last-updated' ? 'selected' : ''}>Last Updated</option>
                 <option value="views-desc" ${window.adminCatalogState.sortBy === 'views-desc' ? 'selected' : ''}>Views (High to Low)</option>
                 <option value="title-asc" ${window.adminCatalogState.sortBy === 'title-asc' ? 'selected' : ''}>Title (A-Z)</option>
               </select>
@@ -3104,6 +3109,7 @@
 
           // Helper to trigger debounced full refresh (Task 3)
           function triggerDebouncedRefresh() {
+            window.adminArticles = null; // Invalidate query cache for refresh
             clearTimeout(window.adminRefreshTimer);
             window.adminRefreshTimer = setTimeout(() => {
               const isEditing = document.querySelector('.article-form') || document.querySelector('#admin-article-form');
@@ -4038,6 +4044,7 @@
             const event = new CustomEvent('show-toast', { detail: detailMsg });
             window.dispatchEvent(event);
           }
+          window.adminArticles = null; // Clear catalog query cache
           showArticlesList();
         } catch (err) {
           alert('Save failed: ' + err.message);
