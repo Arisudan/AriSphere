@@ -145,24 +145,35 @@ img {
   font-weight: 800;
   letter-spacing: -0.03em;
   color: #ffffff !important;
-  background: #090d16;
-  padding: 4px 12px;
-  border-radius: var(--radius-md);
-  border-left: 4px solid var(--color-trending);
+  background: linear-gradient(135deg, #000000 0%, #150505 100%);
+  padding: 6px 16px;
+  border-radius: 4px;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-left: 4px solid #ef4444;
   line-height: 1;
   display: inline-flex;
   align-items: center;
-  box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-fast) ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  transition: transform var(--transition-fast) ease, border-color var(--transition-fast) ease;
 }
 
 .logo:hover {
   transform: scale(1.02);
+  border-color: rgba(239, 68, 68, 0.8);
 }
 
 .logo span {
-  color: var(--color-trending) !important;
+  color: #ef4444 !important;
   margin-left: -1px;
+}
+
+.logo-icon {
+  height: 28px;
+  width: 28px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-right: 10px;
+  border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
 .logo-tagline {

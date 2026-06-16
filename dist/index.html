@@ -26,8 +26,8 @@
 
   <!-- PWA & Favicon -->
   <link rel="manifest" href="/manifest.json">
-  <link rel="icon" type="image/png" href="/assets/images/business-cover.png">
-  <link rel="apple-touch-icon" href="/assets/images/business-cover.png">
+  <link rel="icon" type="image/png" href="/assets/images/logo.png">
+  <link rel="apple-touch-icon" href="/assets/images/logo.png">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
@@ -72,7 +72,7 @@
 
 
   <!-- Dynamic JSON-LD Script Tag for SEO Structured Data (Updated by router) -->
-  <script type="application/ld+json" id="jsonld-schema">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://ari-sphere.vercel.app/#website","url":"https://ari-sphere.vercel.app/","name":"AriSphere","description":"Where Trends Meet Perspective","publisher":{"@id":"https://ari-sphere.vercel.app/#organization"}},{"@type":"Organization","@id":"https://ari-sphere.vercel.app/#organization","name":"AriSphere","url":"https://ari-sphere.vercel.app/","logo":{"@type":"ImageObject","url":"https://ari-sphere.vercel.app/assets/images/business-cover.png"}}]}]}</script>
+  <script type="application/ld+json" id="jsonld-schema">{"@context":"https://schema.org","@graph":[{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://ari-sphere.vercel.app/#website","url":"https://ari-sphere.vercel.app/","name":"AriSphere","description":"Where Trends Meet Perspective","publisher":{"@id":"https://ari-sphere.vercel.app/#organization"}},{"@type":"Organization","@id":"https://ari-sphere.vercel.app/#organization","name":"AriSphere","url":"https://ari-sphere.vercel.app/","logo":{"@type":"ImageObject","url":"https://ari-sphere.vercel.app/assets/images/logo.png"}}]}]}</script>
 </head>
 
 <body>
@@ -94,7 +94,10 @@
     <div class="container header-main">
       <!-- Logo Branding -->
       <a href="/" class="logo-group" aria-label="AriSphere Home">
-        <div class="logo">Ari<span>Sphere</span></div>
+        <div class="logo">
+          <img src="/assets/images/logo.png" alt="" class="logo-icon">
+          Ari<span>Sphere</span>
+        </div>
         <div class="logo-tagline">Where Trends Meet Perspective</div>
       </a>
 
@@ -591,7 +594,10 @@
     <div class="container footer-grid">
       <!-- Footer Brand Info -->
       <div class="footer-brand">
-        <div class="logo">Ari<span>Sphere</span></div>
+        <div class="logo">
+          <img src="/assets/images/logo.png" alt="" class="logo-icon">
+          Ari<span>Sphere</span>
+        </div>
         <p class="footer-description">AriSphere covers shifts in design philosophy, technology infrastructure, business
           scales, and emerging media trends.</p>
         <div class="footer-socials">

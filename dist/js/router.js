@@ -492,7 +492,7 @@
             'url': getBaseURL() + '/',
             'logo': {
               '@type': 'ImageObject',
-              'url': getBaseURL() + '/assets/images/business-cover.png'
+              'url': getBaseURL() + '/assets/images/logo.png'
             }
           }
         ]
@@ -926,7 +926,7 @@
           'name': 'AriSphere',
           'logo': {
             '@type': 'ImageObject',
-            'url': getBaseURL() + '/assets/images/business-cover.png'
+            'url': getBaseURL() + '/assets/images/logo.png'
           }
         },
         'description': article.excerpt
