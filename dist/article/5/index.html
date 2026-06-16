@@ -448,15 +448,7 @@
           delivered direct to your inbox.</p>
         <form class="newsletter-form">
           <input class="form-control" type="email" placeholder="Enter your email address" required="" aria-label="Email address for subscription">
-          <div id="newsletter-turnstile" class="cf-turnstile" data-sitekey="0x4AAAAAAAzhv8pM6O1E9F1V" style="margin-bottom: var(--space-xs); display: flex; justify-content: center;"></div>
-          <script>
-            (function() {
-              const widget = document.getElementById('newsletter-turnstile');
-              if (widget && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname.includes('.local'))) {
-                widget.setAttribute('data-sitekey', '1x00000000000000000000AA');
-              }
-            })();
-          </script>
+          <div id="newsletter-turnstile" class="cf-turnstile" data-sitekey="1x00000000000000000000AA" style="margin-bottom: var(--space-xs); display: flex; justify-content: center;"></div>
           <button type="submit" class="btn btn-primary">Subscribe</button>
         </form>
       </div>

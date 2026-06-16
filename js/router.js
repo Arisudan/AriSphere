@@ -862,7 +862,9 @@
     // Increment view counter locally and trigger remote DB views increment RPC
     article.views = (article.views || 0) + 1;
     if (db.supabase) {
-      db.supabase.rpc('increment_article_views', { article_id: Number(article.id) }).catch(err => {
+      Promise.resolve(
+        db.supabase.rpc('increment_article_views', { article_id: Number(article.id) })
+      ).catch(err => {
         console.warn("Failed to increment views via RPC", err);
       });
     }
