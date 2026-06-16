@@ -144,46 +144,50 @@ img {
   font-size: 1.8rem;
   font-weight: 800;
   letter-spacing: -0.03em;
-  color: #ffffff !important;
-  background: linear-gradient(135deg, #000000 0%, #150505 100%);
-  padding: 6px 16px;
-  border-radius: 4px;
-  border: 1px solid rgba(239, 68, 68, 0.4);
-  border-left: 4px solid #ef4444;
+  color: var(--color-text) !important;
+  background: transparent;
+  padding: 0;
+  border: none;
   line-height: 1;
   display: inline-flex;
   align-items: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  transition: transform var(--transition-fast) ease, border-color var(--transition-fast) ease;
+  box-shadow: none;
+  transition: transform var(--transition-fast) ease;
 }
 
 .logo:hover {
-  transform: scale(1.02);
-  border-color: rgba(239, 68, 68, 0.8);
+  transform: scale(1.01);
 }
 
 .logo span {
-  color: #ef4444 !important;
+  color: var(--color-trending) !important;
   margin-left: -1px;
 }
 
 .logo-icon {
-  height: 28px;
-  width: 28px;
+  height: 32px;
+  width: 32px;
   object-fit: cover;
-  border-radius: 4px;
-  margin-right: 10px;
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 50%;
+  margin-right: 12px;
+  border: 2px solid var(--color-trending);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast) ease;
+}
+
+.logo:hover .logo-icon {
+  transform: rotate(15deg);
 }
 
 .logo-tagline {
-  font-size: 0.6rem;
+  font-size: 0.55rem;
   font-family: var(--font-sans);
   text-transform: uppercase;
-  letter-spacing: 0.15em;
-  font-weight: 600;
+  letter-spacing: 0.16em;
+  font-weight: 700;
   color: var(--color-text-light);
-  margin-top: 4px;
+  margin-top: 6px;
+  padding-left: 44px; /* Aligns tagline starting position to match text 'AriSphere' */
 }
 
 /* Navigation Links - Clean editorial active states instead of sliding lines */
