@@ -40,6 +40,7 @@
   <meta name="application-name" content="AriSphere">
   <meta name="apple-mobile-web-app-title" content="AriSphere">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
   <!-- Twitter -->
@@ -95,10 +96,7 @@
     <div class="container header-main">
       <!-- Logo Branding -->
       <a href="/" class="logo-group" aria-label="AriSphere Home">
-        <div class="logo">
-          <img src="/assets/images/logo.png" alt="" class="logo-icon">
-          Ari<span>Sphere</span>
-        </div>
+        <div class="logo">Ari<span>Sphere</span></div>
         <div class="logo-tagline">Where Trends Meet Perspective</div>
       </a>
 
@@ -216,7 +214,15 @@
           delivered direct to your inbox.</p>
         <form class="newsletter-form">
           <input class="form-control" type="email" placeholder="Enter your email address" required="" aria-label="Email address for subscription">
-          <div class="cf-turnstile" data-sitekey="0x4AAAAAAAzhv8pM6O1E9F1V" style="margin-bottom: var(--space-xs); display: flex; justify-content: center;"></div>
+          <div id="newsletter-turnstile" class="cf-turnstile" data-sitekey="0x4AAAAAAAzhv8pM6O1E9F1V" style="margin-bottom: var(--space-xs); display: flex; justify-content: center;"></div>
+          <script>
+            (function() {
+              const widget = document.getElementById('newsletter-turnstile');
+              if (widget && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname.includes('.local'))) {
+                widget.setAttribute('data-sitekey', '1x00000000000000000000AA');
+              }
+            })();
+          </script>
           <button type="submit" class="btn btn-primary">Subscribe</button>
         </form>
       </div>
@@ -228,10 +234,7 @@
     <div class="container footer-grid">
       <!-- Footer Brand Info -->
       <div class="footer-brand">
-        <div class="logo">
-          <img src="/assets/images/logo.png" alt="" class="logo-icon">
-          Ari<span>Sphere</span>
-        </div>
+        <div class="logo">Ari<span>Sphere</span></div>
         <p class="footer-description">AriSphere covers shifts in design philosophy, technology infrastructure, business
           scales, and emerging media trends.</p>
         <div class="footer-socials">

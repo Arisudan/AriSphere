@@ -187,7 +187,6 @@ img {
   font-weight: 700;
   color: var(--color-text-light);
   margin-top: 6px;
-  padding-left: 44px; /* Aligns tagline starting position to match text 'AriSphere' */
 }
 
 /* Navigation Links - Clean editorial active states instead of sliding lines */
